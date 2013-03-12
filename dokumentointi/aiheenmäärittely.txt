@@ -1,4 +1,35 @@
 Aihe: Laivanupotus-peli
 
-Kaikkien käyttäjien toiminnot:
-	- 
+Tarkoituksenani on toteuttaa laivanupotus-peli kahdelle pelaajalle. Pelin ajatus
+on yleisesti tunnettu ja keskitynkin tässä selostamaan pääpiirteittäin oman imp-
+lementaationi ominaisuuksia ja erityispiirteitä.
+	Pelin alussa molempien pelaajien laivat sijoitetaan erillisiin ruudukkoihin
+sääntöjen mukaisesti. Sääntöjä voidaan muokata esimerkiksi ruudukon koon, laivo-
+jen määrän sekä koon osalta. Lisäksi pelivuorojen määrää voidaan rajoittaa siten
+että peli voi päättyä tasapeliin tai jomman kumman pelaajan voittoon vuorojen
+loputtua ellei peli ratkea perinteisellä tavalla, eli siten että jomman kumman
+pelaajan kaikki laivat on upotettu. Säännöt tallennetaan csv-tiedostoon.
+	Peli etenee tutun kaavan mukaisesti siten, että pelaajat vuorotellen pommit-
+tavat toistensa ruutuja tavoitteenaan upottaa vastapuolen laivasto. Tätä tarkoi-
+tusta varten pelaajat näkevät oman ruudukkonsa täysin vasemmalla ja sen vieressä
+oikealla vastapelaajan ruudukon pommitetut ruudut.
+	Edellä mainitun mukaisesti peli voi päättyä jomman kumman pelaajan koko lai-
+vaston tuhoutumiseen. Vaihtoehtoisesti peli voi loppua jos pelivuorojen määrä on
+rajoitettu. Pelivuorojen loppuessa kesken voittaja ratkeaa jäljellä olevien lai-
+vojen määrän perusteella siten että voittaja on se pelaaja, jolla on enemmän
+laivoja jäljellä. Jos pelaajilla on saman verran laivoja jäljellä, päättyy peli
+tasapeliin. Kolmas mahdollisuus pelin loppumiseen on luovutusvoitto. Jos pelaaja
+luovuttaa, peli päättyy vastapelaajan voittoon.
+
+Kaikkien pelaajien toiminnot:
+	- Laivojen sijoittaminen omaan ruudukkoon
+		- Onnistuu jos laivat sijoitetaan sääntöjen mukaisesti
+	- Vuoron pelaaminen
+		- Onnistuu jos peli ei ole vielä ratkennut
+	- Luovuttaminen
+		- Onnistuu jos peli ei ole vielä ratkennut
+
+Ihmispelaajan toiminnot:
+	- Ohjelman käynnistys
+	- Sääntöjen muokkaaminen
+	- Ohjelman sulkeminen
