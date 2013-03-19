@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author johnny
+ * @author John Lång
  */
 public class SaannotTest {
     
