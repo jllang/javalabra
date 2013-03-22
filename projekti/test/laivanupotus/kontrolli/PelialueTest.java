@@ -20,15 +20,15 @@ import static org.junit.Assert.*;
  *
  * @author John Lång
  */
-public class RuudukkoTest {
+public class PelialueTest {
     
     private static Random   arpoja;
     private static Pelaaja  leikkipelaaja1, leikkipelaaja2;
     private int             leveys, korkeus, x, y;
-    private Ruudukko        ruudukko1, ruudukko2;
+    private Pelialue        pelialue1, pelialue2;
     
     
-    public RuudukkoTest() {
+    public PelialueTest() {
     }
     
     @BeforeClass
@@ -47,10 +47,10 @@ public class RuudukkoTest {
         leveys          = arpoja.nextInt(15) + 5;
         korkeus         = arpoja.nextInt(15) + 5;
         Saannot saannot = new Saannot(leveys, korkeus, 0);
-        leikkipelaaja1.luoRuudukko(saannot);
-        leikkipelaaja2.luoRuudukko(saannot);
-        ruudukko1       = leikkipelaaja1.annaRuudukko();
-        ruudukko2       = leikkipelaaja2.annaRuudukko();
+        leikkipelaaja1.luoPelialue(saannot);
+        leikkipelaaja2.luoPelialue(saannot);
+        pelialue1       = leikkipelaaja1.annaPelialue();
+        pelialue2       = leikkipelaaja2.annaPelialue();
         x               = arpoja.nextInt(leveys);
         y               = arpoja.nextInt(korkeus);
     }
@@ -59,17 +59,12 @@ public class RuudukkoTest {
     public void tearDown() {
         System.out.println("--------------------------------------------------------------------------------\n");
     }
-
-//    @Test
-//    public void testRuudukonKonstruktori() {
-//        Ruudukko ruudukko3 = new Ruudukko(new Saannot(leveys, korkeus, 0));
-//    }
     
     @Test
     public void testAmmu() {
         System.out.println("Testataan ampumista...");
         try {
-            ruudukko1.ammu(leikkipelaaja2, x, y);
+            pelialue1.ammu(leikkipelaaja2, x, y);
         } catch (Exception poikkeus) {
             System.out.println("Saatiin kiinni poikkeus. (" + poikkeus + ")");
             fail("Ruutuun ei voitu ampua odotetusti.");
@@ -80,10 +75,10 @@ public class RuudukkoTest {
     public void testAmmuKaksiKertaaSamaanRuutuun() {
         System.out.println("Testataan ampumista samaan ruutuun kahdesti peräkkäin...");
         try {
-            ruudukko1.ammu(leikkipelaaja2, x, y);
-            ruudukko1.ammu(leikkipelaaja2, x, y);
+            pelialue1.ammu(leikkipelaaja2, x, y);
+            pelialue1.ammu(leikkipelaaja2, x, y);
         } catch (Exception poikkeus) {
-            kasittelePoikkeus(RuutuunOnJoAmmuttu.class, poikkeus);
+            kasittelePoikkeus(RuutuunOnJoAmmuttuException.class, poikkeus);
             return;
         }
         fail("Samaan ruutuun pystyttiin ampumaan kaksi kertaa.");
@@ -93,9 +88,9 @@ public class RuudukkoTest {
     public void testAmmuOmaanRuutuun() {
         System.out.println("Testataan omaan ruutuun ampumista...");
         try {
-            ruudukko1.ammu(leikkipelaaja1, x, y);
+            pelialue1.ammu(leikkipelaaja1, x, y);
         } catch (Exception poikkeus) {
-            kasittelePoikkeus(VaaranPelaajanRuutu.class, poikkeus);
+            kasittelePoikkeus(VaaranPelaajanRuutuException.class, poikkeus);
             return;
         }
         fail("Pystyttiin ampumaan omaan ruutuun.");
@@ -106,7 +101,7 @@ public class RuudukkoTest {
         System.out.println("Testataan ampua ruudukon ulkopuolelle");
         x = x * -1;
         try {
-            ruudukko1.ammu(leikkipelaaja2, x, y);
+            pelialue1.ammu(leikkipelaaja2, x, y);
         } catch (Exception poikkeus) {
             kasittelePoikkeus(IndexOutOfBoundsException.class, poikkeus);
             return;

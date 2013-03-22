@@ -8,9 +8,9 @@ package laivanupotus.poikkeukset;
  *
  * @author johnny
  */
-public class OmistajaOnJoAsetettu extends Exception {
+public class OmistajaOnJoAsetettuException extends Exception {
     
-    public OmistajaOnJoAsetettu() {
+    public OmistajaOnJoAsetettuException() {
         super("Sääntörikkomus: Ruudukon omistaja yritettiin vaithaa.");
     }
     

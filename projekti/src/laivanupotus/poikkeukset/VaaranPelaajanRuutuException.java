@@ -8,9 +8,9 @@ package laivanupotus.poikkeukset;
  *
  * @author John Lång
  */
-public class VaaranPelaajanRuutu extends Exception {
+public class VaaranPelaajanRuutuException extends Exception {
     
-    public VaaranPelaajanRuutu(String viesti) {
+    public VaaranPelaajanRuutuException(String viesti) {
         super(viesti);
     }
     

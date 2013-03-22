@@ -8,9 +8,9 @@ package laivanupotus.poikkeukset;
  *
  * @author John Lång
  */
-public class RuutuunOnJoAmmuttu extends Exception {
+public class RuutuunOnJoAmmuttuException extends Exception {
     
-    public RuutuunOnJoAmmuttu() {
+    public RuutuunOnJoAmmuttuException() {
         super("Sääntörikkomus: Ruutuun yritettiin ampua uudelleen.");
     }
     

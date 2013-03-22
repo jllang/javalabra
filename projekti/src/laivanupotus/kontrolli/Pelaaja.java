@@ -6,7 +6,7 @@ package laivanupotus.kontrolli;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import laivanupotus.poikkeukset.OmistajaOnJoAsetettu;
+import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
 import laivanupotus.tyypit.Saannot;
 
 /**
@@ -15,22 +15,22 @@ import laivanupotus.tyypit.Saannot;
  */
 public abstract class Pelaaja {
     
-    private Ruudukko ruudukko;
+    private Pelialue pelialue;
     
     public Pelaaja() {
     }
     
-    public void luoRuudukko(Saannot saannot) {
-        this.ruudukko = new Ruudukko(saannot);
+    public void luoPelialue(Saannot saannot) {
+        this.pelialue = new Pelialue(saannot);
         try {
-            this.ruudukko.asetaOmistaja(this);
-        } catch (OmistajaOnJoAsetettu ex) {
+            this.pelialue.asetaOmistaja(this);
+        } catch (OmistajaOnJoAsetettuException ex) {
             Logger.getLogger(Pelaaja.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public Ruudukko annaRuudukko() {
-        return ruudukko;
+    public Pelialue annaPelialue() {
+        return pelialue;
     }
     
 }

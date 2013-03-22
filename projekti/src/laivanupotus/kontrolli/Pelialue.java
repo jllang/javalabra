@@ -4,9 +4,9 @@
  */
 package laivanupotus.kontrolli;
 
-import laivanupotus.poikkeukset.OmistajaOnJoAsetettu;
-import laivanupotus.poikkeukset.RuutuunOnJoAmmuttu;
-import laivanupotus.poikkeukset.VaaranPelaajanRuutu;
+import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
+import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
+import laivanupotus.poikkeukset.VaaranPelaajanRuutuException;
 import laivanupotus.tyypit.Piste;
 import laivanupotus.tyypit.Ruutu;
 import laivanupotus.tyypit.Saannot;
@@ -15,7 +15,7 @@ import laivanupotus.tyypit.Saannot;
  *
  * @author John Lång
  */
-public class Ruudukko {
+public class Pelialue {
     
     private Pelaaja         omistaja;
     private boolean         omistajaAsetettu;
@@ -23,7 +23,7 @@ public class Ruudukko {
     private final int       LEVEYS;
     private final int       KORKEUS;
     
-    public Ruudukko(Saannot saannot) {
+    public Pelialue(Saannot saannot) {
         this.LEVEYS = saannot.leveys();
         this.KORKEUS = saannot.korkeus();
         this.KOORDINAATISTO = new Piste[KORKEUS][LEVEYS];
@@ -35,12 +35,12 @@ public class Ruudukko {
         }
     }
     
-    public void asetaOmistaja(Pelaaja omistaja) throws OmistajaOnJoAsetettu {
+    public void asetaOmistaja(Pelaaja omistaja) throws OmistajaOnJoAsetettuException {
         if (!omistajaAsetettu) {            
             this.omistaja = omistaja;
             omistajaAsetettu = true;
         } else {
-            throw new OmistajaOnJoAsetettu();
+            throw new OmistajaOnJoAsetettuException();
         }
     }
     
@@ -62,11 +62,11 @@ public class Ruudukko {
         if (!onkoOsumaa(piste)) {
             piste.osuma = true;
         } else {
-            throw new RuutuunOnJoAmmuttu();
+            throw new RuutuunOnJoAmmuttuException();
         }
     }
     
-    public Ruutu[][] haeRuudut(Pelaaja pelaaja) {
+    public Ruutu[][] haeRuudukko(Pelaaja pelaaja) {
         
         Ruutu[][] ruudukko = new Ruutu[KORKEUS][LEVEYS];
         
@@ -113,12 +113,12 @@ public class Ruudukko {
         }
     }
     
-    private void tarkastaOmistajuus(Pelaaja pelaaja, boolean odotettuPaluuarvo) throws VaaranPelaajanRuutu {
+    private void tarkastaOmistajuus(Pelaaja pelaaja, boolean odotettuPaluuarvo) throws VaaranPelaajanRuutuException {
         if (onkoPelaajaOmistaja(pelaaja) != odotettuPaluuarvo) {
             if (odotettuPaluuarvo) {
-                throw new VaaranPelaajanRuutu("Sääntörikkomus: Yritettiin suorittaa ruudukon omistajalle kuuluvaa toimintoa.");
+                throw new VaaranPelaajanRuutuException("Sääntörikkomus: Yritettiin suorittaa ruudukon omistajalle kuuluvaa toimintoa.");
             } else {
-                throw new VaaranPelaajanRuutu("Sääntörikkomus: Yritettiin suorittaa vastapelaajalle kuuluvaa toimintoa.");
+                throw new VaaranPelaajanRuutuException("Sääntörikkomus: Yritettiin suorittaa vastapelaajalle kuuluvaa toimintoa.");
             }
         }
     }
