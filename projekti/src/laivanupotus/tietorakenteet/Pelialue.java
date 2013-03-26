@@ -2,14 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package laivanupotus.kontrolli;
+package laivanupotus.tietorakenteet;
 
+import java.util.List;
+import laivanupotus.kontrolli.Pelaaja;
+import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
 import laivanupotus.poikkeukset.VaaranPelaajanRuutuException;
-import laivanupotus.tyypit.Piste;
-import laivanupotus.tyypit.Ruutu;
-import laivanupotus.tyypit.Saannot;
+import laivanupotus.rajapinnat.Kayttoliittyma;
+import laivanupotus.rajapinnat.Tallennettava;
+import laivanupotus.tietorakenteet.Piste;
+import laivanupotus.tietorakenteet.Ruutu;
+import laivanupotus.tietorakenteet.Saannot;
 
 /**
  *
@@ -17,15 +22,16 @@ import laivanupotus.tyypit.Saannot;
  */
 public class Pelialue {
     
-    private Pelaaja         omistaja;
-    private boolean         omistajaAsetettu;
-    private final Piste[][] KOORDINAATISTO;
-    private final int       LEVEYS;
-    private final int       KORKEUS;
+    private final Kayttoliittyma    KAYTTOLIITTYMA;
+    private final Pelaaja           OMISTAJA;
+    private final Piste[][]         KOORDINAATISTO;
+    private final int               LEVEYS, KORKEUS;
     
-    public Pelialue(Saannot saannot) {
-        this.LEVEYS = saannot.leveys();
-        this.KORKEUS = saannot.korkeus();
+    public Pelialue(Pelikierros pelikierros, Pelaaja pelaaja) {
+        this.KAYTTOLIITTYMA = pelikierros.annaKayttoliittyma();
+        this.OMISTAJA = pelaaja;
+        this.LEVEYS = pelikierros.annaSaannot().leveys();
+        this.KORKEUS = pelikierros.annaSaannot().korkeus();
         this.KOORDINAATISTO = new Piste[KORKEUS][LEVEYS];
         
         for (int i = 0; i < KORKEUS; i++) {
@@ -35,35 +41,30 @@ public class Pelialue {
         }
     }
     
-    public void asetaOmistaja(Pelaaja omistaja) throws OmistajaOnJoAsetettuException {
-        if (!omistajaAsetettu) {            
-            this.omistaja = omistaja;
-            omistajaAsetettu = true;
-        } else {
-            throw new OmistajaOnJoAsetettuException();
-        }
-    }
-    
     public void lisaaLaiva(Pelaaja omistaja, int x, int y) throws Exception {
         tarkastaOmistajuus(omistaja, true);
         Piste piste = haePiste(x, y);
 
-        if (!onkoLaivaa(piste)) {
+        if (!pisteessaOnLaiva(piste)) {
             piste.osaLaivaa = true;
         } else {
             piste.osaLaivaa = false;
         }
+        
+        KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
     public void ammu(Pelaaja ampuja, int x, int y) throws Exception {
         tarkastaOmistajuus(ampuja, false);
         Piste piste = haePiste(x, y);
         
-        if (!onkoOsumaa(piste)) {
+        if (!pisteessaOnOsuma(piste)) {
             piste.osuma = true;
         } else {
             throw new RuutuunOnJoAmmuttuException();
         }
+        
+        KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
     public Ruutu[][] haeRuudukko(Pelaaja pelaaja) {
@@ -79,7 +80,7 @@ public class Pelialue {
         return ruudukko;
     }
         
-    public Ruutu haeRuutu(Pelaaja pelaaja, int x, int y) {
+    public Ruutu haeRuutu(Pelaaja pelaaja, int x, int y) throws IndexOutOfBoundsException {
         Piste piste = haePiste(x, y);
         Ruutu ruutu = Ruutu.TUNTEMATON;
         if (piste.osuma) {
@@ -89,7 +90,7 @@ public class Pelialue {
                 ruutu = Ruutu.TYHJA_OSUMA;
             }
         }
-        else if (onkoPelaajaOmistaja(pelaaja)) {
+        else if (pelaajaOnOmistaja(pelaaja)) {
             if (piste.osaLaivaa) {
                 ruutu = Ruutu.LAIVA_EI_OSUMAA;
             } else {
@@ -106,15 +107,15 @@ public class Pelialue {
     
     private void tarkastaKoordinaatit(int x, int y) throws IndexOutOfBoundsException {
         if (x < 0
-                || x >= KOORDINAATISTO[0].length
+                || x >= LEVEYS
                 || y < 0
-                || y >= KOORDINAATISTO.length) {
+                || y >= KORKEUS) {
             throw new IndexOutOfBoundsException("Annetut koordinaatit eivät ole koordinaatistossa.");
         }
     }
     
     private void tarkastaOmistajuus(Pelaaja pelaaja, boolean odotettuPaluuarvo) throws VaaranPelaajanRuutuException {
-        if (onkoPelaajaOmistaja(pelaaja) != odotettuPaluuarvo) {
+        if (pelaajaOnOmistaja(pelaaja) != odotettuPaluuarvo) {
             if (odotettuPaluuarvo) {
                 throw new VaaranPelaajanRuutuException("Sääntörikkomus: Yritettiin suorittaa ruudukon omistajalle kuuluvaa toimintoa.");
             } else {
@@ -123,15 +124,15 @@ public class Pelialue {
         }
     }
     
-    private boolean onkoPelaajaOmistaja(Pelaaja pelaaja) {
-        return pelaaja == omistaja;
+    private boolean pelaajaOnOmistaja(Pelaaja pelaaja) {
+        return pelaaja == OMISTAJA;
     }
     
-    private boolean onkoLaivaa(Piste piste) {
+    private boolean pisteessaOnLaiva(Piste piste) {
         return piste.osaLaivaa;
     }
     
-    private boolean onkoOsumaa(Piste piste) {
+    private boolean pisteessaOnOsuma(Piste piste) {
         return piste.osuma;
     }
 

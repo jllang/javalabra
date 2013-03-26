@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package laivanupotus.tyypit.tallennus;
+package laivanupotus.tallennus;
 
 /**
  *
  * @author John Lång
  */
-public class Muistitallentaja {
+public class Tiedostotallentaja {
     
 }

@@ -4,7 +4,7 @@
  */
 package laivanupotus.kontrolli;
 
-import laivanupotus.tyypit.Saannot;
+import laivanupotus.tietorakenteet.Saannot;
 
 /**
  *

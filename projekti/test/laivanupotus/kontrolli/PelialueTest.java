@@ -4,17 +4,21 @@
  */
 package laivanupotus.kontrolli;
 
+import laivanupotus.tietorakenteet.Pelialue;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
 import laivanupotus.poikkeukset.*;
-import laivanupotus.tyypit.Saannot;
+import laivanupotus.rajapinnat.Kayttoliittyma;
+import laivanupotus.tietorakenteet.Saannot;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import testilogiikka.SaantojenArpoja;
 
 /**
  *
@@ -22,10 +26,13 @@ import static org.junit.Assert.*;
  */
 public class PelialueTest {
     
-    private static Random   arpoja;
-    private static Pelaaja  leikkipelaaja1, leikkipelaaja2;
-    private int             leveys, korkeus, x, y;
-    private Pelialue        pelialue1, pelialue2;
+    private static Random           arpoja;
+    private static SaantojenArpoja  saantokone;
+    private static Kayttoliittyma   kayttoliittyma;
+    private static Pelaaja          leikkipelaaja1, leikkipelaaja2;
+    private int                     leveys, korkeus, x, y;
+    private Pelikierros             pelikierros;
+    private Pelialue                pelialue1, pelialue2;
     
     
     public PelialueTest() {
@@ -34,23 +41,25 @@ public class PelialueTest {
     @BeforeClass
     public static void setUpClass() {
         arpoja          = new Random();
+        saantokone      = new SaantojenArpoja(arpoja);
+        kayttoliittyma  = new Tekstikayttoliittyma();
         leikkipelaaja1  = new Ihmispelaaja();
         leikkipelaaja2  = new Ihmispelaaja();
     }
     
     @AfterClass
     public static void tearDownClass() {
+        System.out.println("================================================================================\n");
     }
     
     @Before
     public void setUp() {
-        leveys          = arpoja.nextInt(15) + 5;
-        korkeus         = arpoja.nextInt(15) + 5;
-        Saannot saannot = new Saannot(leveys, korkeus, 0);
-        leikkipelaaja1.luoPelialue(saannot);
-        leikkipelaaja2.luoPelialue(saannot);
-        pelialue1       = leikkipelaaja1.annaPelialue();
-        pelialue2       = leikkipelaaja2.annaPelialue();
+        Saannot saannot = saantokone.arvoSaannot();
+        leveys          = saannot.leveys();
+        korkeus         = saannot.korkeus();
+        pelikierros     = new Pelikierros(kayttoliittyma, saannot, leikkipelaaja1, leikkipelaaja2);
+        pelialue1       = new Pelialue(pelikierros, leikkipelaaja1);
+        pelialue2       = new Pelialue(pelikierros, leikkipelaaja2);
         x               = arpoja.nextInt(leveys);
         y               = arpoja.nextInt(korkeus);
     }
@@ -106,7 +115,7 @@ public class PelialueTest {
             kasittelePoikkeus(IndexOutOfBoundsException.class, poikkeus);
             return;
         }
-        fail("Pystyttiin ampumaan ruudukon ulkopuolelle.");
+        fail("Pystyttiin ampumaan ruudukon ulkopuolelle koordinaatteihin (" + x + "," + y + ").");
     }
 
     private void kasittelePoikkeus(Class odotettuPoikkeus, Exception poikkeus) {

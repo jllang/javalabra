@@ -4,10 +4,11 @@
  */
 package laivanupotus.kontrolli;
 
+import laivanupotus.tietorakenteet.Pelialue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
-import laivanupotus.tyypit.Saannot;
+import laivanupotus.tietorakenteet.Saannot;
 
 /**
  *
@@ -20,13 +21,8 @@ public abstract class Pelaaja {
     public Pelaaja() {
     }
     
-    public void luoPelialue(Saannot saannot) {
-        this.pelialue = new Pelialue(saannot);
-        try {
-            this.pelialue.asetaOmistaja(this);
-        } catch (OmistajaOnJoAsetettuException ex) {
-            Logger.getLogger(Pelaaja.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void asetaPelialue(Pelialue pelialue) {
+        this.pelialue = pelialue;
     }
 
     public Pelialue annaPelialue() {

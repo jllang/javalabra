@@ -13,5 +13,6 @@ import java.util.List;
 public interface Tallennettava {
     
     List<Object> annaSisalto();
+    void rakennaSisalto(List<Object> luettuSisalto);
     
 }

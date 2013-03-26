@@ -1,0 +1,31 @@
+Tunnettuja bugeja ohjelmistossa:
+================================================================================
+
+	- Bugi nro 1:
+	  -----------
+		Löydetty:	26.3.2013
+
+		Estääkö
+		tarkoituk-
+		senmukaisen
+		toiminnan:	Ei (Korvaava menettely tiedossa)
+
+		Kuvaus:		Luokan "Tekstikayttoliittyma" metodi "paivita" ei päivitä
+					käyttötöliittymää.
+
+		Korvaava	
+		menettely:	Metodi "alusta" päivittää käyttöliittymän, mutta lataa
+					molemmat ruudukot uudestaan, mikä on hitaampi toimenpide.
+
+--------------------------------------------------------------------------------
+		
+	- Bugi nro 2:
+	  -----------
+		Löydetty:	26.3.2013
+
+		Estääkö
+		tarkoituk-
+		senmukaisen
+		toiminnan:	Kyllä
+
+		Kuvaus:		Luokan "Laivojenarpoja" metodi "arvoLaivat" ei toimi oikein.

@@ -4,15 +4,19 @@
  */
 package laivanupotus.tyypit;
 
+import laivanupotus.tietorakenteet.Saannot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import testilogiikka.SaantojenArpoja;
 
 /**
  *
@@ -20,27 +24,25 @@ import static org.junit.Assert.*;
  */
 public class SaannotTest {
     
-    private Saannot         saannot;
-    private static Random   arpoja;
-    private static String[] saantojenNimet;
+    private static SaantojenArpoja  saantokone;
+    private Saannot                 saannot;
     
     public SaannotTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
-        arpoja = new Random();
-        saantojenNimet = new String[] {"leveydeksi", "korkeudeksi", "vuorojen määräksi"};
+        saantokone = new SaantojenArpoja(new Random());
     }
     
     @AfterClass
     public static void tearDownClass() {
+        System.out.println("================================================================================\n");
     }
     
     @Before
     public void setUp() {
         this.saannot = new Saannot();
-
     }
     
     @After
@@ -51,14 +53,31 @@ public class SaannotTest {
     @Test(expected = IllegalArgumentException.class)
     public void testEpakelvotSaannot() {
         System.out.println("Testataan järjenvastaisten sääntöjen luomista...\n");
-        Integer[] saantojenArvot = arvoSaantojenArvot();
-        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2] * -1);
+        int[] saantojenArvot = saantokone.arvoTauluSaannoista();
+        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2] - 1, saantokone.luoVakiotLaivojenMitatJaMaarat());
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testEpakelvotSaannot2() {
+        System.out.println("Testataan lisää järjenvastaisten sääntöjen luomista...\n");
+        Map<Integer, Integer> laivaKartta = new TreeMap<>();
+        laivaKartta.put(6, 1);
+        Saannot saannot2 = new Saannot(5, 5, 0, laivaKartta);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testEpakelvotSaannot3() {
+        System.out.println("Testataan lisää järjenvastaisten sääntöjen luomista...\n");
+        Map<Integer, Integer> laivaKartta = new TreeMap<>();
+        laivaKartta.put(5, 1);
+        laivaKartta.put(4, 2);
+        Saannot saannot2 = new Saannot(5, 5, 0, laivaKartta);
     }
     
     @Test
     public void testSaannotOletusarvoilla() {
         System.out.println("Testataan säännöt oletusarvoilla...\n");
-        Integer[] saantojenArvot = {10, 10, 0};
+        int[] saantojenArvot = {10, 10, 0, 4, 4, 6, 6, 4};
         List<Object> saadutArvot = luoListaKentista(saannot);
         vertaile(saantojenArvot, saadutArvot);
     }
@@ -66,8 +85,8 @@ public class SaannotTest {
     @Test
     public void testSaannotSatunnaisillaArvoilla() {
         System.out.println("Testataan säännöt satunnaisilla arvoilla...\n");
-        Integer[] saantojenArvot = arvoSaantojenArvot();
-        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2]);
+        int[] saantojenArvot = saantokone.arvoTauluSaannoista();
+        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2], saantokone.luoVakiotLaivojenMitatJaMaarat());
         List<Object> saadutArvot = luoListaKentista(saannot2);
         vertaile(saantojenArvot, saadutArvot);
     }
@@ -75,48 +94,52 @@ public class SaannotTest {
     @Test
     public void testAnnaSisaltoSatunnaisillaArvoilla() {
         System.out.println("Testataan metodi annaSisalto satunnaisilla arvoilla...\n");
-        Integer[] saantojenArvot = arvoSaantojenArvot();
-        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2]);
+        int[] saantojenArvot = saantokone.arvoTauluSaannoista();
+        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2], saantokone.luoVakiotLaivojenMitatJaMaarat());
         List<Object> sisalto = saannot2.annaSisalto();
         vertaile(saantojenArvot, sisalto);
     }
-    
-    private List<Object> luoListaKentista(Saannot olio) {
-        List<Object> saadutArvot = new ArrayList<>();
-        saadutArvot.add(olio.leveys());
-        saadutArvot.add(olio.korkeus());
-        saadutArvot.add(olio.vuoroja());
-        return saadutArvot;
+        
+    @Test
+    public void testRakennaSisalto() {
+        
     }
     
-    private void vertaile(Integer[] saantojenArvot, List<Object> saadutArvot) {
-        for (int i = 0; i < 3; i++) {
+    @Test
+    public void testAnnaLaivojenMitatJaMaarat() {
+        System.out.println("Testataan metodi annaLaivojenMitatJaMaarat...");
+        
+        Map<Integer, Integer> odotetutMitatJaMaarat = new TreeMap<>();
+        odotetutMitatJaMaarat.put(4, 1);
+        odotetutMitatJaMaarat.put(3, 2);
+        odotetutMitatJaMaarat.put(2, 3);
+        odotetutMitatJaMaarat.put(1, 4);
+        
+        Map<Integer, Integer> saadutMitatJaMaarat = saannot.annaLaivojenMitatJaMaarat();
+        
+        System.out.println("Odotettiin: " + odotetutMitatJaMaarat.toString());
+        System.out.println("Saatiin:    " + saadutMitatJaMaarat.toString());
+        
+        assertEquals(odotetutMitatJaMaarat, saadutMitatJaMaarat);
+    }
+    
+    private List<Object> luoListaKentista(Saannot olio) {
+//        List<Object> saadutArvot = new ArrayList<>();
+//        saadutArvot.add(olio.leveys());
+//        saadutArvot.add(olio.korkeus());
+//        saadutArvot.add(olio.vuoroja());
+//        return saadutArvot;
+        return olio.annaSisalto();
+    }
+    
+    private void vertaile(int[] saantojenArvot, List<Object> saadutArvot) {
+        if(saantojenArvot.length != saadutArvot.size()) {
+            fail("Odotettujen ja saatujen arvojen määrät eivät täsmänneet.");
+        }
+        for (int i = 0; i < saantojenArvot.length; i++) {
             System.out.println("Odotettu arvo: " + saantojenArvot[i] + ", saatu arvo: " + saadutArvot.get(i));
             assertEquals(saantojenArvot[i], saadutArvot.get(i));
         }
-    }
-    
-    private Integer[] arvoSaantojenArvot() {
-        Integer[] saantojenArvot = new Integer[3];
-        
-//        for (int i = 0; i < 3; i++) {
-//            Integer maara = arpoja.nextInt(Integer.MAX_VALUE);
-//            saantojenArvot[i] = maara;
-//            System.out.println("Testattavaksi " + saantojenNimet[i] + " arvottiin " + maara + ".");
-//        }
-        int maara = arpoja.nextInt(15) + 5;
-        saantojenArvot[0] = maara;
-        System.out.println("Testattavaksi " + saantojenNimet[0] + " arvottiin " + maara + ".");
-        maara = arpoja.nextInt(15) + 5;
-        saantojenArvot[1] = maara;
-        System.out.println("Testattavaksi " + saantojenNimet[1] + " arvottiin " + maara + ".");
-        maara = arpoja.nextInt(Integer.MAX_VALUE);
-        saantojenArvot[2] = maara;
-        System.out.println("Testattavaksi " + saantojenNimet[2] + " arvottiin " + maara + ".");
-        
-        System.out.println();
-        
-        return saantojenArvot;
     }
 
 }

@@ -4,6 +4,8 @@
  */
 package laivanupotus.rajapinnat;
 
+import laivanupotus.kontrolli.Pelaaja;
+import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.kontrolli.Pelikierros;
 
 /**
@@ -13,7 +15,9 @@ import laivanupotus.kontrolli.Pelikierros;
 public interface Kayttoliittyma {
     
     void asetaPelikierros(Pelikierros pelikierros);
+    void asetaKatsoja(Pelaaja katsoja);
     void alusta();
-    void paivita();
+    void paivita(Pelialue pelialue, int x, int y);
+    void tulosta();
     
 }
