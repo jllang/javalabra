@@ -14,7 +14,7 @@ import laivanupotus.tietorakenteet.Saannot;
 
 /**
  *
- * @author johnny
+ * @author John Lång
  */
 public class LaivojenArpoja {
     

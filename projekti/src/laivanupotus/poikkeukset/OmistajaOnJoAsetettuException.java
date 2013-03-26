@@ -6,7 +6,7 @@ package laivanupotus.poikkeukset;
 
 /**
  *
- * @author johnny
+ * @author John Lång
  */
 public class OmistajaOnJoAsetettuException extends Exception {
     
