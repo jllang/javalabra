@@ -1,4 +1,4 @@
-javalabra
-=========
+Javalabra: Projekti Laivanupotus
+================================
 
-Testaanpa muokata tätä...
+Nimi sanoo kaiken.
