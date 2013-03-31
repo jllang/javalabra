@@ -102,6 +102,15 @@ public class Saannot implements Tallennettava {
     public int vuoroja() {
         return (int) VARASTO.get(2);
     }
+    
+    public int laivapintaAla() {
+        // Tämä tarvitsee testin.
+        int laivapintaAla = 0;
+        for (int i = 3; i < VARASTO.size(); i++) {
+            laivapintaAla += (int) VARASTO.get(i);
+        }
+        return laivapintaAla;
+    }
 
     @Override
     public List<Object> annaSisalto() {

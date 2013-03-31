@@ -5,6 +5,7 @@
 package laivanupotus.kontrolli;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,27 +25,22 @@ public class Laivanupotus {
      */
     public static void main(String[] args) {
         Kayttoliittyma kayttoliittyma = new Tekstikayttoliittyma();
-        Map<Integer, Integer> laivojenMitatjaMaarat = new TreeMap<>();
-        laivojenMitatjaMaarat.put(1, 2);
-        laivojenMitatjaMaarat.put(2, 0);
-        laivojenMitatjaMaarat.put(3, 2);
-        Saannot saannot = new Saannot(20, 10, 0, laivojenMitatjaMaarat);
+        Random arpoja = new Random();
+//        Map<Integer, Integer> laivojenMitatjaMaarat = new TreeMap<>();
+////        laivojenMitatjaMaarat.put(1, 4);
+////        laivojenMitatjaMaarat.put(2, 3);
+////        laivojenMitatjaMaarat.put(3, 2);
+////        laivojenMitatjaMaarat.put(4, 1);
+//        laivojenMitatjaMaarat.put(1, 1);
+//        laivojenMitatjaMaarat.put(2, 1);
+//        laivojenMitatjaMaarat.put(3, 1);
+//        Saannot saannot = new Saannot(5, 5, 0, laivojenMitatjaMaarat);
+//        Saannot saannot = new Saannot(20, 10, 0, laivojenMitatjaMaarat); //Kaatuu
+        Saannot saannot = new Saannot();
         Pelaaja p1 = new Ihmispelaaja();
-        Pelaaja p2 = new Ihmispelaaja();
-        Pelikierros pelikierros = new Pelikierros(kayttoliittyma, saannot, p1, p2);
-        
-        LaivojenArpoja sijoittamisTekoaly = new LaivojenArpoja(saannot);
-        try {
-            sijoittamisTekoaly.arvoLaivat(p1);
-            sijoittamisTekoaly.arvoLaivat(p2);
-        } catch (Exception ex) {
-            Logger.getLogger(Laivanupotus.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        
-        kayttoliittyma.asetaPelikierros(pelikierros);
-        kayttoliittyma.asetaKatsoja(p1);
-        kayttoliittyma.alusta();
-        kayttoliittyma.tulosta();
+        Pelaaja p2 = new Tekoalypelaaja(arpoja, saannot);
+        Pelikierros pelikierros = new Pelikierros(kayttoliittyma, arpoja, saannot, p1, p2);
+        pelikierros.aloita();
         
     }
 }

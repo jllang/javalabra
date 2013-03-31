@@ -8,6 +8,7 @@ import java.util.List;
 import laivanupotus.kontrolli.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
+import laivanupotus.poikkeukset.RuudussaOnJoLaivaException;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
 import laivanupotus.poikkeukset.VaaranPelaajanRuutuException;
 import laivanupotus.rajapinnat.Kayttoliittyma;
@@ -27,18 +28,20 @@ public class Pelialue {
     private final Piste[][]         KOORDINAATISTO;
     private final int               LEVEYS, KORKEUS;
     
+    private int                     ehjaPintaAla;
+    
     public Pelialue(Pelikierros pelikierros, Pelaaja pelaaja) {
         this.KAYTTOLIITTYMA = pelikierros.annaKayttoliittyma();
         this.OMISTAJA = pelaaja;
         this.LEVEYS = pelikierros.annaSaannot().leveys();
         this.KORKEUS = pelikierros.annaSaannot().korkeus();
-        this.KOORDINAATISTO = new Piste[KORKEUS][LEVEYS];
-        
+        this.KOORDINAATISTO = new Piste[KORKEUS][LEVEYS];        
         for (int i = 0; i < KORKEUS; i++) {
             for (int j = 0; j < LEVEYS; j++) {
                 KOORDINAATISTO[i][j] = new Piste();
             }
         }
+        this.ehjaPintaAla = 0;
     }
     
     public void lisaaLaiva(Pelaaja omistaja, int x, int y) throws Exception {
@@ -47,8 +50,9 @@ public class Pelialue {
 
         if (!pisteessaOnLaiva(piste)) {
             piste.osaLaivaa = true;
+            ehjaPintaAla++;
         } else {
-            piste.osaLaivaa = false;
+            throw new RuudussaOnJoLaivaException();
         }
         
         KAYTTOLIITTYMA.paivita(this, x, y);
@@ -62,6 +66,10 @@ public class Pelialue {
             piste.osuma = true;
         } else {
             throw new RuutuunOnJoAmmuttuException();
+        }
+        
+        if (pisteessaOnLaiva(piste)) {
+            ehjaPintaAla--;
         }
         
         KAYTTOLIITTYMA.paivita(this, x, y);
@@ -98,6 +106,15 @@ public class Pelialue {
             }
         }
         return ruutu;
+    }
+    
+    public boolean laivojaOnJaljella() {
+        return ehjaPintaAla > 0;
+    }
+    
+    public int laivapintaAlaaJaljella() {
+        //Väliaikainen ratkaisu LaivojenArpojan tuloksen tarkistamiseksi.
+        return ehjaPintaAla;
     }
     
     private Piste haePiste(int x, int y) throws IndexOutOfBoundsException {
