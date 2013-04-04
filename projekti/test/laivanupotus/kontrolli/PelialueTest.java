@@ -4,6 +4,8 @@
  */
 package laivanupotus.kontrolli;
 
+import laivanupotus.kayttajat.Ihmispelaaja;
+import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.tietorakenteet.Pelialue;
 import java.util.Random;
 import java.util.logging.Level;
@@ -18,7 +20,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import testilogiikka.SaantojenArpoja;
 
 /**
  *
@@ -26,10 +27,12 @@ import testilogiikka.SaantojenArpoja;
  */
 public class PelialueTest {
     
+    private static Poikkeustenkasittelija poikkeustenkasittelija;
     private static Random           arpoja;
     private static SaantojenArpoja  saantokone;
     private static Kayttoliittyma   kayttoliittyma;
     private static Pelaaja          leikkipelaaja1, leikkipelaaja2;
+    
     private int                     leveys, korkeus, x, y;
     private Pelikierros             pelikierros;
     private Pelialue                pelialue1, pelialue2;
@@ -40,16 +43,18 @@ public class PelialueTest {
     
     @BeforeClass
     public static void setUpClass() {
+        poikkeustenkasittelija              = new Poikkeustenkasittelija(kayttoliittyma, true, false);
         arpoja          = new Random();
         saantokone      = new SaantojenArpoja(arpoja);
-        kayttoliittyma  = new Tekstikayttoliittyma();
+        kayttoliittyma  = new Tekstikayttoliittyma(false);
         leikkipelaaja1  = new Ihmispelaaja();
         leikkipelaaja2  = new Ihmispelaaja();
     }
     
     @AfterClass
     public static void tearDownClass() {
-        System.out.println("================================================================================\n");
+        System.out.println("==================================================="
+                + "=============================\n");
     }
     
     @Before
@@ -57,16 +62,21 @@ public class PelialueTest {
         Saannot saannot = saantokone.arvoSaannot();
         leveys          = saannot.leveys();
         korkeus         = saannot.korkeus();
-        pelikierros     = new Pelikierros(kayttoliittyma, saannot, leikkipelaaja1, leikkipelaaja2);
+        pelikierros     = new Pelikierros(kayttoliittyma, poikkeustenkasittelija,
+                arpoja, saannot, leikkipelaaja1, leikkipelaaja2);
         pelialue1       = new Pelialue(pelikierros, leikkipelaaja1);
         pelialue2       = new Pelialue(pelikierros, leikkipelaaja2);
         x               = arpoja.nextInt(leveys);
         y               = arpoja.nextInt(korkeus);
+        kayttoliittyma.asetaPelikierros(pelikierros);
+        kayttoliittyma.asetaKatsoja(leikkipelaaja1);
+        kayttoliittyma.alusta();
     }
     
     @After
     public void tearDown() {
-        System.out.println("--------------------------------------------------------------------------------\n");
+        System.out.println("---------------------------------------------------"
+                + "-----------------------------\n");
     }
     
     @Test

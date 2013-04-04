@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import testilogiikka.SaantojenArpoja;
+import laivanupotus.kontrolli.SaantojenArpoja;
 
 /**
  *
@@ -71,6 +71,9 @@ public class SaannotTest {
         Map<Integer, Integer> laivaKartta = new TreeMap<>();
         laivaKartta.put(5, 1);
         laivaKartta.put(4, 2);
+        laivaKartta.put(3, 0);
+        laivaKartta.put(2, 1);
+        laivaKartta.put(1, 0);
         Saannot saannot2 = new Saannot(5, 5, 0, laivaKartta);
     }
     

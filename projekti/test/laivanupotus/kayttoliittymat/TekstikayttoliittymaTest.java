@@ -7,10 +7,11 @@ package laivanupotus.kayttoliittymat;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Random;
-import laivanupotus.kontrolli.Ihmispelaaja;
-import laivanupotus.kontrolli.Pelaaja;
+import laivanupotus.kayttajat.Ihmispelaaja;
+import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.kontrolli.Pelikierros;
+import laivanupotus.kontrolli.Poikkeustenkasittelija;
 import laivanupotus.tietorakenteet.Saannot;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,16 +19,19 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import testilogiikka.SaantojenArpoja;
+import org.junit.Ignore;
+import laivanupotus.kontrolli.SaantojenArpoja;
 
 /**
  *
- * @author johnny
+ * @author John Lång
  */
+@Ignore  //Ei valmis
 public class TekstikayttoliittymaTest {
     
     private static ByteArrayOutputStream    standardiulostulo;
     private static ByteArrayOutputStream    virheulostulo;
+    private static Poikkeustenkasittelija   poikkeustenkasittelija;
     private static Random                   arpoja;
     private static SaantojenArpoja          saantokone;
     private static Pelaaja                  pelaaja1, pelaaja2;
@@ -58,11 +62,13 @@ public class TekstikayttoliittymaTest {
     
     @Before
     public void setUp() {
+        poikkeustenkasittelija  = new Poikkeustenkasittelija(tekstikayttoliittyma, true, false);
         saannot                 = saantokone.arvoSaannot();
         leveys                  = saannot.leveys();
         korkeus                 = saannot.korkeus();
-        tekstikayttoliittyma    = new Tekstikayttoliittyma();
-        pelikierros             = new Pelikierros(tekstikayttoliittyma, saannot, pelaaja1, pelaaja2);
+        tekstikayttoliittyma    = new Tekstikayttoliittyma(false);
+        pelikierros             = new Pelikierros(tekstikayttoliittyma,
+                poikkeustenkasittelija, arpoja, saannot, pelaaja1, pelaaja2);
         pelialue1               = pelikierros.annaPelialue1();
         pelialue2               = pelikierros.annaPelialue2();
         tekstikayttoliittyma.asetaPelikierros(pelikierros);

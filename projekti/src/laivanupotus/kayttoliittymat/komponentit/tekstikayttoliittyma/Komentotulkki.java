@@ -3,12 +3,12 @@
  * and open the template in the editor.
  */
 
-package laivanupotus.kontrolli;
+package laivanupotus.kayttoliittymat.komponentit.tekstikayttoliittyma;
 
 import java.util.HashMap;
 import java.util.Map;
 import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.Komentotyyppi;
+import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 
 /**
  *
@@ -42,7 +42,7 @@ public class Komentotulkki {
         KIRJAINKARTTA.put("T", 19);
     }
     
-    public Komento tulkitse(String syote) throws Exception {
+    public Komento tulkitse(String syote) throws IllegalArgumentException {
         String[] syotteenOsat = syote.split(" ");
         Komento tulkittuKomento;
         switch (syotteenOsat[0]) {
@@ -55,11 +55,22 @@ public class Komentotulkki {
             case "PAIVITA":
                 tulkittuKomento = new Komento(Komentotyyppi.PAIVITA_KAYTTOLIITTYMA);
                 break;
+            case "LAIVOJA":
+                tulkittuKomento = new Komento(Komentotyyppi.TILAKYSELY,
+                        Komento.TILAKYSELY_VASTUSTAJAN_LAIVOJA_JALJELLA);
+                break;
+            case "VUOROJA":
+                tulkittuKomento = new Komento(Komentotyyppi.TILAKYSELY,
+                        Komento.TILAKYSELY_VUOROJA_JALJELLA);
+                break;
             case "AMMU":
                 tarkistaKoordinaattiParametrit(syotteenOsat);
                 tulkittuKomento = new Komento(Komentotyyppi.AMMU,
                     KIRJAINKARTTA.get(syotteenOsat[1]),
                     Integer.parseInt(syotteenOsat[2]) - 1);
+                break;
+            case "LUOVUTA":
+                tulkittuKomento = new Komento(Komentotyyppi.LUOVUTA);
                 break;
             default:
                 tulkittuKomento = new Komento(Komentotyyppi.TUNTEMATON);
@@ -67,13 +78,14 @@ public class Komentotulkki {
         return tulkittuKomento;
     }
 
-    private void tarkistaKoordinaattiParametrit(String[] syotteenOsat) throws IllegalArgumentException {
+    private void tarkistaKoordinaattiParametrit(String[] syotteenOsat)
+            throws IllegalArgumentException {
         // Tarkastetaan vain koordinaattien muoto, ei oikeellisuutta:
         // (Oikeellisuuden tarkastaminen kuuluu luokalle Pelialue.)
         if (syotteenOsat[1].matches("[^A-T]")
                 || syotteenOsat[2].matches("[^0-9]")) {
-            throw new IllegalArgumentException("Ampumiskomennon"
-                    + "koordinaatit olivat virheelliset");
+            throw new IllegalArgumentException("Ampumiskomennon "
+                    + "koordinaatit olivat virheelliset.");
         }
     }
 

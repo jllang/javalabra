@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package testilogiikka;
+package laivanupotus.kontrolli;
 
 import java.util.Map;
 import java.util.Random;
@@ -22,7 +22,7 @@ public class SaantojenArpoja {
     }
     
     public Saannot arvoSaannot() {
-        int leveys = ARPOJA.nextInt(15) + 5, korkeus = ARPOJA.nextInt(15) + 5, vuoroja = 0;
+        int leveys = ARPOJA.nextInt(13) + 7, korkeus = ARPOJA.nextInt(13) + 7, vuoroja = 0;
         System.out.println("Pelikentän leveydeksi arvottiin " + leveys + ".");
         System.out.println("Pelikentän korkeudeksi arvottiin " + korkeus + ".");
         System.out.println("Pelin kestoksi arvottiin " + vuoroja + ".");

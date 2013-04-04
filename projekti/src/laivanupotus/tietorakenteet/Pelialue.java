@@ -5,7 +5,7 @@
 package laivanupotus.tietorakenteet;
 
 import java.util.List;
-import laivanupotus.kontrolli.Pelaaja;
+import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
 import laivanupotus.poikkeukset.RuudussaOnJoLaivaException;
@@ -14,7 +14,7 @@ import laivanupotus.poikkeukset.VaaranPelaajanRuutuException;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.rajapinnat.Tallennettava;
 import laivanupotus.tietorakenteet.Piste;
-import laivanupotus.tietorakenteet.Ruutu;
+import laivanupotus.tietorakenteet.enumit.Ruutu;
 import laivanupotus.tietorakenteet.Saannot;
 
 /**
@@ -108,6 +108,10 @@ public class Pelialue {
         return ruutu;
     }
     
+    public int laivojaJaljella() {
+        return ehjaPintaAla;
+    }
+    
     public boolean laivojaOnJaljella() {
         return ehjaPintaAla > 0;
     }
@@ -152,19 +156,5 @@ public class Pelialue {
     private boolean pisteessaOnOsuma(Piste piste) {
         return piste.osuma;
     }
-
-    /* Tätä metodia voisi käyttää pelin tallentamiseen (edellyttäen rajapinnan 
-     * "Tallennettava" implementointia):
-     */
-//    @Override
-//    public List<Object> annaSisalto() {
-//        List<Object> sisalto = new ArrayList<>();
-//        for (int i = 0; i < KORKEUS; i++) {
-//            for (int j = 0; j < LEVEYS; j++) {
-//                sisalto.add(KOORDINAATISTO[i][j]);
-//            }
-//        }
-//        return sisalto;
-//    }
     
 }

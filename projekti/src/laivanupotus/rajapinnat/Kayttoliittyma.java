@@ -4,7 +4,7 @@
  */
 package laivanupotus.rajapinnat;
 
-import laivanupotus.kontrolli.Pelaaja;
+import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.tietorakenteet.Komento;
@@ -13,7 +13,7 @@ import laivanupotus.tietorakenteet.Komento;
  *
  * @author John Lång
  */
-public interface Kayttoliittyma {
+public interface Kayttoliittyma extends Runnable {
     
     void asetaPelikierros(Pelikierros pelikierros);
     void asetaKatsoja(Pelaaja katsoja);
@@ -21,6 +21,7 @@ public interface Kayttoliittyma {
     void paivita(Pelialue pelialue, int x, int y);
     void tulostaPelitilanne();
     void tulostaViesti(String viesti);
+    void tulostaDebuggausViesti(String viesti);
     Komento pyydaKomento(Pelaaja pelaaja) throws Exception;
     
 }

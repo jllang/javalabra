@@ -44,6 +44,12 @@ public class Saannot implements Tallennettava {
     }
     
     private void tarkastaArvot(int leveys, int korkeus, int vuoroja, Map<Integer, Integer> laivojenMitatJaMaarat) {
+        tarkastaPelialueenMitat(leveys, korkeus, vuoroja);
+        tarkastaLaivojenMitatJaPintaAlat(laivojenMitatJaMaarat, leveys, korkeus);
+        
+    }
+    
+    private void tarkastaPelialueenMitat(int leveys, int korkeus, int vuoroja) throws IllegalArgumentException {
         if (leveys < 5
                 || leveys > 20
                 || korkeus < 5
@@ -51,25 +57,26 @@ public class Saannot implements Tallennettava {
                 || vuoroja < 0) {
             throw new IllegalArgumentException("Virheelliset säännöt: Ruudukon korkeuden tulee olla väliltä [5 ... 20] ja vuorojen määrä ei saa olla negatiivinen.");
         }
-        
+    }
+
+    private void tarkastaLaivojenMitatJaPintaAlat(Map<Integer, Integer> laivojenMitatJaMaarat, int leveys, int korkeus) throws IllegalArgumentException {
         if(laivojenMitatJaMaarat == null || laivojenMitatJaMaarat.isEmpty()) {
             throw new IllegalArgumentException("Virheelliset säännöt: Laivojen määriä ja mittoja ei annettu.");
         }
         
-        int laivojenKokonaisPintaAla = 0, alusluokanPintaAla = 0;
+        int laivojenKokonaisPintaAla = 0, laivojenLukumaara = 0;
         
         for (Integer pituus : laivojenMitatJaMaarat.keySet()) {
             if (pituus > leveys || pituus > korkeus) {
                 throw new IllegalArgumentException("Virheelliset säännöt: Laivojen pituudet eivät saa ylittää pelialueen mittoja.");
             }
             laivojenKokonaisPintaAla += pituus * laivojenMitatJaMaarat.get(pituus);
+            laivojenLukumaara++;
         }
         
-        //Tämä tarkastus on hieman karkea, mutta estänee aivan älyttömät laivojen määrät:
-        if (laivojenKokonaisPintaAla > (leveys * korkeus) / 3) {
+        if ((laivojenKokonaisPintaAla * 3 + laivojenLukumaara * 2) > (leveys - 2) * (korkeus - 2)) {
             throw new IllegalArgumentException("Virheelliset säännöt: Liikaa laivoja.");
-        }       
-        
+        }
     }
     
     private void lisaaLaivojenMitatJaMaarat(Map<Integer, Integer> laivojenMitatJaMaarat) {

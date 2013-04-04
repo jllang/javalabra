@@ -2,11 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package laivanupotus.kontrolli;
+package laivanupotus.kayttajat;
 
+import laivanupotus.kayttajat.Pelaaja;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.Komentotyyppi;
+import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 import laivanupotus.tietorakenteet.Saannot;
 
 /**
@@ -30,6 +33,12 @@ public class Tekoalypelaaja extends Pelaaja {
         int x = ARPOJA.nextInt(saannot.leveys());
         int y = ARPOJA.nextInt(saannot.korkeus());
         komento = new Komento(Komentotyyppi.AMMU, x, y);
+        
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException keskeytys) {
+            Logger.getLogger(Tekoalypelaaja.class.getName()).log(Level.SEVERE, null, keskeytys);
+        }
         
         return komento;
     }

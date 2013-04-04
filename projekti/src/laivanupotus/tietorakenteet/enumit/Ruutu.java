@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package laivanupotus.tietorakenteet;
+package laivanupotus.tietorakenteet.enumit;
 
 /**
  *
@@ -10,6 +10,6 @@ package laivanupotus.tietorakenteet;
  */
 public enum Ruutu {
     
-    TYHJA_EI_OSUMAA, LAIVA_EI_OSUMAA, TYHJA_OSUMA, LAIVA_OSUMA, TUNTEMATON, TARKASTETTU;
+    TYHJA_EI_OSUMAA, LAIVA_EI_OSUMAA, TYHJA_OSUMA, LAIVA_OSUMA, TUNTEMATON;
     
 }
