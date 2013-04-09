@@ -71,7 +71,7 @@
     nbproject/build-impl.xml file. 
 
     -->
-<!--    <property environment="env"/>
+    <property environment="env"/>
     <taskdef classpath="cobertura.jar" resource="tasks.properties"/>
     <target name="-pre-compile-test">
 	<delete dir="${build.instrumented.dir}" />
@@ -84,11 +84,11 @@
 		</fileset>
 	</cobertura-instrument>
     </target>
-    <target name="-post-test-run" depends="test">-->
+    <target name="-post-test-run" depends="test">
         <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
-<!--        <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>-->
+        <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
         <!-- Used by the hudson plug-in -->
-<!--        <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+        <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
         <delete file="cobertura.ser" />
-    </target>-->
+    </target>
 </project>
