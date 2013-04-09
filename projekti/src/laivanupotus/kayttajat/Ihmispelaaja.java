@@ -1,16 +1,22 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package laivanupotus.kayttajat;
 
-import laivanupotus.kayttajat.Pelaaja;
-import laivanupotus.tietorakenteet.Saannot;
+import laivanupotus.tietorakenteet.Komento;
 
 /**
  *
  * @author John Lång
  */
-public class Ihmispelaaja extends Pelaaja {
+public final class Ihmispelaaja extends Pelaaja {
+    
+    public Ihmispelaaja(String nimi) {
+        super(nimi);
+    }
+
+    @Override
+    public Komento annaKomento(Komento odotettu) {
+        // Vähän tyhmä ratkaisu ehkä...
+        return null;
+    }
     
 }

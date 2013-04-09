@@ -1,56 +1,52 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package laivanupotus.kontrolli;
 
-import laivanupotus.kayttajat.Tekoalypelaaja;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import laivanupotus.kielet.Kieli;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
 import laivanupotus.poikkeukset.TuntematonKomentoException;
 import laivanupotus.poikkeukset.TyhjaKomentoException;
 import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 import laivanupotus.tietorakenteet.Saannot;
+import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 
 /**
+ * Tämän luokka ohjaa varsinaista pelin kulkua ja välittää tietoa eri 
+ * komponenttien välillä.
  *
  * @author John Lång
  */
-public class Pelikierros {
+public final class Pelikierros {
 
     private final Kayttoliittyma            KAYTTOLIITTYMA;
     private final Poikkeustenkasittelija    POIKKEUSTENKASITTELIJA;
-    private final Random                    ARPOJA;
     private final Saannot                   SAANNOT;
     private final Pelaaja                   PELAAJA1;
     private final Pelaaja                   PELAAJA2;
     private final Pelialue                  PELIALUE1;
     private final Pelialue                  PELIALUE2;
     
-    private boolean                         peliJatkuu, vuorojenMääräOnRajoitettu;
+    private boolean                         peliJatkuu, vuorotOnRajoitettu;
     private Pelaaja                         voittaja, vuorossaolija;
     private int                             vuoro;
     
-    public Pelikierros(Kayttoliittyma kayttoliittyma,
-            Poikkeustenkasittelija poikkeustenkasittelija, Random arpoja,
-            Saannot saannot, Pelaaja pelaaja1, Pelaaja pelaaja2) {
+    public Pelikierros(
+            Kayttoliittyma kayttoliittyma,
+            Poikkeustenkasittelija poikkeustenkasittelija,
+            Saannot saannot,
+            Pelaaja pelaaja1,
+            Pelaaja pelaaja2) {
+        
         this.KAYTTOLIITTYMA         = kayttoliittyma;
         this.POIKKEUSTENKASITTELIJA = poikkeustenkasittelija;
-        this.ARPOJA                 = arpoja;
         this.SAANNOT                = saannot;
         this.PELAAJA1               = pelaaja1;
         this.PELAAJA2               = pelaaja2;
         this.PELIALUE1              = new Pelialue(this, pelaaja1);
         this.PELIALUE2              = new Pelialue(this, pelaaja2);
-        this.peliJatkuu    = true;
+        this.peliJatkuu             = true;
         this.vuorossaolija          = pelaaja1;
         this.PELAAJA1.asetaPelialue(PELIALUE1);
         this.PELAAJA2.asetaPelialue(PELIALUE2);
@@ -79,14 +75,13 @@ public class Pelikierros {
         return PELIALUE2;
     }
     
-    public void aloita() throws Exception {
-        LaivojenArpoja arpoja = new LaivojenArpoja(SAANNOT, ARPOJA);
+    /**
+     * Aloittaa pelikierroksen kulun.
+     */
+    public void aloita() {
         KAYTTOLIITTYMA.asetaKatsoja(PELAAJA1);
         KAYTTOLIITTYMA.asetaPelikierros(this);
         KAYTTOLIITTYMA.alusta();
-        
-        arpoja.sijoitaLaivasto(PELAAJA1);
-        arpoja.sijoitaLaivasto(PELAAJA2);
         
         while (peliJatkuu) {
             KAYTTOLIITTYMA.tulostaPelitilanne();
@@ -98,6 +93,15 @@ public class Pelikierros {
         }
     }
 
+    /**
+     * Tämän metodin tarkoitus on kuljettaa peliä eteenpäin yksi vuoro, joka 
+     * sisältää molempien pelaajien ampumiskomennot tai joka päättyy 
+     * mahdollisesti jomman kumman pelaajan voittoon tai luovutukseen
+     * @param pelaaja Vuorossa oleva pelaaja.
+     * @throws Exception Mahdollinen pelaajan sääntöjen vastaisen toiminnan tai 
+     * muun ei-toivotun tapahtuman aiheuttama poikkeus.
+     * @see Saannot
+     */
     private void kasitteleVuoro(Pelaaja pelaaja) throws Exception {
         if (!pelaaja.annaPelialue().laivojaOnJaljella()) {
             voittaja = annaVastapelaaja(pelaaja);
@@ -109,26 +113,37 @@ public class Pelikierros {
         Pelialue pelialue = annaVastapelaaja(pelaaja).annaPelialue();
 
         Komento komento;
+        
         if (pelaaja.getClass() == Ihmispelaaja.class) {
-            komento = KAYTTOLIITTYMA.pyydaKomento(pelaaja);
+            komento = KAYTTOLIITTYMA.pyydaKomento();
         } else {
-            Tekoalypelaaja tekoalypelaaja = (Tekoalypelaaja) pelaaja;
-            komento = tekoalypelaaja.ammuSatunnaiseenRuutuun();
+            komento = pelaaja.annaKomento(new Komento(Komentotyyppi.AMMU));
         }
+        
         kasitteleKomento(komento, pelialue);
     }
     
+    /**
+     * Käsittelee pelaajalta saatuja pelin kulkuun liittyviä komentoja.
+     * 
+     * @param komento luokan <tt>Komento</tt> instanssi, joka sisältää tiedon 
+     * suoritettavasta toiminnosta ja sen mahdollisista parametreista.
+     * @param pelialue Sen pelaajan pelialue, johon mahdollisesti ollaan 
+     * ampumassa.
+     * @throws Exception Mahdollinen pelaajan sääntöjen vastaisen toiminnan tai 
+     * muun ei-toivotun tapahtuman aiheuttama poikkeus.
+     */
     private void kasitteleKomento(Komento komento, 
             Pelialue pelialue) throws Exception {
         switch (komento.KOMENTOTYYPPI) {
             case TYHJA:
                 throw new TyhjaKomentoException();
-            case LUOVUTA:  //Asetetaan voittaja ja jatketaan eteenpäin.
+            case LUOVUTA:  // Asetetaan voittaja ja jatketaan eteenpäin.
                 voittaja = annaVastapelaaja(vuorossaolija);
             case LOPETA:
                 peliJatkuu = false;
                 return;
-            case PAIVITA_KAYTTOLIITTYMA:
+            case PAIVITA_KAYTTOLIITTYMA: // Varattu mahdollista myöhempää käyttöä varten
                 KAYTTOLIITTYMA.alusta();
                 KAYTTOLIITTYMA.tulostaPelitilanne();
                 return;
@@ -137,7 +152,7 @@ public class Pelikierros {
                 return;
             case AMMU:
                 try {
-                    pelialue.ammu(vuorossaolija,
+                    pelialue.ammuJaPaivityta(vuorossaolija,
                             komento.PARAMETRIT[0],
                             komento.PARAMETRIT[1]);
                     vuorossaolija = annaVastapelaaja(vuorossaolija);
@@ -157,7 +172,7 @@ public class Pelikierros {
                 KAYTTOLIITTYMA.tulostaViesti("On " + vuoro + ". vuoro.");
                 break;
             case Komento.TILAKYSELY_VUOROJA_JALJELLA:
-                if (vuorojenMääräOnRajoitettu) {
+                if (vuorotOnRajoitettu) {
                     KAYTTOLIITTYMA.tulostaViesti("Vuoroja on jäljellä "
                             + (SAANNOT.vuoroja() - vuoro));
                 } else {

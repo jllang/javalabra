@@ -1,25 +1,35 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package laivanupotus.tietorakenteet;
 
 /**
+ * Mallintaa yhtä pistettä koordinaatistossa. Pisteellä on tasan neljä 
+ * mahdollista erilaista aina tunnettua diskreettiä tilaa (, joten se voitaisiin
+ * myös mallintaa enumina,) jotka on tallennettu kahten julkiseen kenttään. 
+ * Suorituskyvyn parantamiseksi ja tarpeettoman monimutkaisuuden välttämiseksi 
+ * olen katsonut parhaaksi määrittää nämä kentät julkisiksi.
  *
  * @author John Lång
+ * @see Ruutu
+ * @see Pelialue
  */
-public class Piste {
+public final class Piste {
     
-    //private boolean nakyvissa;
-    public boolean osaLaivaa;  // Tosi jos ruutu on osa jotain laivaa.
-    public boolean osuma;      // Tosi jos ruutuun on ammuttu.
-    /* Muuttujat ovat toisistaan riippumattomia, joten "tyhjässä" ruudussa voi
-     * olla "osuma".
+    /**
+     * Tosi jos ja vain jos pisteessä on laiva.
      */
+    public boolean onOsaLaivaa;
     
+    /**
+     * Tosi jos ja vain jos pisteeseen on ammuttu.
+     */
+    public boolean onAmmuttu;
+    
+    /**
+     * Konstruktori joka luo aina tyhjän ruudun.
+     */
     public Piste() {
-        osaLaivaa   = false;
-        osuma       = false;
+        onOsaLaivaa = false;
+        onAmmuttu   = false;
     }
     
 }

@@ -1,27 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package laivanupotus.tietorakenteet;
 
-import java.util.List;
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
-import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
 import laivanupotus.poikkeukset.RuudussaOnJoLaivaException;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
 import laivanupotus.poikkeukset.VaaranPelaajanRuutuException;
 import laivanupotus.rajapinnat.Kayttoliittyma;
-import laivanupotus.rajapinnat.Tallennettava;
-import laivanupotus.tietorakenteet.Piste;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
-import laivanupotus.tietorakenteet.Saannot;
 
 /**
+ * Tämän luokan tarkoituksena on hallita pelaajan ruudukkoa sääntöjen mukaisesti.
  *
  * @author John Lång
+ * @see Saannot
  */
-public class Pelialue {
+public final class Pelialue {
     
     private final Kayttoliittyma    KAYTTOLIITTYMA;
     private final Pelaaja           OMISTAJA;
@@ -44,12 +38,27 @@ public class Pelialue {
         this.ehjaPintaAla = 0;
     }
     
-    public void lisaaLaiva(Pelaaja omistaja, int x, int y) throws Exception {
-        tarkastaOmistajuus(omistaja, true);
+    /**
+     * Lisää annettuun ruutuun laivan mikäli mahdollista.
+     * 
+     * @param lisaaja   Pelialueen omistaja. Parametria käytetään 
+     * varmistamaan että pelaaja omistaa pelialueen johon hän yrittää lisätä 
+     * laivan. Jos annettu pelaaja ei ole pelialueen omistaja, heitetään 
+     * poikkeus <tt>VaaranPelaajanRuutuException</tt>.
+     * @param x             Lisättävän laivan x-koordinaatti (kokonaislukuna).
+     * @param y             Lisättävän laivan y-koordinaatti.
+     * @throws Exception    Mahdollinen sääntöjen vastaisen laivan 
+     * lisäysyrityksen aiheuttama poikkeus.
+     * @see VaaranPelaajanRuutuException
+     * @see RuudussaOnJoLaivaException
+     * @see IndexOutOfBoundsException
+     */
+    public void lisaaLaiva(Pelaaja lisaaja, int x, int y) throws Exception {
+        tarkastaOmistajuus(lisaaja, true);
         Piste piste = haePiste(x, y);
 
         if (!pisteessaOnLaiva(piste)) {
-            piste.osaLaivaa = true;
+            piste.onOsaLaivaa = true;
             ehjaPintaAla++;
         } else {
             throw new RuudussaOnJoLaivaException();
@@ -58,12 +67,40 @@ public class Pelialue {
         KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
+    /**
+     * Ampuu annettuun ruutuun ja kutsuu käyttöliittymän metodia 
+     * <tt>paivita</tt> mikäli mahdollista. Tätä metodia käytetään ihmispelaajan 
+     * ampuessa vastapelaajan ruudukkoon.
+     * 
+     * @see Pelialue#ammu(laivanupotus.kayttajat.Pelaaja, int, int) 
+     * @see Kayttoliittyma#paivita(laivanupotus.tietorakenteet.Pelialue, int, int) 
+     */
+    public void ammuJaPaivityta(Pelaaja ampuja, int x, int y) throws Exception {
+        ammu(ampuja, x, y);
+        
+        KAYTTOLIITTYMA.paivita(this, x, y);
+    }
+    
+    /**
+     * Ampuu annettuun ruutuun mikäli mahdollista.
+     * 
+     * @param ampuja        Pelialueen omistajan vastapelaaja. Parametria 
+     * käytetään varmistamaan ettei pelaaja ammu omaan ruutuunsa.
+     * @param x             Lisättävän laivan x-koordinaatti (kokonaislukuna).
+     * @param y             Lisättävän laivan y-koordinaatti.
+     * @throws Exception    Mahdollinen sääntöjen vastaisen laivan 
+     * lisäysyrityksen aiheuttama poikkeus.
+     * @throws Exception 
+     * @see VaaranPelaajanRuutuException
+     * @see RuutuunOnJoAmmuttuException
+     * @see IndexOutOfBoundsException
+     */
     public void ammu(Pelaaja ampuja, int x, int y) throws Exception {
         tarkastaOmistajuus(ampuja, false);
         Piste piste = haePiste(x, y);
         
         if (!pisteessaOnOsuma(piste)) {
-            piste.osuma = true;
+            piste.onAmmuttu = true;
         } else {
             throw new RuutuunOnJoAmmuttuException();
         }
@@ -71,8 +108,6 @@ public class Pelialue {
         if (pisteessaOnLaiva(piste)) {
             ehjaPintaAla--;
         }
-        
-        KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
     public Ruutu[][] haeRuudukko(Pelaaja pelaaja) {
@@ -88,18 +123,19 @@ public class Pelialue {
         return ruudukko;
     }
         
-    public Ruutu haeRuutu(Pelaaja pelaaja, int x, int y) throws IndexOutOfBoundsException {
+    public Ruutu haeRuutu(Pelaaja pelaaja, int x, int y)
+            throws IndexOutOfBoundsException {
         Piste piste = haePiste(x, y);
         Ruutu ruutu = Ruutu.TUNTEMATON;
-        if (piste.osuma) {
-            if (piste.osaLaivaa) {
+        if (piste.onAmmuttu) {
+            if (piste.onOsaLaivaa) {
                 ruutu = Ruutu.LAIVA_OSUMA;
             } else  {
                 ruutu = Ruutu.TYHJA_OSUMA;
             }
         }
         else if (pelaajaOnOmistaja(pelaaja)) {
-            if (piste.osaLaivaa) {
+            if (piste.onOsaLaivaa) {
                 ruutu = Ruutu.LAIVA_EI_OSUMAA;
             } else {
                 ruutu = Ruutu.TYHJA_EI_OSUMAA;
@@ -126,7 +162,8 @@ public class Pelialue {
         return KOORDINAATISTO[y][x];
     }
     
-    private void tarkastaKoordinaatit(int x, int y) throws IndexOutOfBoundsException {
+    private void tarkastaKoordinaatit(int x, int y)
+            throws IndexOutOfBoundsException {
         if (x < 0
                 || x >= LEVEYS
                 || y < 0
@@ -135,7 +172,8 @@ public class Pelialue {
         }
     }
     
-    private void tarkastaOmistajuus(Pelaaja pelaaja, boolean odotettuPaluuarvo) throws VaaranPelaajanRuutuException {
+    private void tarkastaOmistajuus(Pelaaja pelaaja, boolean odotettuPaluuarvo)
+            throws VaaranPelaajanRuutuException {
         if (pelaajaOnOmistaja(pelaaja) != odotettuPaluuarvo) {
             if (odotettuPaluuarvo) {
                 throw new VaaranPelaajanRuutuException("Sääntörikkomus: Yritettiin suorittaa ruudukon omistajalle kuuluvaa toimintoa.");
@@ -150,11 +188,13 @@ public class Pelialue {
     }
     
     private boolean pisteessaOnLaiva(Piste piste) {
-        return piste.osaLaivaa;
+        return piste.onOsaLaivaa;
     }
     
     private boolean pisteessaOnOsuma(Piste piste) {
-        return piste.osuma;
+        return piste.onAmmuttu;
     }
+
+
     
 }

@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package laivanupotus.kontrolli;
 
 import java.util.Map;
@@ -10,10 +7,12 @@ import java.util.TreeMap;
 import laivanupotus.tietorakenteet.Saannot;
 
 /**
+ * Tämä luokka on lähinnä tarkoitettu apuvälineeksi luokan <tt>Saannot</tt> 
+ * automaattiseen yksikkötestaukseen.
  *
- * @author johnny
+ * @author John Lång
  */
-public class SaantojenArpoja {
+public final class SaantojenArpoja {
     
     private final Random ARPOJA;
     

@@ -51,8 +51,8 @@ public class TekstikayttoliittymaTest {
         virheulostulo       = new ByteArrayOutputStream();
         arpoja      = new Random();
         saantokone  = new SaantojenArpoja(arpoja);
-        pelaaja1    = new Ihmispelaaja();
-        pelaaja2    = new Ihmispelaaja();
+        pelaaja1    = new Ihmispelaaja("Kaisa");
+        pelaaja2    = new Ihmispelaaja("Pirjo-Liisa");
     }
     
     @AfterClass
@@ -68,7 +68,7 @@ public class TekstikayttoliittymaTest {
         korkeus                 = saannot.korkeus();
         tekstikayttoliittyma    = new Tekstikayttoliittyma(false);
         pelikierros             = new Pelikierros(tekstikayttoliittyma,
-                poikkeustenkasittelija, arpoja, saannot, pelaaja1, pelaaja2);
+                poikkeustenkasittelija, saannot, pelaaja1, pelaaja2);
         pelialue1               = pelikierros.annaPelialue1();
         pelialue2               = pelikierros.annaPelialue2();
         tekstikayttoliittyma.asetaPelikierros(pelikierros);

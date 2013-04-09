@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package laivanupotus.kayttoliittymat;
 
@@ -41,7 +37,7 @@ public class GraafinenKayttoliittyma implements Kayttoliittyma, Runnable {
     public void tulostaViesti(String viesti) {};
     
     @Override
-    public Komento pyydaKomento(Pelaaja pelaaja) throws Exception {
+    public Komento pyydaKomento() throws Exception {
         return null;
     };
 

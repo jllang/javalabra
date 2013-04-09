@@ -47,8 +47,8 @@ public class PelialueTest {
         arpoja          = new Random();
         saantokone      = new SaantojenArpoja(arpoja);
         kayttoliittyma  = new Tekstikayttoliittyma(false);
-        leikkipelaaja1  = new Ihmispelaaja();
-        leikkipelaaja2  = new Ihmispelaaja();
+        leikkipelaaja1  = new Ihmispelaaja("Jarkko");
+        leikkipelaaja2  = new Ihmispelaaja("Pirjo");
     }
     
     @AfterClass
@@ -63,7 +63,7 @@ public class PelialueTest {
         leveys          = saannot.leveys();
         korkeus         = saannot.korkeus();
         pelikierros     = new Pelikierros(kayttoliittyma, poikkeustenkasittelija,
-                arpoja, saannot, leikkipelaaja1, leikkipelaaja2);
+                saannot, leikkipelaaja1, leikkipelaaja2);
         pelialue1       = new Pelialue(pelikierros, leikkipelaaja1);
         pelialue2       = new Pelialue(pelikierros, leikkipelaaja2);
         x               = arpoja.nextInt(leveys);
@@ -83,7 +83,7 @@ public class PelialueTest {
     public void testAmmu() {
         System.out.println("Testataan ampumista...");
         try {
-            pelialue1.ammu(leikkipelaaja2, x, y);
+            pelialue1.ammuJaPaivityta(leikkipelaaja2, x, y);
         } catch (Exception poikkeus) {
             System.out.println("Saatiin kiinni poikkeus. (" + poikkeus + ")");
             fail("Ruutuun ei voitu ampua odotetusti.");
@@ -94,8 +94,8 @@ public class PelialueTest {
     public void testAmmuKaksiKertaaSamaanRuutuun() {
         System.out.println("Testataan ampumista samaan ruutuun kahdesti peräkkäin...");
         try {
-            pelialue1.ammu(leikkipelaaja2, x, y);
-            pelialue1.ammu(leikkipelaaja2, x, y);
+            pelialue1.ammuJaPaivityta(leikkipelaaja2, x, y);
+            pelialue1.ammuJaPaivityta(leikkipelaaja2, x, y);
         } catch (Exception poikkeus) {
             kasittelePoikkeus(RuutuunOnJoAmmuttuException.class, poikkeus);
             return;
@@ -107,7 +107,7 @@ public class PelialueTest {
     public void testAmmuOmaanRuutuun() {
         System.out.println("Testataan omaan ruutuun ampumista...");
         try {
-            pelialue1.ammu(leikkipelaaja1, x, y);
+            pelialue1.ammuJaPaivityta(leikkipelaaja1, x, y);
         } catch (Exception poikkeus) {
             kasittelePoikkeus(VaaranPelaajanRuutuException.class, poikkeus);
             return;
@@ -120,7 +120,7 @@ public class PelialueTest {
         System.out.println("Testataan ampua ruudukon ulkopuolelle");
         x = x * -1;
         try {
-            pelialue1.ammu(leikkipelaaja2, x, y);
+            pelialue1.ammuJaPaivityta(leikkipelaaja2, x, y);
         } catch (Exception poikkeus) {
             kasittelePoikkeus(IndexOutOfBoundsException.class, poikkeus);
             return;

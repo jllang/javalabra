@@ -22,3 +22,22 @@ Tiistai 26.3:
 Lauantai 30.3:
 	- Kello 14.30 - 17.30: Itsenäistä työskentelyä
 	- Kello 18.30 - 22.00: Itsenäistä työskentelyä
+
+Tiistai 2.4:
+	- Kello 16:00 - 16:30: Itsenäistä työskentelyä
+	- Kello 17:30 - 20.00: Itsenäistä työskentelyä
+
+Keskiviikko 3.4:
+	- Kello 13.20 - 16.20: Itsenäistä työskentelyä
+	- Kello 17.15 - 21.45: Itsenäistä työskentelyä
+
+Torstai 4.4:
+	- Kello 19.45 - 21.45: Itsenäistä työskentelyä
+
+Lauantai 6.4:
+	- Kello 16.00 - 19.15: Itsenäistä työskentelyä
+
+Tiistai 9.4:
+	- Kello 12.00 - 13.30: Itsenäistä työskentelyä
+	- Kello 15.15 - 20.30: Itsenäistä työskentelyä
+	- Kello 21.15 - 22.00: Itsenäistä työskentelyä

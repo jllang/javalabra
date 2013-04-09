@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package laivanupotus.kayttoliittymat;
 
 import laivanupotus.kayttoliittymat.komponentit.tekstikayttoliittyma.Komentotulkki;
@@ -16,10 +13,12 @@ import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
 
 /**
+ * Tämän luokan tarkoituksena on toteuttaa käyttöjärjestelmän komentotulkista 
+ * käsin operoitava käyttöliittymä.
  *
- * @author John Lång
+ * @author John Lång 
  */
-public class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
+public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     
     private static final int    KUVAN_LEVEYS = 80, KUVAN_KORKEUS = 21;
     private static final char[] AAKKOSET = {
@@ -47,6 +46,14 @@ public class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     private static int          ruudukonLeveys, ruudukonKorkeus;
     private Pelaaja             katsoja;
     
+    /**
+     * Luokan Tekstikayttoliittyma konstruktori.
+     * 
+     * @param varitOnKaytossa Käytetäänkö viestien tulostamisessa System.out 
+     * -virtaan "ANSI escape code"-merkkijonoja. Kyseinen ominaisuus ei toimi 
+     * Windows-käyttöjärjestelmissä ja oletuksena luokan Laivanupotus metodi 
+     * main syöttää Tekstikayttoliittyman konstruktorille arvon false.
+     */
     public Tekstikayttoliittyma(boolean varitOnKaytossa) {
         this.LUKIJA             = new Scanner(System.in);
         this.KOMENTOTULKKI      = new Komentotulkki();
@@ -101,9 +108,9 @@ public class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     }
     
     @Override
-    public Komento pyydaKomento(Pelaaja pelaaja) throws Exception {
-        Komento luettu = null;
-        System.out.print("> ");
+    public Komento pyydaKomento() throws Exception {
+        Komento luettu;
+        tulostaMerkkijono("> ");
         String syote = LUKIJA.nextLine();
         luettu = KOMENTOTULKKI.tulkitse(syote.toUpperCase());
         

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package laivanupotus.kayttoliittymat.komponentit.tekstikayttoliittyma;
 
@@ -11,10 +7,14 @@ import laivanupotus.tietorakenteet.Komento;
 import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 
 /**
+ * Tämän luokan on tarkoitus toimia luokan <tt>Tekstikayttoliittyma</tt> 
+ * komponenttina. Komentotulkki muuntaa käyttöliittymän välittämän ihmisen 
+ * syöttämän merkkijonon ohjelman sisäisessä kontrollissa käytettäväksi luokan 
+ * <tt>Komento</tt> instanssiksi.
  *
  * @author John Lång
  */
-public class Komentotulkki {
+public final class Komentotulkki {
     
     private final Map<String, Integer> KIRJAINKARTTA;
     
@@ -42,49 +42,71 @@ public class Komentotulkki {
         KIRJAINKARTTA.put("T", 19);
     }
     
+    /**
+     * Tämän metodin tarkoituksena on muuntaa ihmisen antamat merkkijonot luokan
+     * <tt>Komento</tt> instansseiksi.
+     *
+     * @param syote Syötteenä annettu tarkastettava ja tulkittava merkkijono.
+     * @return Uusi, oikeanmuotoiseksi varmistettu, luokan <tt>Komento</tt> 
+     * instanssi.
+     * @throws IllegalArgumentException Virhe joka palautetaan jos merkkijonoa 
+     * ei pystytty tulkitsemaan kelvolliseksi komennoksi.
+     */
     public Komento tulkitse(String syote) throws IllegalArgumentException {
+        if (syote == null || syote.isEmpty()) {
+            throw new IllegalArgumentException("Pelaaja antoi tyhjän komennon.");
+        }
         String[] syotteenOsat = syote.split(" ");
-        Komento tulkittuKomento;
         switch (syotteenOsat[0]) {
             case "":
-                tulkittuKomento = new Komento(Komentotyyppi.TYHJA);
-                break;
+                return new Komento();
             case "LOPETA":
-                tulkittuKomento = new Komento(Komentotyyppi.LOPETA);
-                break;
+                return new Komento(Komentotyyppi.LOPETA);
             case "PAIVITA":
-                tulkittuKomento = new Komento(Komentotyyppi.PAIVITA_KAYTTOLIITTYMA);
-                break;
+                return new Komento(Komentotyyppi.PAIVITA_KAYTTOLIITTYMA);
             case "LAIVOJA":
-                tulkittuKomento = new Komento(Komentotyyppi.TILAKYSELY,
+                return new Komento(Komentotyyppi.TILAKYSELY,
                         Komento.TILAKYSELY_VASTUSTAJAN_LAIVOJA_JALJELLA);
-                break;
             case "VUOROJA":
-                tulkittuKomento = new Komento(Komentotyyppi.TILAKYSELY,
+                return new Komento(Komentotyyppi.TILAKYSELY,
                         Komento.TILAKYSELY_VUOROJA_JALJELLA);
-                break;
+            case "ASETA":
+                tarkistaSyotteenOsienMaara(syotteenOsat, 4);
+                tarkistaKoordinaatit(syotteenOsat);
+                return new Komento(Komentotyyppi.SIJOITA_LAIVA,
+                    KIRJAINKARTTA.get(syotteenOsat[1]),
+                    Integer.parseInt(syotteenOsat[2]) - 1,
+                        Integer.parseInt(syotteenOsat[3]) - 1);
             case "AMMU":
-                tarkistaKoordinaattiParametrit(syotteenOsat);
-                tulkittuKomento = new Komento(Komentotyyppi.AMMU,
+                tarkistaSyotteenOsienMaara(syotteenOsat, 3);
+                tarkistaKoordinaatit(syotteenOsat);
+                return new Komento(Komentotyyppi.AMMU_JA_PAIVITYTA,
                     KIRJAINKARTTA.get(syotteenOsat[1]),
                     Integer.parseInt(syotteenOsat[2]) - 1);
-                break;
             case "LUOVUTA":
-                tulkittuKomento = new Komento(Komentotyyppi.LUOVUTA);
-                break;
+                return new Komento(Komentotyyppi.LUOVUTA);
             default:
-                tulkittuKomento = new Komento(Komentotyyppi.TUNTEMATON);
+                return new Komento(Komentotyyppi.TUNTEMATON);
         }
-        return tulkittuKomento;
+    }
+    
+    private void tarkistaSyotteenOsienMaara(String[] syotteenOsat,
+            int haluttuMaara) throws IllegalArgumentException {
+        // Tarkastetaan vain koordinaattien määrä, ei oikeellisuutta:
+        if (syotteenOsat[1].matches("[^A-T]")
+                || syotteenOsat[2].matches("[^0-9]")) {
+            throw new IllegalArgumentException("Annettujen parametrien määrä "
+                    + "oli virheellinen");
+        }
     }
 
-    private void tarkistaKoordinaattiParametrit(String[] syotteenOsat)
+    private void tarkistaKoordinaatit(String[] koordionaatit)
             throws IllegalArgumentException {
         // Tarkastetaan vain koordinaattien muoto, ei oikeellisuutta:
         // (Oikeellisuuden tarkastaminen kuuluu luokalle Pelialue.)
-        if (syotteenOsat[1].matches("[^A-T]")
-                || syotteenOsat[2].matches("[^0-9]")) {
-            throw new IllegalArgumentException("Ampumiskomennon "
+        if (koordionaatit[1].matches("[^A-T]")
+                || koordionaatit[2].matches("[^0-9]")) {
+            throw new IllegalArgumentException("Komennon "
                     + "koordinaatit olivat virheelliset.");
         }
     }

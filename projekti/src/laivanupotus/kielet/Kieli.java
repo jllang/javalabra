@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package laivanupotus.kielet;
 
@@ -9,10 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Tämän keskeneräisen luokan tarkoituksena on tulevaisuudessa mahdollistaa 
+ * ohjelman kääntäminen eri kielille siten, että käyttöliittymä pyytää eri 
+ * tilanteissa tulostettavat merkkijonot luokan instanssilta. Käyttämättömät 
+ * kielet säilytetään tiedostojärjestelmässä keskusmuistin säästämiseksi.
  *
  * @author John Lång
+ * @see Tallennettava
+ * @see Tallentaja
  */
-public abstract class Kieli {
+public final class Kieli {
     
     private static final int PELITILANNE_VUORO  = 1;
     
