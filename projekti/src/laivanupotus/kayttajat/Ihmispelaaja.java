@@ -1,6 +1,7 @@
 
 package laivanupotus.kayttajat;
 
+import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
 
 /**
@@ -14,9 +15,9 @@ public final class Ihmispelaaja extends Pelaaja {
     }
 
     @Override
-    public Komento annaKomento(Komento odotettu) {
-        // Vähän tyhmä ratkaisu ehkä...
-        return null;
+    public Komento annaKomento(Komento odotettu) throws Exception {
+        // Menee vähän ihmeelliseksi pyörittelyksi mutta saa kelvata toistaiseksi.
+        return Tekoalypelaaja.annaSatunnainenSijoituskomento(odotettu.PARAMETRIT[0]);
     }
     
 }

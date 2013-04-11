@@ -15,16 +15,16 @@ import laivanupotus.tietorakenteet.Saannot;
  */
 public final class Tekoalypelaaja extends Pelaaja {
     
-    private final Random    ARPOJA;
-    private Saannot         saannot;
-    private int             korkeus, leveys;
+    private static Random   arpoja;
+    private static Saannot  saannot;
+    private static int      korkeus, leveys;
     
     public Tekoalypelaaja(Random arpoja, Saannot saannot) {
         super("Tietokone");
-        this.ARPOJA     = arpoja;
-        this.saannot    = saannot;
-        this.korkeus    = saannot.korkeus();
-        this.leveys     = saannot.leveys();
+        Tekoalypelaaja.arpoja   = arpoja;
+        Tekoalypelaaja.saannot  = saannot;
+        Tekoalypelaaja.korkeus  = saannot.korkeus();
+        Tekoalypelaaja.leveys   = saannot.leveys();
     }
     
     @Override
@@ -42,8 +42,8 @@ public final class Tekoalypelaaja extends Pelaaja {
     private Komento annaSatunnainenAmpumiskomento() {
         Komento komento;
         
-        int x = ARPOJA.nextInt(leveys);
-        int y = ARPOJA.nextInt(korkeus);
+        int x = arpoja.nextInt(leveys);
+        int y = arpoja.nextInt(korkeus);
         komento = new Komento(Komentotyyppi.AMMU, x, y);
         
         try {
@@ -55,21 +55,31 @@ public final class Tekoalypelaaja extends Pelaaja {
         return komento;
     }
     
-    private Komento annaSatunnainenSijoituskomento(int pituus) {
-        
-        int[] parametrit = new int[3];
-        parametrit[2] = ARPOJA.nextInt(2);
-            
-            switch (parametrit[2]) {
-                default:
-                    parametrit[0] = ARPOJA.nextInt(leveys - pituus);
-                    parametrit[1] = ARPOJA.nextInt(korkeus);
-                    break;
-                case Laivansijoitin.VERTIKAALINEN_ORIENTAATIO:
-                    parametrit[0] = ARPOJA.nextInt(leveys);
-                    parametrit[1] = ARPOJA.nextInt(korkeus - pituus);
-            }
+    /**
+     * Metodi on staattinen jotta Ihmispelaaja voisi lainata sitä automaattiseen 
+     * laivojen sijoitukseen.
+     * 
+     * @param pituus    Pelialueelle sijoitetetavan laivan pituus.
+     * @return          Sijoituskomento uudelle laivalle.
+     */
+    protected static Komento annaSatunnainenSijoituskomento(int pituus) {
+        int[] parametrit = arvoSijoitusparametrit(pituus);
         return new Komento(Komentotyyppi.SIJOITA_LAIVA, parametrit);
+    }
+    
+    private static int[] arvoSijoitusparametrit(int pituus) {
+        int[] parametrit = new int[3];
+        parametrit[2] = arpoja.nextInt(2);
+        switch (parametrit[2]) {
+            default:
+                parametrit[0] = arpoja.nextInt(leveys - pituus);
+                parametrit[1] = arpoja.nextInt(korkeus);
+                break;
+            case Laivansijoitin.VERTIKAALINEN_ORIENTAATIO:
+                parametrit[0] = arpoja.nextInt(leveys);
+                parametrit[1] = arpoja.nextInt(korkeus - pituus);
+        }
+        return parametrit;
     }
     
 }

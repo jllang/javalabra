@@ -28,6 +28,8 @@ public class Saannot implements Tallennettava {
      * avaimina tulee olla pelissä käytettävien laivojen pituudet ja arvoina 
      * määrät. On syytä huomata, että kaikille laivojen pituuksille 1..n tulee 
      * olla avain kartassa vaikka kyseisen mittaisten laivojen määrä olisikin 0.
+     * (Käytettävä tietorakenne on nimenomaan <tt>TreeMap</tt> sillä avainten 
+     * oletetaan olevan suuruusjärjestyksessä.)
      */
     public Saannot(int leveys, int korkeus, int vuoroja,
             TreeMap<Integer, Integer> laivojenMitatJaMaarat) {
@@ -144,9 +146,8 @@ public class Saannot implements Tallennettava {
     }
     
     public int laivapintaAla() {
-        // Tämä tarvitsee testin.
         int laivapintaAla = 0;
-        for (int i = 3; i < VARASTO.size(); i++) {
+        for (int i = 4; i < VARASTO.size(); i++) {
             laivapintaAla += (int) VARASTO.get(i);
         }
         return laivapintaAla;

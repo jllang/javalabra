@@ -87,8 +87,8 @@ public final class LaivastonSijoitus {
             if (!sijoitetaanKasin) {
                 komento = pelaaja.annaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, pituus));
             } else {
-                // Pitää korjata tämä Ihmispelaajalle.
-                komento = hankiSijoituskomento();
+                komento = hankiSijoituskomentoKayttoliittymalta();
+                KAYTTOLIITTYMA.tulostaPelitilanne();
             }
             
             int x = komento.PARAMETRIT[0], y = komento.PARAMETRIT[1];
@@ -102,8 +102,6 @@ public final class LaivastonSijoitus {
             sijoitusOnnistui = true;
         }
         
-       KAYTTOLIITTYMA.tulostaPelitilanne(); 
-        
     }
     
     private void valmisteleLaivasto(Pelaaja pelaaja, boolean sijoitetaanKasin) {
@@ -115,7 +113,7 @@ public final class LaivastonSijoitus {
         LAIVAN_SIJOITIN.asetaPelaaja(pelaaja);
     }
     
-    private Komento hankiSijoituskomento() throws Exception {
+    private Komento hankiSijoituskomentoKayttoliittymalta() throws Exception {
         boolean saatiinKelvollinenKomento = false;
         Komento komento = new Komento();
         while (!saatiinKelvollinenKomento) {

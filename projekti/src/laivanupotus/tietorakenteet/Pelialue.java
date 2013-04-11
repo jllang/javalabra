@@ -71,18 +71,6 @@ public final class Pelialue {
      * Ampuu annettuun ruutuun ja kutsuu käyttöliittymän metodia 
      * <tt>paivita</tt> mikäli mahdollista.
      * 
-     * @see Pelialue#ammu(laivanupotus.kayttajat.Pelaaja, int, int) 
-     * @see Kayttoliittyma#paivita(laivanupotus.tietorakenteet.Pelialue, int, int) 
-     */
-    public void ammuJaPaivityta(Pelaaja ampuja, int x, int y) throws Exception {
-        ammu(ampuja, x, y);
-        
-        KAYTTOLIITTYMA.paivita(this, x, y);
-    }
-    
-    /**
-     * Ampuu annettuun ruutuun mikäli mahdollista.
-     * 
      * @param ampuja        Pelialueen omistajan vastapelaaja. Parametria 
      * käytetään varmistamaan ettei pelaaja ammu omaan ruutuunsa.
      * @param x             Lisättävän laivan x-koordinaatti (kokonaislukuna).
@@ -94,7 +82,7 @@ public final class Pelialue {
      * @see RuutuunOnJoAmmuttuException
      * @see IndexOutOfBoundsException
      */
-    private void ammu(Pelaaja ampuja, int x, int y) throws Exception {
+    public void ammu(Pelaaja ampuja, int x, int y) throws Exception {
         tarkastaOmistajuus(ampuja, false);
         Piste piste = haePiste(x, y);
         
@@ -107,6 +95,8 @@ public final class Pelialue {
         if (pisteessaOnLaiva(piste)) {
             ehjaPintaAla--;
         }
+        
+        KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
     public Ruutu[][] haeRuudukko(Pelaaja pelaaja) {

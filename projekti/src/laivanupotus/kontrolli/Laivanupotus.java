@@ -47,7 +47,7 @@ public final class Laivanupotus {
         kl.asetaKatsoja(p1);
         kl.alusta();
         try {
-            ls.sijoitaLaivasto(p1, false);
+            ls.sijoitaLaivasto(p1, true);
             ls.sijoitaLaivasto(p2, false);
             peki.aloita();
         } catch (Exception poikkeus) {

@@ -80,7 +80,7 @@ public final class Komentotulkki {
             case "AMMU":
                 tarkistaSyotteenOsienMaara(syotteenOsat, 3);
                 tarkistaKoordinaatit(syotteenOsat);
-                return new Komento(Komentotyyppi.AMMU_JA_PAIVITYTA,
+                return new Komento(Komentotyyppi.AMMU,
                     KIRJAINKARTTA.get(syotteenOsat[1]),
                     Integer.parseInt(syotteenOsat[2]) - 1);
             case "LUOVUTA":

@@ -178,7 +178,7 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     }
     
     private void tulostaMerkkijono(String merkkijono) {
-        System.out.println(merkkijono);
+        System.out.print(merkkijono);
     }
 
     private String rakennaKuva() {

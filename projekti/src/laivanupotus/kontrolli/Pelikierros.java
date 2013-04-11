@@ -154,7 +154,7 @@ public final class Pelikierros {
                 return;
             case AMMU:
                 try {
-                    pelialue.ammuJaPaivityta(vuorossaolija,
+                    pelialue.ammu(vuorossaolija,
                             komento.PARAMETRIT[0],
                             komento.PARAMETRIT[1]);
                     vuorossaolija = annaVastapelaaja(vuorossaolija);

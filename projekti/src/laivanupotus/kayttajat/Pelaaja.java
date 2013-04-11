@@ -41,12 +41,13 @@ public abstract class Pelaaja {
      * Tämän metodin avulla tuotetaan jostakin pelin toiminnosta vastaavalle 
      * kontrollioliolle uusi luokan <tt>Komento</tt> instanssi. (Tällä hetkellä 
      * metodi toimii ainoastaan luokan <tt>Tekoalypelaaja</tt> olioilla. Ihmisen 
-     * antamat komennot tuotetaan käyttöliittymän avulla.)
+     * antamat komennot tuotetaan käyttöliittymän avulla paitsi jos 
+     * ihmispelaajan laivat sijoitetaan automaattisesti pelialueelle.)
      * 
      * @param odotettu Haluttua paluuarvoa koskeva tieto.
      * @return uusi luokan <tt>Komento</tt> instanssi.
      */
-    public abstract Komento annaKomento(Komento odotettu);
+    public abstract Komento annaKomento(Komento odotettu) throws Exception;
     
     // odotettu -parametria varten pitäisi ehkä luoda uusi luokka sekaannusten
     // välttämiseksi ja ohjelman sisäisen kommunikaation selkiyttämiseksi.
