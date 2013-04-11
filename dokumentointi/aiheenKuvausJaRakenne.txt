@@ -1,4 +1,0 @@
-Aihe: Laivanupotus-peli
-
-Kaikkien käyttäjien toiminnot:
-	- 
