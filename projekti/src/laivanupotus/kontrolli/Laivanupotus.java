@@ -8,6 +8,9 @@ import java.util.Random;
 import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
 import laivanupotus.kontrolli.sijoitus.LaivastonSijoitus;
 import laivanupotus.rajapinnat.Kayttoliittyma;
+import laivanupotus.rajapinnat.Tallentaja;
+import laivanupotus.tallentajat.Muistitallentaja;
+import laivanupotus.tallentajat.Tiedostotallentaja;
 import laivanupotus.tietorakenteet.Saannot;
 
 /**
@@ -34,6 +37,9 @@ public final class Laivanupotus {
         Kayttoliittyma kl = new Tekstikayttoliittyma(varitOnKaytossa);
         kl.run();
         Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, true, false);
+        Tallentaja t1 = new Tiedostotallentaja();
+        Tallentaja t2 = new Muistitallentaja();
+        t1.tallenna();
         Random arpoja = new Random();
 //        Saannot s = new Saannot(20, 10, 0, laivojenMitatjaMaarat); //Kaatuu; mutta miksi?
         Saannot s = new Saannot();

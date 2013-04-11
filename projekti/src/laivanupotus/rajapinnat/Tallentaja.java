@@ -5,6 +5,8 @@ package laivanupotus.rajapinnat;
  *
  * @author John Lång
  */
-public class Tallentaja {
-    
+public interface Tallentaja {
+   
+    void tallenna();
+   
 }
