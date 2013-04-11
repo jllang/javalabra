@@ -1,7 +1,6 @@
 
 package laivanupotus.kontrolli;
 
-import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import laivanupotus.tietorakenteet.Saannot;
@@ -29,8 +28,8 @@ public final class SaantojenArpoja {
         return new Saannot(leveys, korkeus, vuoroja, luoVakiotLaivojenMitatJaMaarat());
     }
         
-    public Map<Integer, Integer> luoVakiotLaivojenMitatJaMaarat() {
-        Map<Integer, Integer> laivojenMitatJaMaarat = new TreeMap<>();
+    public TreeMap<Integer, Integer> luoVakiotLaivojenMitatJaMaarat() {
+        TreeMap<Integer, Integer> laivojenMitatJaMaarat = new TreeMap<>();
         
         laivojenMitatJaMaarat.put(3, 1);
         laivojenMitatJaMaarat.put(2, 1);

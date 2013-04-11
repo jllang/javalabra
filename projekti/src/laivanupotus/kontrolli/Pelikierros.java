@@ -84,7 +84,9 @@ public final class Pelikierros {
         KAYTTOLIITTYMA.alusta();
         
         while (peliJatkuu) {
-            KAYTTOLIITTYMA.tulostaPelitilanne();
+            if (vuorossaolija.getClass() == Ihmispelaaja.class) {
+                KAYTTOLIITTYMA.tulostaPelitilanne();
+            }
             try {
                 kasitteleVuoro(vuorossaolija);
             } catch (Exception poikkeus) {
@@ -158,7 +160,8 @@ public final class Pelikierros {
                     vuorossaolija = annaVastapelaaja(vuorossaolija);
                 } catch (RuutuunOnJoAmmuttuException rojae) {
                     // Tulostetaan virhesanoma mutta jatketaan normaalisti
-                    KAYTTOLIITTYMA.tulostaDebuggausViesti(rojae.getMessage());
+//                    KAYTTOLIITTYMA.tulostaDebuggausViesti(rojae.getMessage());
+                    POIKKEUSTENKASITTELIJA.kasittele(rojae);
                 }
                 return;
         default:

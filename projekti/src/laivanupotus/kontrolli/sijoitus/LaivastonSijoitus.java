@@ -87,6 +87,7 @@ public final class LaivastonSijoitus {
             if (!sijoitetaanKasin) {
                 komento = pelaaja.annaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, pituus));
             } else {
+                // Pitää korjata tämä Ihmispelaajalle.
                 komento = hankiSijoituskomento();
             }
             

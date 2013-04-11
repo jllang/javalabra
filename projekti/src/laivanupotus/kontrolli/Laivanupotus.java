@@ -31,28 +31,28 @@ public final class Laivanupotus {
     public static void main(String[] parametrit) {
         kasitteleParametrit(parametrit);
         
-        Kayttoliittyma kayttoliittyma = new Tekstikayttoliittyma(varitOnKaytossa);
-        kayttoliittyma.run();
-        Poikkeustenkasittelija poikkeustenkasittelija = new Poikkeustenkasittelija(kayttoliittyma, true, false);
+        Kayttoliittyma kl = new Tekstikayttoliittyma(varitOnKaytossa);
+        kl.run();
+        Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, true, false);
         Random arpoja = new Random();
-//        Saannot saannot = new Saannot(20, 10, 0, laivojenMitatjaMaarat); //Kaatuu; mutta miksi?
-        Saannot saannot = new Saannot();
-        Pelaaja pelaaja1 = new Ihmispelaaja("Käyttäjä");
-        Pelaaja pelaaja2 = new Tekoalypelaaja(arpoja, saannot);
-        LaivastonSijoitus laivastonSijoitus = new LaivastonSijoitus(poikkeustenkasittelija, kayttoliittyma);
-        laivastonSijoitus.asetaSaannot(saannot);
+//        Saannot s = new Saannot(20, 10, 0, laivojenMitatjaMaarat); //Kaatuu; mutta miksi?
+        Saannot s = new Saannot();
+        Pelaaja p1 = new Ihmispelaaja("Käyttäjä");
+        Pelaaja p2 = new Tekoalypelaaja(arpoja, s);
+        LaivastonSijoitus ls = new LaivastonSijoitus(poka, kl);
+        ls.asetaSaannot(s);
         
-        Pelikierros pelikierros = new Pelikierros(kayttoliittyma, poikkeustenkasittelija, saannot, pelaaja1, pelaaja2);
-        kayttoliittyma.asetaPelikierros(pelikierros);
-        kayttoliittyma.asetaKatsoja(pelaaja1);
-        kayttoliittyma.alusta();
+        Pelikierros peki = new Pelikierros(kl, poka, s, p1, p2);
+        kl.asetaPelikierros(peki);
+        kl.asetaKatsoja(p1);
+        kl.alusta();
         try {
-            laivastonSijoitus.sijoitaLaivasto(pelaaja1, false);
-            laivastonSijoitus.sijoitaLaivasto(pelaaja2, false);
-            pelikierros.aloita();
+            ls.sijoitaLaivasto(p1, false);
+            ls.sijoitaLaivasto(p2, false);
+            peki.aloita();
         } catch (Exception poikkeus) {
             // Vain fataalien virheiden pitäisi päästä tänne asti.
-            poikkeustenkasittelija.kasittele(poikkeus);
+            poka.kasittele(poikkeus);
         }
         
     }

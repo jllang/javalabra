@@ -40,7 +40,7 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     private final Komentotulkki KOMENTOTULKKI;
     private final boolean       VARIT_ON_KAYTOSSA;
     
-    private char[][]            kuvapuskuri;
+    private char[][]            valimuisti;
     private static Pelikierros  pelikierros;
     private static Ruutu[][]    ruudukko1, ruudukko2;
     private static int          ruudukonLeveys, ruudukonKorkeus;
@@ -52,13 +52,13 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
      * @param varitOnKaytossa Käytetäänkö viestien tulostamisessa System.out 
      * -virtaan "ANSI escape code"-merkkijonoja. Kyseinen ominaisuus ei toimi 
      * Windows-käyttöjärjestelmissä ja oletuksena luokan Laivanupotus metodi 
-     * main syöttää Tekstikayttoliittyman konstruktorille arvon false.
+     * main syöttää Tekstikayttoliittyman konstruktorille arvon <tt>false</tt>.
      */
     public Tekstikayttoliittyma(boolean varitOnKaytossa) {
         this.LUKIJA             = new Scanner(System.in);
         this.KOMENTOTULKKI      = new Komentotulkki();
         this.VARIT_ON_KAYTOSSA  = varitOnKaytossa;
-        this.kuvapuskuri        = new char[KUVAN_KORKEUS][KUVAN_LEVEYS];
+        this.valimuisti        = new char[KUVAN_KORKEUS][KUVAN_LEVEYS];
         alustaKuva();
         alustaKoordinaatit();
     }
@@ -120,36 +120,36 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     private void alustaKoordinaatit() {
         //Vähän epäkaunis ratkaisu, mutta ajaapahan asiansa:
         for (int i = 0; i < ruudukonLeveys; i++) {
-            kuvapuskuri[0][i * 2 + 3] = AAKKOSET[i];
-            kuvapuskuri[1][i * 2 + 3] = '-';
-            kuvapuskuri[1][i * 2 + 4] = '-';
-            kuvapuskuri[0][i * 2 + 7 + ruudukonLeveys * 2] = AAKKOSET[i];
-            kuvapuskuri[1][i * 2 + 7 + ruudukonLeveys * 2] = '-';
-            kuvapuskuri[1][i * 2 + 7 + ruudukonLeveys * 2 + 1] = '-';
-            kuvapuskuri[ruudukonKorkeus + 2][i * 2 + 3] = '-';
-            kuvapuskuri[ruudukonKorkeus + 2][i * 2 + 4] = '-';
-            kuvapuskuri[ruudukonKorkeus + 2][i * 2 + 7 + ruudukonLeveys * 2] = '-';
-            kuvapuskuri[ruudukonKorkeus + 2][i * 2 + 7 + ruudukonLeveys * 2 + 1] = '-';
+            valimuisti[0][i * 2 + 3] = AAKKOSET[i];
+            valimuisti[1][i * 2 + 3] = '-';
+            valimuisti[1][i * 2 + 4] = '-';
+            valimuisti[0][i * 2 + 7 + ruudukonLeveys * 2] = AAKKOSET[i];
+            valimuisti[1][i * 2 + 7 + ruudukonLeveys * 2] = '-';
+            valimuisti[1][i * 2 + 7 + ruudukonLeveys * 2 + 1] = '-';
+            valimuisti[ruudukonKorkeus + 2][i * 2 + 3] = '-';
+            valimuisti[ruudukonKorkeus + 2][i * 2 + 4] = '-';
+            valimuisti[ruudukonKorkeus + 2][i * 2 + 7 + ruudukonLeveys * 2] = '-';
+            valimuisti[ruudukonKorkeus + 2][i * 2 + 7 + ruudukonLeveys * 2 + 1] = '-';
         }
         
         for (int i = 0; i < ruudukonKorkeus; i++) {
             if (i >= 9) {
-                kuvapuskuri[i + 2][0] = NUMEROT[1];
-                kuvapuskuri[i + 2][ruudukonLeveys * 2 + 4] = NUMEROT[1];
+                valimuisti[i + 2][0] = NUMEROT[1];
+                valimuisti[i + 2][ruudukonLeveys * 2 + 4] = NUMEROT[1];
             }
-            kuvapuskuri[i + 2][1] = NUMEROT[(i + 1) % 10];
-            kuvapuskuri[i + 2][2] = '|';
-            kuvapuskuri[i + 2][ruudukonLeveys * 2 + 2] = '|';
-            kuvapuskuri[i + 2][ruudukonLeveys * 2 + 5] = NUMEROT[(i + 1) % 10];
-            kuvapuskuri[i + 2][ruudukonLeveys * 2 + 6] = '|';
-            kuvapuskuri[i + 2][ruudukonLeveys * 4 + 6] = '|';
+            valimuisti[i + 2][1] = NUMEROT[(i + 1) % 10];
+            valimuisti[i + 2][2] = '|';
+            valimuisti[i + 2][ruudukonLeveys * 2 + 2] = '|';
+            valimuisti[i + 2][ruudukonLeveys * 2 + 5] = NUMEROT[(i + 1) % 10];
+            valimuisti[i + 2][ruudukonLeveys * 2 + 6] = '|';
+            valimuisti[i + 2][ruudukonLeveys * 4 + 6] = '|';
         }
     }
     
     private void alustaKuva() {
         for (int i = 0; i < KUVAN_KORKEUS; i++) {
             for (int j = 0; j < KUVAN_LEVEYS; j++) {
-                kuvapuskuri[i][j] = ' ';
+                valimuisti[i][j] = ' ';
             }
         }
     }
@@ -157,7 +157,7 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     private void tulkitseRuudukko(Ruutu[][] ruudukko, int siirto) {
         for (int i = 0; i < ruudukonKorkeus; i++) {
             for (int j = 0; j < ruudukonLeveys; j++) {
-                kuvapuskuri[i + 2][j * 2 + siirto * 2 + 3] = tulkitseRuutu(ruudukko[i][j]);
+                valimuisti[i + 2][j * 2 + siirto * 2 + 3] = tulkitseRuutu(ruudukko[i][j]);
             }
         }
     }
@@ -186,7 +186,7 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
         char nykyinenMerkki;
         for (int i = 0; i < KUVAN_KORKEUS; i++) {
             for (int j = 0; j < KUVAN_LEVEYS; j++) {
-                nykyinenMerkki = kuvapuskuri[i][j];
+                nykyinenMerkki = valimuisti[i][j];
                 if (VARIT_ON_KAYTOSSA) {
                     mjr.append(varita(nykyinenMerkki));
                 }

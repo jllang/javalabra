@@ -1,19 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package laivanupotus.tietorakenteet;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 import laivanupotus.rajapinnat.Tallennettava;
 
 /**
+ * Tämän luokan instanssin tehtävänä on sisältää tieto pelikierroksella 
+ * käytettävistä pelin säännöistä sekä varmistaa mahdollisten käyttäjän antamien 
+ * sääntöjen tarkoituksenmukaisuus.
  *
  * @author John Lång
  */
@@ -21,17 +17,36 @@ public class Saannot implements Tallennettava {
     
     private final List<Object> VARASTO;
     
-    public Saannot(int leveys, int korkeus, int vuoroja, Map<Integer, Integer> laivojenMitatJaMaarat) {
+    /**
+     * Luo annettujen parametrien mukaiset säännöt mikäli se on 
+     * tarkoituksenmukaista.
+     * 
+     * @param leveys                Pelialueen leveys.
+     * @param korkeus               Pelialueen korkeus.
+     * @param vuoroja               Suurin sallittu pelivuorojen määrä.
+     * @param laivojenMitatJaMaarat <tt>TreeMap</tt>-tyypin puukartta, jonka 
+     * avaimina tulee olla pelissä käytettävien laivojen pituudet ja arvoina 
+     * määrät. On syytä huomata, että kaikille laivojen pituuksille 1..n tulee 
+     * olla avain kartassa vaikka kyseisen mittaisten laivojen määrä olisikin 0.
+     */
+    public Saannot(int leveys, int korkeus, int vuoroja,
+            TreeMap<Integer, Integer> laivojenMitatJaMaarat) {
         tarkastaArvot(leveys, korkeus, vuoroja, laivojenMitatJaMaarat);
         this.VARASTO = new ArrayList<>();
         VARASTO.add(leveys);
         VARASTO.add(korkeus);
         VARASTO.add(vuoroja);
+        // Laivojen pituuksien puuttumista ei tulla tarkistamaan koska käyttäjä 
+        // ei pääse suoraan lisäämään avain-arvopareja TreeMappiin sitten 
+        // tulevaisuudessa kun kerkeän toteuttamaan pelaajan omien sääntöjen 
+        // luomisen peliin.
         lisaaLaivojenMitatJaMaarat(laivojenMitatJaMaarat);
     }
     
+    /**
+     *  Luo oletusarvoiset säännöt.
+     */
     public Saannot() {
-        //Oletussäännöt
         this.VARASTO = new ArrayList<>();
         VARASTO.add(10);
         VARASTO.add(10);
@@ -43,13 +58,15 @@ public class Saannot implements Tallennettava {
         VARASTO.add(4);     // 1 * 4 ruutua
     }
     
-    private void tarkastaArvot(int leveys, int korkeus, int vuoroja, Map<Integer, Integer> laivojenMitatJaMaarat) {
+    private void tarkastaArvot(int leveys, int korkeus, int vuoroja,
+            TreeMap<Integer, Integer> laivojenMitatJaMaarat) {
         tarkastaPelialueenMitat(leveys, korkeus, vuoroja);
         tarkastaLaivojenMitatJaPintaAlat(laivojenMitatJaMaarat, leveys, korkeus);
         
     }
     
-    private void tarkastaPelialueenMitat(int leveys, int korkeus, int vuoroja) throws IllegalArgumentException {
+    private void tarkastaPelialueenMitat(int leveys, int korkeus, int vuoroja)
+            throws IllegalArgumentException {
         if (leveys < 5
                 || leveys > 20
                 || korkeus < 5
@@ -59,16 +76,23 @@ public class Saannot implements Tallennettava {
         }
     }
 
-    private void tarkastaLaivojenMitatJaPintaAlat(Map<Integer, Integer> laivojenMitatJaMaarat, int leveys, int korkeus) throws IllegalArgumentException {
+    private void tarkastaLaivojenMitatJaPintaAlat(
+            TreeMap<Integer, Integer> laivojenMitatJaMaarat,
+            int leveys,
+            int korkeus)
+            throws IllegalArgumentException {
         if(laivojenMitatJaMaarat == null || laivojenMitatJaMaarat.isEmpty()) {
-            throw new IllegalArgumentException("Virheelliset säännöt: Laivojen määriä ja mittoja ei annettu.");
+            throw new IllegalArgumentException("Virheelliset säännöt: "
+                    + "Laivojen määriä ja mittoja ei annettu.");
         }
         
         int laivojenKokonaisPintaAla = 0, laivojenLukumaara = 0;
         
         for (Integer pituus : laivojenMitatJaMaarat.keySet()) {
             if (pituus > leveys || pituus > korkeus) {
-                throw new IllegalArgumentException("Virheelliset säännöt: Laivojen pituudet eivät saa ylittää pelialueen mittoja.");
+                throw new IllegalArgumentException("Virheelliset säännöt: "
+                        + "Laivojen pituudet eivät saa ylittää pelialueen "
+                        + "mittoja.");
             }
             laivojenKokonaisPintaAla += pituus * laivojenMitatJaMaarat.get(pituus);
             laivojenLukumaara++;
@@ -79,17 +103,26 @@ public class Saannot implements Tallennettava {
         }
     }
     
-    private void lisaaLaivojenMitatJaMaarat(Map<Integer, Integer> laivojenMitatJaMaarat) {
+    private void lisaaLaivojenMitatJaMaarat(TreeMap<Integer, Integer> laivojenMitatJaMaarat) {
         VARASTO.add(laivojenMitatJaMaarat.size());  // Lisättävien arvojen määrä ja pisimpien laivojen pituus
         for (Integer pituus : laivojenMitatJaMaarat.keySet()) {
             VARASTO.add(pituus * laivojenMitatJaMaarat.get(pituus));
         }
     }
     
-    public Map<Integer, Integer> annaLaivojenMitatJaMaarat() {
-        Map<Integer, Integer> laivojenMitatJaMaarat = new TreeMap<>();
-        int pituus  = (int) VARASTO.get(3); //Pisimmän laivan pituus;
-        int i       = (int) VARASTO.size() - 1; //Pisimpien laivojen pinta-ala.
+    /**
+     * Palauttaa <tt>Map</tt>-rajapinnan toteuttavan tietorakenteen, jonka 
+     * avaimina ovat laivojen mitat ja arvoina kunkin mittaisten laivojen 
+     * lukumäärät. Luokka LaivastonSijoitus on riippuvainen tästä metodista.
+     *
+     * @return <tt>Map</tt> sääntöjen mukaisista laivojen pituuksista ja 
+     * määristä.
+     * @see LaivastonSijoitus#sijoitaLaiva(int) 
+     */
+    public TreeMap<Integer, Integer> annaLaivojenMitatJaMaarat() {
+        TreeMap<Integer, Integer> laivojenMitatJaMaarat = new TreeMap<>();
+        int pituus  = (int) VARASTO.get(3);     // Pisimmän laivan pituus;
+        int i       = (int) VARASTO.size() - 1; // Pisimpien laivojen pinta-ala.
         
         for (; i > 3; i--, pituus--) {
             laivojenMitatJaMaarat.put(pituus, (int) VARASTO.get(i) / pituus);

@@ -69,8 +69,7 @@ public final class Pelialue {
     
     /**
      * Ampuu annettuun ruutuun ja kutsuu käyttöliittymän metodia 
-     * <tt>paivita</tt> mikäli mahdollista. Tätä metodia käytetään ihmispelaajan 
-     * ampuessa vastapelaajan ruudukkoon.
+     * <tt>paivita</tt> mikäli mahdollista.
      * 
      * @see Pelialue#ammu(laivanupotus.kayttajat.Pelaaja, int, int) 
      * @see Kayttoliittyma#paivita(laivanupotus.tietorakenteet.Pelialue, int, int) 
@@ -95,7 +94,7 @@ public final class Pelialue {
      * @see RuutuunOnJoAmmuttuException
      * @see IndexOutOfBoundsException
      */
-    public void ammu(Pelaaja ampuja, int x, int y) throws Exception {
+    private void ammu(Pelaaja ampuja, int x, int y) throws Exception {
         tarkastaOmistajuus(ampuja, false);
         Piste piste = haePiste(x, y);
         
