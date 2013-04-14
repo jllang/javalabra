@@ -8,7 +8,7 @@ package laivanupotus.poikkeukset;
 public final class OmistajaOnJoAsetettuException extends Exception {
     
     public OmistajaOnJoAsetettuException() {
-        super("Sääntörikkomus: Ruudukon omistaja yritettiin vaithaa.");
+        super("Sääntörikkomus: Ruudukon omistaja yritettiin vaihtaa.");
     }
     
 }

@@ -30,6 +30,7 @@ public class SaannotTest {
 
     @BeforeClass
     public static void setUpClass() {
+        System.out.println("Aloitetaan luokan Saannot testaus...");
         saantokone = new SaantojenArpoja(new Random());
     }
 

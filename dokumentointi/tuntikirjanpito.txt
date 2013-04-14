@@ -47,3 +47,9 @@ Keskiviikko 10.4 - Torstai 11.4:
 
 Torstai 11.4:
 	- Kello 12.00 - 13.30: Itsenäistä työskentelyä
+	- Kello 15.30 - 19.00: Itsenäistä työskentelyä
+
+Sunnuntai 14.4:
+	- Kello 11.30 -	13.30: Koodikatselmointi 1
+	- Kello 17.30 - 20.30: Itsenäistä työskentelyä
+

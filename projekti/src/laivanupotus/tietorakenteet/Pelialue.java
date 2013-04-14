@@ -3,7 +3,7 @@ package laivanupotus.tietorakenteet;
 
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
-import laivanupotus.poikkeukset.RuudussaOnJoLaivaException;
+import laivanupotus.poikkeukset.SaantojenvastainenSijoitusException;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
 import laivanupotus.poikkeukset.VaaranPelaajanRuutuException;
 import laivanupotus.rajapinnat.Kayttoliittyma;
@@ -24,9 +24,18 @@ public final class Pelialue {
     
     private int                     ehjaPintaAla;
     
-    public Pelialue(Pelikierros pelikierros, Pelaaja pelaaja) {
+    /**
+     * Luo uuden pelialueen liittäen sen käynnissä olevaan pelikierrokseen ja 
+     * asettaen sen omistajaksi parametrina annetun pelaajan. Tietoa pelialueen 
+     * omistajasta tarvitaan monessa luokan tarjoamassa palvelussa.
+     * 
+     * @param pelikierros   Nykyinen pelikierros.
+     * @param omistaja      Pelialueen omistaja, ts. pelaaja joka näkee pelin 
+     * alusta alkaen kaikki pelialueen laivat.
+     */
+    public Pelialue(Pelikierros pelikierros, Pelaaja omistaja) {
         this.KAYTTOLIITTYMA = pelikierros.annaKayttoliittyma();
-        this.OMISTAJA = pelaaja;
+        this.OMISTAJA = omistaja;
         this.LEVEYS = pelikierros.annaSaannot().leveys();
         this.KORKEUS = pelikierros.annaSaannot().korkeus();
         this.KOORDINAATISTO = new Piste[KORKEUS][LEVEYS];        
@@ -61,7 +70,8 @@ public final class Pelialue {
             piste.onOsaLaivaa = true;
             ehjaPintaAla++;
         } else {
-            throw new RuudussaOnJoLaivaException();
+            throw new SaantojenvastainenSijoitusException("Sääntörikkomus: "
+                    + "Ruutuun yritettiin asettaa uudelleen laiva.");
         }
         
         KAYTTOLIITTYMA.paivita(this, x, y);
@@ -99,20 +109,20 @@ public final class Pelialue {
         KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
-    public Ruutu[][] haeRuudukko(Pelaaja pelaaja) {
+    public Ruutu[][] haeRuudukko(Pelaaja asiakas) {
         
         Ruutu[][] ruudukko = new Ruutu[KORKEUS][LEVEYS];
         
         for (int i = 0; i < KORKEUS; i++) {
             for (int j = 0; j < LEVEYS; j++) {
-                ruudukko[i][j] = haeRuutu(pelaaja, j, i);
+                ruudukko[i][j] = haeRuutu(asiakas, j, i);
             }
         }
         
         return ruudukko;
     }
         
-    public Ruutu haeRuutu(Pelaaja pelaaja, int x, int y)
+    public Ruutu haeRuutu(Pelaaja asiakas, int x, int y)
             throws IndexOutOfBoundsException {
         Piste piste = haePiste(x, y);
         Ruutu ruutu = Ruutu.TUNTEMATON;
@@ -123,7 +133,7 @@ public final class Pelialue {
                 ruutu = Ruutu.TYHJA_OSUMA;
             }
         }
-        else if (pelaajaOnOmistaja(pelaaja)) {
+        else if (pelaajaOnOmistaja(asiakas)) {
             if (piste.onOsaLaivaa) {
                 ruutu = Ruutu.LAIVA_EI_OSUMAA;
             } else {
@@ -157,7 +167,7 @@ public final class Pelialue {
                 || x >= LEVEYS
                 || y < 0
                 || y >= KORKEUS) {
-            throw new IndexOutOfBoundsException("Annetut koordinaatit eivät ole koordinaatistossa.");
+            throw new IndexOutOfBoundsException("Annetut koordinaatit (" + x + "," + y + ") eivät ole koordinaatistossa.");
         }
     }
     

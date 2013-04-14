@@ -76,7 +76,7 @@ public final class Komentotulkki {
                 return new Komento(Komentotyyppi.SIJOITA_LAIVA,
                     KIRJAINKARTTA.get(syotteenOsat[1]),
                     Integer.parseInt(syotteenOsat[2]) - 1,
-                        Integer.parseInt(syotteenOsat[3]) - 1);
+                        Integer.parseInt(syotteenOsat[3]));
             case "AMMU":
                 tarkistaSyotteenOsienMaara(syotteenOsat, 3);
                 tarkistaKoordinaatit(syotteenOsat);

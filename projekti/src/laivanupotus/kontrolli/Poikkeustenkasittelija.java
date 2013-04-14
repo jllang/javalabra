@@ -32,10 +32,12 @@ public final class Poikkeustenkasittelija {
      * @param poikkeus Käsiteltävä poikkeus.
      */
     public void kasittele(Exception poikkeus) {
-        if (AIKALEIMAT_ON_KAYTOSSA) {
-            kasitteleAikaleimalla(poikkeus.getMessage());
-        } else {
-            kasitteleIlmanAikaleimaa(poikkeus.getMessage());
+        if (VIESTIT_TULOSTETAAN) {
+            if (AIKALEIMAT_ON_KAYTOSSA) {
+                kasitteleAikaleimalla(poikkeus.getMessage());
+            } else {
+                kasitteleIlmanAikaleimaa(poikkeus.getMessage());
+            }
         }
     }
     

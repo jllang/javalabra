@@ -21,7 +21,13 @@ import laivanupotus.tietorakenteet.Saannot;
  */
 public final class Laivanupotus {
     
-    private static boolean varitOnKaytossa;
+//    private static boolean varitOnKaytossa;
+    private static boolean[] asetukset; // Tilapäinen ratkaisu.
+    // 0: Asetetaanko laivat käsin (oletus true); 1: Käytetäänkö värejä (false)
+    // 2: Jatketaanko ohjelman suoritusta (true)
+    // Pitänee myös lisätä parametrit debuggausasetuksille (ks. Poikkeustenkasittelija).
+    // Tulevaisuudessa laivojen käsin asettamisen voi valita joka pelikierroksen 
+    // alussa.
 
     /**
      * Metodin vastuulla on ohjelman keskeisimpien komponenttien luominen sekä 
@@ -32,14 +38,18 @@ public final class Laivanupotus {
      * valinnaiset parametrit.
      */
     public static void main(String[] parametrit) {
+        // VAROITUS: Siivoamatonta koodia
         kasitteleParametrit(parametrit);
+        if (!asetukset[2]) {
+            return;
+        }
         
-        Kayttoliittyma kl = new Tekstikayttoliittyma(varitOnKaytossa);
+        Kayttoliittyma kl = new Tekstikayttoliittyma(asetukset[1]);
         kl.run();
         Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, true, false);
-        Tallentaja t1 = new Tiedostotallentaja();
-        Tallentaja t2 = new Muistitallentaja();
-        t1.tallenna();
+//        Tallentaja t1 = new Tiedostotallentaja();
+//        Tallentaja t2 = new Muistitallentaja();
+//        t1.tallenna();
         Random arpoja = new Random();
 //        Saannot s = new Saannot(20, 10, 0, laivojenMitatjaMaarat); //Kaatuu; mutta miksi?
         Saannot s = new Saannot();
@@ -53,7 +63,7 @@ public final class Laivanupotus {
         kl.asetaKatsoja(p1);
         kl.alusta();
         try {
-            ls.sijoitaLaivasto(p1, true);
+            ls.sijoitaLaivasto(p1, asetukset[0]);
             ls.sijoitaLaivasto(p2, false);
             peki.aloita();
         } catch (Exception poikkeus) {
@@ -72,20 +82,36 @@ public final class Laivanupotus {
      * @return Palautetaan <tt>true</tt>, jos värit otetaan käytöön; muutoin 
      * <tt>false</tt>.
      */
-    private static boolean kasitteleParametrit(String[] parametrit) {
-        varitOnKaytossa = false;
+    private static void kasitteleParametrit(String[] parametrit) {
+//        varitOnKaytossa = false;
+        asetukset = new boolean[3];
+        //Alustetaan oletusarvot:
+        asetukset[0] = true;
+        asetukset[1] = false;
+        asetukset[2] = true;
+        
         if (parametrit != null && parametrit.length > 0 && parametrit[0] != null
                 && !parametrit[0].isEmpty()) {
             for (int i = 0; i < parametrit.length; i++) {
                 switch (parametrit[i]) {
                     default:
-                        varitOnKaytossa = false;
+//                        varitOnKaytossa = false;
+                        break;
+                    case "automaattisijoitus":
+                        asetukset[0] = false;
                         break;
                     case "varit":
-                        varitOnKaytossa = true;
+//                        varitOnKaytossa = true;
+                        asetukset[1] = true;
+                        break;
+                    case "ohje":
+                        // Kesken. Tarkoituksena tulostaa tieto mahdollisista 
+                        // käynnistysparametreista ja lopettaa ohjelman suoritus.
+                        asetukset[2] = false;
+                        break;
                 }
             }
         }
-        return varitOnKaytossa;
+//        return varitOnKaytossa;
     }
 }

@@ -19,7 +19,9 @@ public class Saannot implements Tallennettava {
     
     /**
      * Luo annettujen parametrien mukaiset säännöt mikäli se on 
-     * tarkoituksenmukaista.
+     * tarkoituksenmukaista. Sääntöolion sisällä tieto säilötään listaan, 
+     * jolloin tieto on helppo tarvittaessa tallentaa tiedostojärjestelmään 
+     * Tallentaja-rajapinnan toteuttavan olion avulla.
      * 
      * @param leveys                Pelialueen leveys.
      * @param korkeus               Pelialueen korkeus.

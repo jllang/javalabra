@@ -40,6 +40,7 @@ public class PelialueTest {
     
     @BeforeClass
     public static void setUpClass() {
+        System.out.println("Aloitetaan luokan Pelialue testaus...");
         poikkeustenkasittelija              = new Poikkeustenkasittelija(kayttoliittyma, true, false);
         arpoja          = new Random();
         saantokone      = new SaantojenArpoja(arpoja);
@@ -117,7 +118,7 @@ public class PelialueTest {
     @Test
     public void testAmmuRuudukonUlkopuolelle() {
         System.out.println("Testataan ampua ruudukon ulkopuolelle");
-        x = x * -1;
+        x = (x + 1) * -1;
         try {
             pelialue1.ammu(leikkipelaaja2, x, y);
         } catch (Exception poikkeus) {

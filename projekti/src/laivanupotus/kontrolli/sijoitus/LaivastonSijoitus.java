@@ -88,7 +88,6 @@ public final class LaivastonSijoitus {
                 komento = pelaaja.annaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, pituus));
             } else {
                 komento = hankiSijoituskomentoKayttoliittymalta();
-                KAYTTOLIITTYMA.tulostaPelitilanne();
             }
             
             int x = komento.PARAMETRIT[0], y = komento.PARAMETRIT[1];
@@ -97,9 +96,13 @@ public final class LaivastonSijoitus {
             try {
                 LAIVAN_SIJOITIN.sijoitaLaiva(x, y, orientaatio, pituus);
             } catch (Exception exception) {
+                POIKKEUSTENKASITTELIJA.kasittele(exception);
                 continue;
             }
             sijoitusOnnistui = true;
+            if (sijoitetaanKasin) {
+                KAYTTOLIITTYMA.tulostaPelitilanne();
+            }
         }
         
     }

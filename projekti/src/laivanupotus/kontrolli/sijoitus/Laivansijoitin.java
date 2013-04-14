@@ -2,6 +2,7 @@
 package laivanupotus.kontrolli.sijoitus;
 
 import laivanupotus.kayttajat.Pelaaja;
+import laivanupotus.poikkeukset.SaantojenvastainenSijoitusException;
 import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
 
@@ -45,13 +46,20 @@ public final class Laivansijoitin {
      * 
      * @throws Exception    Mahdollinen virheellisten parametrien tai sääntöjen 
      * vastaisen sijoittamisyrityksen aiheuttama poikkeus.
-     * 
      */
     public void sijoitaLaiva(int x, int y, int orientaatio,
             int pituus) throws Exception {
-        if(orientaatio < 0 || orientaatio > 1) {
-            throw new IllegalArgumentException("Orientaation sallitut arvot "
-                    + "ovat 0 (oikealle) tai 1 (alas).");
+//        System.err.println("Sijoitettavan laivan koordinaatit olivat ("
+//                + x + "," + y + ").");
+        tarkastaOrientaatio(orientaatio);
+        if (!laivalleOnTilaa(x, y, orientaatio, pituus)) {
+            throw new SaantojenvastainenSijoitusException("Sääntörikkomus: "
+                    + "Laiva yritettiin sijoittaa toisen laivan päälle tai "
+                    + "pelialueen ulkopuolelle.");
+        }
+        if (!laivanYmparistoOnTyhja(x, y, orientaatio, pituus)) {
+            throw new SaantojenvastainenSijoitusException("Sääntörikkomus: "
+                    + "Laiva yritettiin sijoittaa kiinni toisen laivan kylkeen.");
         }
         switch (orientaatio) {
             default:
@@ -65,6 +73,14 @@ public final class Laivansijoitin {
                 }
         }
         
+    }
+    
+    private void tarkastaOrientaatio(int orientaatio)
+            throws IllegalArgumentException {
+        if(orientaatio < 0 || orientaatio > 1) {
+            throw new IllegalArgumentException("Orientaation sallitut arvot "
+                    + "ovat 0 (oikealle) tai 1 (alas).");
+        }
     }
     
     private boolean laivalleOnTilaa(int x, int y, int orientaatio,
@@ -100,7 +116,7 @@ public final class Laivansijoitin {
                         return false;
                     }
                 }
-                if (ruutuOnIdenttinen(x + 1, y, Ruutu.LAIVA_EI_OSUMAA)) {
+                if (ruutuOnIdenttinen(x + pituus + 1, y, Ruutu.LAIVA_EI_OSUMAA)) {
                     return false;
                 }
                 break;
@@ -114,7 +130,7 @@ public final class Laivansijoitin {
                         return false;
                     }
                 }
-                if (ruutuOnIdenttinen(x, y + 1, Ruutu.LAIVA_EI_OSUMAA)) {
+                if (ruutuOnIdenttinen(x, y + pituus + 1, Ruutu.LAIVA_EI_OSUMAA)) {
                     return false;
                 }
         }
@@ -122,11 +138,11 @@ public final class Laivansijoitin {
     }
     
     private boolean ruutuOnIdenttinen(int x, int y, Ruutu vertailtava) {
-        Ruutu ruutu;
+        Ruutu ruutu = null;
         try {
             ruutu = pelialue.haeRuutu(pelaaja, x, y);
         } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            return false;
+            // Jatketaan normaalisti
         }
         return ruutu == vertailtava;
     }
