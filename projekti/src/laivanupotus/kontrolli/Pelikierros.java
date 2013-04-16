@@ -48,6 +48,7 @@ public final class Pelikierros {
         this.PELIALUE2              = new Pelialue(this, pelaaja2);
         this.peliJatkuu             = true;
         this.vuorossaolija          = pelaaja1;
+        this.vuoro                  = 1;
         this.PELAAJA1.asetaPelialue(PELIALUE1);
         this.PELAAJA2.asetaPelialue(PELIALUE2);
     }
@@ -109,7 +110,7 @@ public final class Pelikierros {
             voittaja = annaVastapelaaja(pelaaja);
             peliJatkuu = false;
             KAYTTOLIITTYMA.tulostaViesti("Peli päättyi. Voittaja oli "
-                    + ((voittaja == PELAAJA1) ? "pelaaja 1." : "pelaaja 2."));
+                    + ((voittaja == PELAAJA1) ? "pelaaja 1." : "pelaaja 2.\n"));
             return;
         }
         Pelialue pelialue = annaVastapelaaja(pelaaja).annaPelialue();
@@ -141,14 +142,19 @@ public final class Pelikierros {
             case TYHJA:
                 throw new TyhjaKomentoException();
             case LUOVUTA:  // Asetetaan voittaja ja jatketaan eteenpäin.
+                KAYTTOLIITTYMA.tulostaViesti("Pelaaja "
+                        + vuorossaolija.kerroNimi() + "luovutti pelin.\n");
                 voittaja = annaVastapelaaja(vuorossaolija);
             case LOPETA:
                 peliJatkuu = false;
                 return;
-            case PAIVITA_KAYTTOLIITTYMA: // Varattu mahdollista myöhempää käyttöä varten
-                KAYTTOLIITTYMA.alusta();
-                KAYTTOLIITTYMA.tulostaPelitilanne();
+            case OHJEET:
+                KAYTTOLIITTYMA.tulostaOhje();
                 return;
+//            case PAIVITA_KAYTTOLIITTYMA: // Varattu debuggausta varten
+//                KAYTTOLIITTYMA.alusta();
+//                KAYTTOLIITTYMA.tulostaPelitilanne();
+//                return;
             case TILAKYSELY:
                 kasitteleTilakysely(komento.PARAMETRIT[0]);
                 return;
@@ -171,28 +177,24 @@ public final class Pelikierros {
     
     private void kasitteleTilakysely(int kyselynumero) {
         switch (kyselynumero) {
-            case Komento.TILAKYSELY_MONESKO_VUORO:
-                KAYTTOLIITTYMA.tulostaViesti("On " + vuoro + ". vuoro.");
-                break;
-            case Komento.TILAKYSELY_VUOROJA_JALJELLA:
+            case Komento.TILAKYSELY_VUOROT:
+                KAYTTOLIITTYMA.tulostaViesti("On " + vuoro + ". vuoro.\n");
                 if (vuorotOnRajoitettu) {
                     KAYTTOLIITTYMA.tulostaViesti("Vuoroja on jäljellä "
-                            + (SAANNOT.vuoroja() - vuoro));
+                            + (SAANNOT.vuoroja() - vuoro) + ".\n");
                 } else {
                     KAYTTOLIITTYMA.tulostaViesti("Vuorojen määrää ei "
-                            + "ole rajoitettu");
+                            + "ole rajoitettu.\n");
                 }
                 break;
-            case Komento.TILAKYSELY_OMIA_LAIVOJA_JALJELLA:
+            case Komento.TILAKYSELY_LAIVAT:
                 KAYTTOLIITTYMA.tulostaViesti("Omia laivaruutuja on jäljellä "
                         + vuorossaolija.annaPelialue().laivapintaAlaaJaljella()
-                        + " kpl.");
-                break;
-            case Komento.TILAKYSELY_VASTUSTAJAN_LAIVOJA_JALJELLA:
+                        + " kpl.\n");
                 KAYTTOLIITTYMA.tulostaViesti("Vastustajan laivaruutuja on "
                         + "jäljellä " + annaVastapelaaja(vuorossaolija)
                         .annaPelialue().laivapintaAlaaJaljella()
-                        + " kpl.");
+                        + " kpl.\n");
                 break;
         }
     }

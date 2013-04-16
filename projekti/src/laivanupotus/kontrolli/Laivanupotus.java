@@ -8,9 +8,6 @@ import java.util.Random;
 import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
 import laivanupotus.kontrolli.sijoitus.LaivastonSijoitus;
 import laivanupotus.rajapinnat.Kayttoliittyma;
-import laivanupotus.rajapinnat.Tallentaja;
-import laivanupotus.tallentajat.Muistitallentaja;
-import laivanupotus.tallentajat.Tiedostotallentaja;
 import laivanupotus.tietorakenteet.Saannot;
 
 /**
@@ -21,10 +18,13 @@ import laivanupotus.tietorakenteet.Saannot;
  */
 public final class Laivanupotus {
     
+    public static final long KAYNNISTYSAIKA = System.currentTimeMillis();
+    
 //    private static boolean varitOnKaytossa;
     private static boolean[] asetukset; // Tilapäinen ratkaisu.
     // 0: Asetetaanko laivat käsin (oletus true); 1: Käytetäänkö värejä (false)
-    // 2: Jatketaanko ohjelman suoritusta (true)
+    // 2: Jatketaanko ohjelman suoritusta (true); 3: Tulostetaanko debuggausviestit (false)
+    // 4: Käytetäänkö debuggausviesteissä aikaleimaa
     // Pitänee myös lisätä parametrit debuggausasetuksille (ks. Poikkeustenkasittelija).
     // Tulevaisuudessa laivojen käsin asettamisen voi valita joka pelikierroksen 
     // alussa.
@@ -34,19 +34,21 @@ public final class Laivanupotus {
      * pelin aikana mahdollisti ilmenevien fataalien virheiden käsittelyn 
      * ohjaaminen poikkeustenkäsittelijälle.
      * 
-     * @param parametrit Käyttöjärjestelmän komentotulkissa ohjelmalle annetut 
+     * @param argumentit Käyttöjärjestelmän komentotulkissa ohjelmalle annetut 
      * valinnaiset parametrit.
      */
-    public static void main(String[] parametrit) {
+    public static void main(String[] argumentit) {
         // VAROITUS: Siivoamatonta koodia
-        kasitteleParametrit(parametrit);
+        alustaAsetuksetOletusarvoilla();
+        kasitteleArgumentit(argumentit);
         if (!asetukset[2]) {
+            tulostaOhje();
             return;
         }
         
         Kayttoliittyma kl = new Tekstikayttoliittyma(asetukset[1]);
         kl.run();
-        Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, true, false);
+        Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, asetukset[3], asetukset[4]);
 //        Tallentaja t1 = new Tiedostotallentaja();
 //        Tallentaja t2 = new Muistitallentaja();
 //        t1.tallenna();
@@ -76,42 +78,79 @@ public final class Laivanupotus {
     /**
      * Käsittelee ohjelmalle komentorivillä annetut valinnaiset parametrit.
      * 
-     * @param parametrit Tällä hetkellä ainoa käytössäoleva parametri on 
+     * @param argumentit Tällä hetkellä ainoa käytössäoleva parametri on 
      * <tt>varit</tt>, jonka tarkoituksena on ottaa käyttöön (unixtyyppisten 
      * käyttöjärjestelmien) terminaalissa toimivat tekstin värit.
      * @return Palautetaan <tt>true</tt>, jos värit otetaan käytöön; muutoin 
      * <tt>false</tt>.
      */
-    private static void kasitteleParametrit(String[] parametrit) {
-//        varitOnKaytossa = false;
-        asetukset = new boolean[3];
-        //Alustetaan oletusarvot:
-        asetukset[0] = true;
-        asetukset[1] = false;
-        asetukset[2] = true;
-        
-        if (parametrit != null && parametrit.length > 0 && parametrit[0] != null
-                && !parametrit[0].isEmpty()) {
-            for (int i = 0; i < parametrit.length; i++) {
-                switch (parametrit[i]) {
+    private static void kasitteleArgumentit(String[] argumentit) {        
+        if (argumentit != null && argumentit.length > 0 && argumentit[0] != null
+                && !argumentit[0].isEmpty()) {
+            for (int i = 0; i < argumentit.length; i++) {
+                switch (argumentit[i]) {
                     default:
 //                        varitOnKaytossa = false;
+                        System.err.println("Tuntematon argumentti \""
+                                + argumentit[i].trim() + " \".");
                         break;
+                    case "a":
                     case "automaattisijoitus":
                         asetukset[0] = false;
                         break;
+                    case "v":
                     case "varit":
 //                        varitOnKaytossa = true;
                         asetukset[1] = true;
                         break;
+                    case "o":
                     case "ohje":
-                        // Kesken. Tarkoituksena tulostaa tieto mahdollisista 
-                        // käynnistysparametreista ja lopettaa ohjelman suoritus.
                         asetukset[2] = false;
+                        break;
+                    case "d":
+                    case "debuggaus":
+                        asetukset[3] = true;
+                        break;
+                    case "da":
+                    case "aikaleimat":
+                        asetukset[4] = true;
                         break;
                 }
             }
         }
 //        return varitOnKaytossa;
     }
+    
+    private static void alustaAsetuksetOletusarvoilla() {
+        asetukset = new boolean[5];
+        asetukset[0] = true;
+        asetukset[1] = false;
+        asetukset[2] = true;
+        asetukset[3] = false;
+        asetukset[4] = false;
+    }
+
+    private static void tulostaOhje() {
+        System.out.println("Peli voidaan käynnistää komentotulkissa seuraavalla"
+                + " komennolla:");
+        System.out.println("    java -jar projekti.jar [<argumentti 1>]"
+                + "[ <argumentti 2>][... <argumentti n>]");
+        System.out.println("Huom. Argumentit pitää erottaa välilyönneillä.");
+        System.out.println();
+        System.out.println("Taulukko pelin käynnistysargumenteista:");
+        System.out.println("------------------------------------");
+        System.out.println("Argumentti          Lyh.    Selitys");
+        System.out.println();
+        System.out.println("ohje                o       Näyttää tämän ohjeen.");
+        System.out.println("varit               v       Värilliset tekstit "
+                + "käyttöön terminaalissa.");
+        System.out.println("automaattisijoitus  a       Pelaajan laivat "
+                + "asetetaan automaattisesti.");
+        System.out.println("debuggaus           d       (Debuggaus) "
+                + "Tulostetaanko debuggausviestit.");
+        System.out.println("aikaleimat          da      (Debuggaus) Käytetäänkö"
+                + " aikaleimoja");
+        System.out.println();
+    }
+
 }

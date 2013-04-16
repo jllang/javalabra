@@ -66,6 +66,16 @@ public interface Kayttoliittyma extends Runnable {
     void tulostaPelitilanne();
     
     /**
+     * Tulostaa pelin ohjeet. Nämä ohjeet sisältävät lyhyen selostuksen pelistä
+     * sekä siinä käytettävissä olevista komennoista. Luokan Laivanupotus metodi 
+     * tulostaOhje puolestaan tulostaa teknisluontoisemman ohjeen käytettävissä 
+     * olevista pelin käynnistysargumenteista.
+     * 
+     * @see Laivanupotus
+     */
+    void tulostaOhje();
+    
+    /**
      * Tulostaa (tai esittää muulla tavoin) annetun viestin käyttäjälle.
      *
      * @param viesti Tulostettava viesti.

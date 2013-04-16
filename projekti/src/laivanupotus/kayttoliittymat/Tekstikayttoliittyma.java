@@ -3,13 +3,11 @@ package laivanupotus.kayttoliittymat;
 
 import laivanupotus.kayttoliittymat.komponentit.tekstikayttoliittyma.Komentotulkki;
 import java.util.Scanner;
-import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
 
 /**
@@ -101,6 +99,71 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
         String mj = rakennaKuva();
         tulostaMerkkijono(mj);
     }
+    
+    @Override
+    public void tulostaOhje() {
+        // Teen tämän myöhemmin siististi jos ehdin:
+        tulostaMerkkijono("\nYleistä\n\n"
+                + "Laivanupotus on peli jossa tarkoituksena on upottaa "
+                + "vastapelaajan koko laivasto.\n"
+                + "Pelin aluksi molemmat pelaajat sijoittavat laivastonsa "
+                + "omalle pelialueelleen jo-\n"
+                + "ko käsin tai automaattisesti.\n"
+                + "Peli etenee siten että pelaajat ampuvata vuorotellen "
+                + "toistensa ruudukkoihin kun-\n"
+                + "nes peli päättyy.\n"
+                + "Peli voi päättyä jomman kumman pelaajan voittoon, "
+                + "luovutukseen tai vuorojen lop-\n"
+                + "pumiseen kesken. (Yksityiskohdat riippuvat käytettävistä "
+                + "säännöistä.)\n\n"
+                + "----------------------------------------"
+                + "----------------------------------------\n\n"
+                + "Laivojen sijoittaminen ruudukkoon\n\n"
+                + "Laivat sijoitetaan ennen pelikierroksen alkua "
+                + "pelialueille alkaen lyhyimmistä\n"
+                + "laivoista pisimpiin. Laivojen sijoittaminen käsin "
+                + "ruudukkoon tapahtuu komennolla\n"
+                + "    aseta <x> <y> 0|1\n"
+                + "missä <x> on sijoitettavan laivan ensimmäisen ruudun "
+                + "sijainti vaakasuunnassa vä-\n"
+                + "liltä [A, " + AAKKOSET[pelikierros.annaSaannot().leveys() -1]
+                + "] ja <y> on sijoitettavan laivan ensimmäisen ruudun sijainti"
+                + " pysty-\n"
+                + "suunnassa väliltä [1, " + pelikierros.annaSaannot().korkeus()
+                + "]. "
+                + "Komennon viimeisenä parametrina annetaaan sijoitetta-\n"
+                + "van laivan orientaatio. Orientaatio kuvaa sijoitettavan "
+                + "laivan suuntaa siten,\n"
+                + "että arvo 0 merkitsee laivan sijoittamista horisontaalisesti"
+                + " (ts. annetusta ruu-\n"
+                + "dusta oikealle päin) ja arvo 1 vertikaalisesti (ts. "
+                + "annetusta ruudusta alaspäin)\n. Esimerkki:\n"
+                + "    aseta a 3 0\n\n"
+                + "----------------------------------------"
+                + "----------------------------------------\n\n"
+                + "Pelikierroksen aikana käytettävissä olevat komennot\n\n"
+                + "Komento      Parametrit      Selitys\n\n"
+                + "ohje         (ei ole)        Tulostaa tämän ohjeen.\n"
+                + "lopeta       (ei ole)        Lopettaa pelin.\n"
+                + "luovuta      (ei ole)        Lopettaa pelin (vastapuolen "
+                + "voittoon.)\n"
+                + "ammu         <x> <y>         Ampuu vastustajan pelialueelle "
+                + "annettuun ruutuun.\n"
+                + "                             <x> ja <y> kuten laivojen "
+                + "sijoituskomennossa.\n"
+                + "laivoja      (ei ole)        Tulostaa tiedon pelaajien "
+                + "jäljellä olevasta laiva-\n"
+                + "                             pinta-alasta.\n"
+                + "vuoro        (ei ole)        Tulostaa tiedon käynnissä "
+                + "olevan pelivuoron jär-\n"
+                + "                             jestysnumerosta. Tulostaa "
+                + "lisäksi tiedon jäljellä\n"
+                + "                             olevien vuorojen määrästä "
+                + "mikäli se on rajoitettu.\n\n"
+                + "----------------------------------------"
+                + "----------------------------------------\n\n");
+        //46
+    };
     
     @Override
     public void tulostaViesti(String viesti) {

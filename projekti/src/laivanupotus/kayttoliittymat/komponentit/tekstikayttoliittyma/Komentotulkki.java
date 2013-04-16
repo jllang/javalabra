@@ -62,14 +62,16 @@ public final class Komentotulkki {
                 return new Komento();
             case "LOPETA":
                 return new Komento(Komentotyyppi.LOPETA);
-            case "PAIVITA":
-                return new Komento(Komentotyyppi.PAIVITA_KAYTTOLIITTYMA);
+            case "OHJE":
+                return new Komento(Komentotyyppi.OHJEET);
+//            case "PAIVITA":
+//                return new Komento(Komentotyyppi.PAIVITA_KAYTTOLIITTYMA);
             case "LAIVOJA":
                 return new Komento(Komentotyyppi.TILAKYSELY,
-                        Komento.TILAKYSELY_VASTUSTAJAN_LAIVOJA_JALJELLA);
+                        Komento.TILAKYSELY_LAIVAT);
             case "VUOROJA":
                 return new Komento(Komentotyyppi.TILAKYSELY,
-                        Komento.TILAKYSELY_VUOROJA_JALJELLA);
+                        Komento.TILAKYSELY_VUOROT);
             case "ASETA":
                 tarkistaSyotteenOsienMaara(syotteenOsat, 4);
                 tarkistaKoordinaatit(syotteenOsat);

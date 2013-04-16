@@ -15,10 +15,12 @@ public final class Komento {
     
     // Maagisia lukuja liittyen enumiin Komentotyyppi.TILAKYSELY:
     public static final int 
-            TILAKYSELY_MONESKO_VUORO                = 1,
-            TILAKYSELY_VUOROJA_JALJELLA             = 2,
-            TILAKYSELY_OMIA_LAIVOJA_JALJELLA        = 3, 
-            TILAKYSELY_VASTUSTAJAN_LAIVOJA_JALJELLA = 4;
+//            TILAKYSELY_MONESKO_VUORO                = 1,
+//            TILAKYSELY_VUOROJA_JALJELLA             = 2,
+//            TILAKYSELY_OMIA_LAIVOJA_JALJELLA        = 3, 
+//            TILAKYSELY_VASTUSTAJAN_LAIVOJA_JALJELLA = 4;
+            TILAKYSELY_VUOROT = 1,
+            TILAKYSELY_LAIVAT = 2;
     
     /**
      * Komennon enumeroitu tyyppi.
@@ -48,7 +50,9 @@ public final class Komento {
     }
     
     /**
-     * Luo oletusarvoisen (tyhjän) komennon.
+     * Luo oletusarvoisen (tyhjän) komennon eli komennon, jonka kentän 
+     * <tt>KOMENTOTYYPPI</tt> enumeroitu arvo on <tt>Komentotyyppi.TYHJA</tt> ja 
+     * kentän <tt>PARAMETRIT</tt> arvo on <tt>null</tt>.
      */
     public Komento() {
         this.KOMENTOTYYPPI  = Komentotyyppi.TYHJA;

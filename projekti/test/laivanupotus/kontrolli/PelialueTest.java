@@ -109,7 +109,7 @@ public class PelialueTest {
         try {
             pelialue1.ammu(leikkipelaaja1, x, y);
         } catch (Exception poikkeus) {
-            kasittelePoikkeus(VaaranPelaajanRuutuException.class, poikkeus);
+            kasittelePoikkeus(VaaraPelialueException.class, poikkeus);
             return;
         }
         fail("Pystyttiin ampumaan omaan ruutuun.");

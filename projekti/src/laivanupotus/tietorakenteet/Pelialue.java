@@ -5,7 +5,7 @@ import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.poikkeukset.SaantojenvastainenSijoitusException;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
-import laivanupotus.poikkeukset.VaaranPelaajanRuutuException;
+import laivanupotus.poikkeukset.VaaraPelialueException;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
 
@@ -172,12 +172,12 @@ public final class Pelialue {
     }
     
     private void tarkastaOmistajuus(Pelaaja pelaaja, boolean odotettuPaluuarvo)
-            throws VaaranPelaajanRuutuException {
+            throws VaaraPelialueException {
         if (pelaajaOnOmistaja(pelaaja) != odotettuPaluuarvo) {
             if (odotettuPaluuarvo) {
-                throw new VaaranPelaajanRuutuException("Sääntörikkomus: Yritettiin suorittaa ruudukon omistajalle kuuluvaa toimintoa.");
+                throw new VaaraPelialueException("Sääntörikkomus: Yritettiin suorittaa ruudukon omistajalle kuuluvaa toimintoa.");
             } else {
-                throw new VaaranPelaajanRuutuException("Sääntörikkomus: Yritettiin suorittaa vastapelaajalle kuuluvaa toimintoa.");
+                throw new VaaraPelialueException("Sääntörikkomus: Yritettiin suorittaa vastapelaajalle kuuluvaa toimintoa.");
             }
         }
     }
@@ -193,7 +193,5 @@ public final class Pelialue {
     private boolean pisteessaOnOsuma(Piste piste) {
         return piste.onAmmuttu;
     }
-
-
     
 }

@@ -16,13 +16,11 @@ import laivanupotus.tietorakenteet.Saannot;
 public final class Tekoalypelaaja extends Pelaaja {
     
     private static Random   arpoja;
-    private static Saannot  saannot;
     private static int      korkeus, leveys;
     
     public Tekoalypelaaja(Random arpoja, Saannot saannot) {
         super("Tietokone");
         Tekoalypelaaja.arpoja   = arpoja;
-        Tekoalypelaaja.saannot  = saannot;
         Tekoalypelaaja.korkeus  = saannot.korkeus();
         Tekoalypelaaja.leveys   = saannot.leveys();
     }
@@ -31,15 +29,19 @@ public final class Tekoalypelaaja extends Pelaaja {
     public Komento annaKomento(Komento odotettu) {
         switch (odotettu.KOMENTOTYYPPI) {
             default:
+                // Palautetaan tyhjä komento jos pyydettiin tekoälypelaajan 
+                // kannalta "tuntematonta" komentoa kuten tilakysely.
+                // Tällaista ei-tuettua tekoälyominaisuutta varten pitäisi ehkä 
+                // tehdä uusi poikkeus.
                 return new Komento();
             case AMMU:
-                return annaSatunnainenAmpumiskomento();
+                return annaAmpumiskomento();
             case SIJOITA_LAIVA:
-                return annaSatunnainenSijoituskomento(odotettu.PARAMETRIT[0]);
+                return annaSijoituskomento(odotettu.PARAMETRIT[0]);
         }
     }
     
-    private Komento annaSatunnainenAmpumiskomento() {
+    private Komento annaAmpumiskomento() {
         Komento komento;
         
         int x = arpoja.nextInt(leveys);
@@ -62,7 +64,7 @@ public final class Tekoalypelaaja extends Pelaaja {
      * @param pituus    Pelialueelle sijoitetetavan laivan pituus.
      * @return          Sijoituskomento uudelle laivalle.
      */
-    protected static Komento annaSatunnainenSijoituskomento(int pituus) {
+    protected static Komento annaSijoituskomento(int pituus) {
         int[] parametrit = arvoSijoitusparametrit(pituus);
         return new Komento(Komentotyyppi.SIJOITA_LAIVA, parametrit);
     }

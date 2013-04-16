@@ -1,7 +1,6 @@
 
 package laivanupotus.kayttoliittymat;
 
-import javax.swing.JPanel;
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.rajapinnat.Kayttoliittyma;
@@ -32,6 +31,9 @@ public class GraafinenKayttoliittyma implements Kayttoliittyma, Runnable {
     
     @Override
     public void tulostaPelitilanne() {};
+    
+    @Override
+    public void tulostaOhje() {};
     
     @Override
     public void tulostaViesti(String viesti) {};

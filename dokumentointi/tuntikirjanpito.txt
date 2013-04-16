@@ -53,3 +53,8 @@ Sunnuntai 14.4:
 	- Kello 11.30 -	13.30: Koodikatselmointi 1
 	- Kello 17.30 - 20.30: Itsenäistä työskentelyä
 
+Tiistai 16.4:
+	- Kello 11.00 - 14:00: Itsenäistä työskentelyä
+	- Kello 16.00 - 20.30: Itsenäistä työskentelyä
+
+

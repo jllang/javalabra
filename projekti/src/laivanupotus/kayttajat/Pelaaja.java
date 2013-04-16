@@ -2,19 +2,13 @@
 package laivanupotus.kayttajat;
 
 import laivanupotus.tietorakenteet.Pelialue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import laivanupotus.poikkeukset.OmistajaOnJoAsetettuException;
 import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.Saannot;
-import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 
 /**
- *
- * @author John Lång
- * 
  * Tämän abstraktin luokan tarkoitus on mallintaa laivanupotuksen pelaajaa.
  * Luokat <tt>Ihmispelaaja</tt> ja <tt>Tekoalypelaaja</tt> perivät tämän luokan.
+ * 
+ * @author John Lång 
  */
 public abstract class Pelaaja {
     
@@ -45,7 +39,14 @@ public abstract class Pelaaja {
      * ihmispelaajan laivat sijoitetaan automaattisesti pelialueelle.)
      * 
      * @param odotettu Haluttua paluuarvoa koskeva tieto.
-     * @return uusi luokan <tt>Komento</tt> instanssi.
+     * @return uusi luokan <tt>Komento</tt> instanssi. Metodi palauttaa tyhjän 
+     * komennon jos parametrin <tt>odotettu</tt> mukaista komentoa ei voida tai 
+     * ole tarkoituksenmukaista antaa. Esimerkiksi luokan 
+     * <tt>Tekoalypelaaja</tt> metodi <tt>annaKomento</tt> palauttaa tyhjän 
+     * komennon 
+     * 
+     * @see Komento
+     * @see Komentotyyppi
      */
     public abstract Komento annaKomento(Komento odotettu) throws Exception;
     

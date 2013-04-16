@@ -2,11 +2,8 @@
 package laivanupotus.kontrolli.sijoitus;
 
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
-import laivanupotus.kayttajat.Tekoalypelaaja;
 import laivanupotus.kontrolli.Poikkeustenkasittelija;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
@@ -135,8 +132,10 @@ public final class LaivastonSijoitus {
     private void tarkastaKomento(Komento tarkastettava)
             throws IllegalArgumentException {
         if (tarkastettava.KOMENTOTYYPPI != Komentotyyppi.SIJOITA_LAIVA) {
-            throw new IllegalArgumentException("Pelaaja antoi epäkelvon "
-                    + "laivansijoituskomennon. (" + tarkastettava.KOMENTOTYYPPI.name() + ")");
+//            throw new IllegalArgumentException("Pelaaja antoi epäkelvon "
+//                    + "laivansijoituskomennon.\n");
+            KAYTTOLIITTYMA.tulostaDebuggausViesti("Epäkelpo sijoituskomento.");
+            KAYTTOLIITTYMA.tulostaOhje();
         }
     }
     
