@@ -70,11 +70,16 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
     public void asetaKatsoja(Pelaaja katsoja) {
         this.katsoja = katsoja;
     }
+    
+    @Override
+    public Pelaaja annaKatsoja() {
+        return this.katsoja;
+    }
 
     @Override
     public void alusta() {
-        ruudukko1 = katsoja.annaPelialue().haeRuudukko(katsoja);
-        ruudukko2 = pelikierros.annaVastapelaaja(katsoja).annaPelialue().haeRuudukko(katsoja);
+        ruudukko1 = katsoja.annaPelialue().annaRuudukko(katsoja);
+        ruudukko2 = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
         ruudukonLeveys = pelikierros.annaSaannot().leveys();
         ruudukonKorkeus = pelikierros.annaSaannot().korkeus();
         alustaKuva();

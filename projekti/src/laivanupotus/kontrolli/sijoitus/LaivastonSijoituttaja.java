@@ -7,7 +7,6 @@ import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Poikkeustenkasittelija;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.Saannot;
 import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 
@@ -20,22 +19,19 @@ import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
  * @see Saannot
  * @see LaivanSijoitin
  */
-public final class LaivastonSijoitus {
+public final class LaivastonSijoituttaja {
     
-    private static final Laivansijoitin     LAIVAN_SIJOITIN = new Laivansijoitin();
+    private static final Laivansijoitin     LAIVANSIJOITIN = new Laivansijoitin();
     
     private final Poikkeustenkasittelija    POIKKEUSTENKASITTELIJA;
     private final Kayttoliittyma            KAYTTOLIITTYMA;
     
-    private Saannot                         saannot;
-    private int                             leveys, korkeus;
-    
+    private Saannot                         saannot;    
     private Pelaaja                         pelaaja;
-    private Pelialue                        pelialue;
     private Map<Integer, Integer>           laivojenMitatJaMaarat;
     private boolean                         sijoitetaanKasin;
     
-    public LaivastonSijoitus(Poikkeustenkasittelija poikkeustenkasittelija,
+    public LaivastonSijoituttaja(Poikkeustenkasittelija poikkeustenkasittelija,
             Kayttoliittyma kayttoliittyma) {
         this.POIKKEUSTENKASITTELIJA = poikkeustenkasittelija;
         this.KAYTTOLIITTYMA         = kayttoliittyma;
@@ -44,8 +40,6 @@ public final class LaivastonSijoitus {
         
     public void asetaSaannot(Saannot saannot) {
         this.saannot    = saannot;
-        this.leveys     = saannot.leveys();
-        this.korkeus    = saannot.korkeus();
     }
     
     /**
@@ -71,16 +65,18 @@ public final class LaivastonSijoitus {
     private void sijoitutaAlusluokanLaivat(int luokka, int maara)
             throws Exception {
         for (int i = 0; i < maara; i++) {
-            sijoitaLaiva(luokka);
+            sijoitutaLaiva(luokka);
         }
     }
     
-    private void sijoitaLaiva(int pituus) throws Exception {
+    private void sijoitutaLaiva(int pituus) throws Exception {
          
         boolean sijoitusOnnistui = false;
         Komento komento;
+        int i = 0;
         
-        while (!sijoitusOnnistui) {            
+        while (!sijoitusOnnistui) {
+            i++;
             if (!sijoitetaanKasin) {
                 komento = pelaaja.annaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, pituus));
             } else {
@@ -91,9 +87,11 @@ public final class LaivastonSijoitus {
             int orientaatio = komento.PARAMETRIT[2];
             
             try {
-                LAIVAN_SIJOITIN.sijoitaLaiva(x, y, orientaatio, pituus);
-            } catch (Exception exception) {
-                POIKKEUSTENKASITTELIJA.kasittele(exception);
+                LAIVANSIJOITIN.sijoitaLaiva(x, y, orientaatio, pituus);
+            } catch (Exception poikkeus) {
+                if (pelaaja == KAYTTOLIITTYMA.annaKatsoja()) {
+                    POIKKEUSTENKASITTELIJA.kasittele(poikkeus);
+                }
                 continue;
             }
             sijoitusOnnistui = true;
@@ -106,11 +104,10 @@ public final class LaivastonSijoitus {
     
     private void valmisteleLaivasto(Pelaaja pelaaja, boolean sijoitetaanKasin) {
         this.pelaaja            = pelaaja;
-        this.pelialue           = pelaaja.annaPelialue();
         this.sijoitetaanKasin   = pelaaja.getClass() == Ihmispelaaja.class
                 && sijoitetaanKasin;
         laivojenMitatJaMaarat   = saannot.annaLaivojenMitatJaMaarat();
-        LAIVAN_SIJOITIN.asetaPelaaja(pelaaja);
+        LAIVANSIJOITIN.asetaPelaaja(pelaaja);
     }
     
     private Komento hankiSijoituskomentoKayttoliittymalta() throws Exception {

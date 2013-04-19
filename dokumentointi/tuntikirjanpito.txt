@@ -57,4 +57,9 @@ Tiistai 16.4:
 	- Kello 11.00 - 14:00: Itsenäistä työskentelyä
 	- Kello 16.00 - 20.30: Itsenäistä työskentelyä
 
+Torstai 18.4:
+	- Kello 10.30 - 13.30: Itsenäistä työskentelyä
+	- Kello 15.30 - 17.00: Itsenäistä työskentelyä
 
+Perjantai 19.4:
+	- Kello 15.00 - 21.15: Itsenäistä työskentelyä

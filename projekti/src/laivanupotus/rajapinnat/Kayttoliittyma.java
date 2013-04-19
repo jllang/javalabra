@@ -36,6 +36,8 @@ public interface Kayttoliittyma extends Runnable {
      */
     void asetaKatsoja(Pelaaja katsoja);
     
+    Pelaaja annaKatsoja();
+    
     /**
      * Suorittaa pelitilanteen tulostamista edeltävät valmistelutoimenpiteet. 
      * Metodi on tarkoitettu suoritettavaksi vain kerran jokaisen pelikierroksen 

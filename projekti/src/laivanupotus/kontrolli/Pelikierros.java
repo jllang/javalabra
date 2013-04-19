@@ -170,6 +170,13 @@ public final class Pelikierros {
                     POIKKEUSTENKASITTELIJA.kasittele(rojae);
                 }
                 return;
+            case GOD_MODE:
+                KAYTTOLIITTYMA.tulostaViesti("Jumaltila aktivoitu. Vastustajan "
+                        + "laivasto näkyy nyt vasemmalla.");
+                KAYTTOLIITTYMA.asetaKatsoja(annaVastapelaaja(vuorossaolija));
+                KAYTTOLIITTYMA.alusta();
+                KAYTTOLIITTYMA.tulostaPelitilanne();
+                return;
         default:
             throw new TuntematonKomentoException();
         }
@@ -188,12 +195,12 @@ public final class Pelikierros {
                 }
                 break;
             case Komento.TILAKYSELY_LAIVAT:
-                KAYTTOLIITTYMA.tulostaViesti("Omia laivaruutuja on jäljellä "
-                        + vuorossaolija.annaPelialue().laivapintaAlaaJaljella()
+                KAYTTOLIITTYMA.tulostaViesti("Omia laivoja on jäljellä "
+                        + vuorossaolija.annaPelialue().laivojaJaljella()
                         + " kpl.\n");
-                KAYTTOLIITTYMA.tulostaViesti("Vastustajan laivaruutuja on "
+                KAYTTOLIITTYMA.tulostaViesti("Vastustajan laivoja on "
                         + "jäljellä " + annaVastapelaaja(vuorossaolija)
-                        .annaPelialue().laivapintaAlaaJaljella()
+                        .annaPelialue().laivojaJaljella()
                         + " kpl.\n");
                 break;
         }

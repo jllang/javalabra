@@ -5,8 +5,10 @@ import laivanupotus.kayttajat.Tekoalypelaaja;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
 import java.util.Random;
+import javax.swing.SwingUtilities;
+import laivanupotus.kayttoliittymat.GraafinenKayttoliittyma;
 import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
-import laivanupotus.kontrolli.sijoitus.LaivastonSijoitus;
+import laivanupotus.kontrolli.sijoitus.LaivastonSijoituttaja;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Saannot;
 
@@ -46,8 +48,8 @@ public final class Laivanupotus {
             return;
         }
         
-        Kayttoliittyma kl = new Tekstikayttoliittyma(asetukset[1]);
-        kl.run();
+//        Kayttoliittyma kl = new Tekstikayttoliittyma(asetukset[1]);
+        Kayttoliittyma kl = new GraafinenKayttoliittyma();
         Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, asetukset[3], asetukset[4]);
 //        Tallentaja t1 = new Tiedostotallentaja();
 //        Tallentaja t2 = new Muistitallentaja();
@@ -57,16 +59,21 @@ public final class Laivanupotus {
         Saannot s = new Saannot();
         Pelaaja p1 = new Ihmispelaaja("Käyttäjä");
         Pelaaja p2 = new Tekoalypelaaja(arpoja, s);
-        LaivastonSijoitus ls = new LaivastonSijoitus(poka, kl);
+        LaivastonSijoituttaja ls = new LaivastonSijoituttaja(poka, kl);
         ls.asetaSaannot(s);
         
         Pelikierros peki = new Pelikierros(kl, poka, s, p1, p2);
         kl.asetaPelikierros(peki);
         kl.asetaKatsoja(p1);
         kl.alusta();
+        SwingUtilities.invokeLater(kl);
         try {
-            ls.sijoitaLaivasto(p1, asetukset[0]);
+//            ls.sijoitaLaivasto(p1, asetukset[0]);
+            ls.sijoitaLaivasto(p1, false);
             ls.sijoitaLaivasto(p2, false);
+//            System.out.println("g");
+            kl.tulostaPelitilanne();
+            
             peki.aloita();
         } catch (Exception poikkeus) {
             // Vain fataalien virheiden pitäisi päästä tänne asti.

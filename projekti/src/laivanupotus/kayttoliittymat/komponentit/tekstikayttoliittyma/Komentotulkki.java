@@ -57,7 +57,7 @@ public final class Komentotulkki {
             throw new IllegalArgumentException("Pelaaja antoi tyhjän komennon.");
         }
         String[] syotteenOsat = syote.split(" ");
-        switch (syotteenOsat[0]) {
+        switch (syotteenOsat[0].trim()) {
             case "":
                 return new Komento();
             case "LOPETA":
@@ -87,6 +87,12 @@ public final class Komentotulkki {
                     Integer.parseInt(syotteenOsat[2]) - 1);
             case "LUOVUTA":
                 return new Komento(Komentotyyppi.LUOVUTA);
+            case "EN": // "Debuggausta" varten. :P
+                if (syotteenOsat[1].trim().equals("VAIN")) {
+                    if (syotteenOsat[2].trim().equals("OSAA")) {
+                        return new Komento(Komentotyyppi.GOD_MODE);
+                    }
+                }
             default:
                 return new Komento(Komentotyyppi.TUNTEMATON);
         }

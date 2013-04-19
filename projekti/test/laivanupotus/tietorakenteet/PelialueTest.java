@@ -1,13 +1,14 @@
 
-package laivanupotus.kontrolli;
+package laivanupotus.tietorakenteet;
 
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.tietorakenteet.Pelialue;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
+import laivanupotus.kontrolli.Pelikierros;
+import laivanupotus.kontrolli.Poikkeustenkasittelija;
+import laivanupotus.kontrolli.SaantojenArpoja;
 import laivanupotus.poikkeukset.*;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Saannot;
@@ -89,6 +90,31 @@ public class PelialueTest {
             fail("Ruutuun ei voitu ampua odotetusti.");
         }
     }
+    
+    @Test
+    public void testSijoitaJaAmmu() {
+        System.out.println("Testataan tykkiveneen sijoittamista ja upotusta...");
+        try {
+            pelialue1.peitaSijaintiLaivalla(leikkipelaaja1, x, y);
+            pelialue1.viimeisteleSijoitus();
+            pelialue1.ammu(leikkipelaaja2, x, y);
+        } catch (Exception poikkeus) {
+            fail();
+        }
+    }
+    
+//    @Test
+//    public void testSijoitaJaAmmu2() {
+//        Laivansijoitin ls = new Laivansijoitin();
+//        System.out.println("Testataan laivan sijoittamista ja upotusta...");
+//        try {
+//            pelialue1.peitaSijaintiLaivalla(leikkipelaaja1, x, y);
+//            pelialue1.viimeisteleSijoitus();
+//            pelialue1.ammu(leikkipelaaja2, x, y);
+//        } catch (Exception poikkeus) {
+//            fail();
+//        }
+//    }
     
     @Test
     public void testAmmuKaksiKertaaSamaanRuutuun() {

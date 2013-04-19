@@ -11,7 +11,7 @@ import org.junit.Ignore;
 @Ignore // Tämäkin testi on kesken...
 public class LaivastonSijoitusTest {
     
-    private LaivastonSijoitus laivastonSijoitus;
+    private LaivastonSijoituttaja laivastonSijoitus;
     
     public LaivastonSijoitusTest() {
     }
