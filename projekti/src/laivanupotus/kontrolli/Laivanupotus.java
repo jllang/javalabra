@@ -47,9 +47,12 @@ public final class Laivanupotus {
             tulostaOhje();
             return;
         }
-        
-//        Kayttoliittyma kl = new Tekstikayttoliittyma(asetukset[1]);
-        Kayttoliittyma kl = new GraafinenKayttoliittyma();
+        Kayttoliittyma kl;
+        if (asetukset[5]) {
+            kl = new GraafinenKayttoliittyma();
+        } else {
+            kl = new Tekstikayttoliittyma(asetukset[1]);
+        }
         Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, asetukset[3], asetukset[4]);
 //        Tallentaja t1 = new Tiedostotallentaja();
 //        Tallentaja t2 = new Muistitallentaja();
@@ -66,13 +69,15 @@ public final class Laivanupotus {
         kl.asetaPelikierros(peki);
         kl.asetaKatsoja(p1);
         kl.alusta();
-        SwingUtilities.invokeLater(kl);
+        if (asetukset[5]) {
+            SwingUtilities.invokeLater(kl);
+        }
         try {
-//            ls.sijoitaLaivasto(p1, asetukset[0]);
-            ls.sijoitaLaivasto(p1, false);
-            ls.sijoitaLaivasto(p2, false);
-//            System.out.println("g");
             kl.tulostaPelitilanne();
+            ls.sijoitaLaivasto(p1, asetukset[0]);
+//            ls.sijoitaLaivasto(p1, false);
+            ls.sijoitaLaivasto(p2, false);
+//            System.out.println("g");            
             
             peki.aloita();
         } catch (Exception poikkeus) {
@@ -122,6 +127,10 @@ public final class Laivanupotus {
                     case "aikaleimat":
                         asetukset[4] = true;
                         break;
+                    case "g":
+                    case "gui":
+                        asetukset[5] = true;
+                        break;
                 }
             }
         }
@@ -129,12 +138,13 @@ public final class Laivanupotus {
     }
     
     private static void alustaAsetuksetOletusarvoilla() {
-        asetukset = new boolean[5];
-        asetukset[0] = true;
-        asetukset[1] = false;
-        asetukset[2] = true;
-        asetukset[3] = false;
-        asetukset[4] = false;
+        asetukset = new boolean[6];
+        asetukset[0] = true;    // Laivojen sijoitus käsin
+        asetukset[1] = false;   // Värit
+        asetukset[2] = true;    // Jatketaanko suoritusta
+        asetukset[3] = false;   // Debuggausviestit
+        asetukset[4] = false;   // Debuggauksen aikaleimat
+        asetukset[5] = false;   // Graafinen käyttöliittymä
     }
 
     private static void tulostaOhje() {
