@@ -58,9 +58,6 @@ public final class Laivanupotus {
             kl = new Tekstikayttoliittyma(asetukset[1]);
         }
         Poikkeustenkasittelija poka = new Poikkeustenkasittelija(kl, asetukset[3], asetukset[4]);
-//        Tallentaja t1 = new Tiedostotallentaja();
-//        Tallentaja t2 = new Muistitallentaja();
-//        t1.tallenna();
         Random arpoja = new Random();
 //        Saannot s = new Saannot(20, 10, 0, laivojenMitatjaMaarat); //Kaatuu; mutta miksi?
         Saannot s = new Saannot();
