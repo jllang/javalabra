@@ -47,6 +47,10 @@ public final class Laivanupotus {
             tulostaOhje();
             return;
         }
+        
+//        asetukset[5] = true;
+//        asetukset[0] = true;
+        
         Kayttoliittyma kl;
         if (asetukset[5]) {
             kl = new GraafinenKayttoliittyma();
@@ -139,7 +143,8 @@ public final class Laivanupotus {
     
     private static void alustaAsetuksetOletusarvoilla() {
         asetukset = new boolean[6];
-        asetukset[0] = true;    // Laivojen sijoitus käsin
+//        asetukset[0] = true;    //Tilaspäisesti pois käytöstä.
+        asetukset[0] = false;   // Laivojen sijoitus käsin
         asetukset[1] = false;   // Värit
         asetukset[2] = true;    // Jatketaanko suoritusta
         asetukset[3] = false;   // Debuggausviestit
@@ -156,17 +161,20 @@ public final class Laivanupotus {
         System.out.println();
         System.out.println("Taulukko pelin käynnistysargumenteista:");
         System.out.println("------------------------------------");
-        System.out.println("Argumentti          Lyh.    Selitys");
+        System.out.println("    Argumentti          Lyh.    Selitys");
         System.out.println();
-        System.out.println("ohje                o       Näyttää tämän ohjeen.");
-        System.out.println("varit               v       Värilliset tekstit "
+        System.out.println("    ohje                o       Näyttää tämän "
+                + "ohjeen.");
+        System.out.println("    varit               v       Värilliset tekstit "
                 + "käyttöön terminaalissa.");
-        System.out.println("automaattisijoitus  a       Pelaajan laivat "
+        System.out.println("    automaattisijoitus  a       Pelaajan laivat "
                 + "asetetaan automaattisesti.");
-        System.out.println("debuggaus           d       (Debuggaus) "
+        System.out.println("    debuggaus           d       (Debuggaus) "
                 + "Tulostetaanko debuggausviestit.");
-        System.out.println("aikaleimat          da      (Debuggaus) Käytetäänkö"
-                + " aikaleimoja");
+        System.out.println("    aikaleimat          da      (Debuggaus) "
+                + "Käytetäänkö aikaleimoja");
+        System.out.println("    gui                 g       Graafinen "
+                + "käyttöliittymä");
         System.out.println();
     }
 

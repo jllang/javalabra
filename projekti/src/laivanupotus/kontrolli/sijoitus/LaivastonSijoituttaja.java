@@ -129,10 +129,8 @@ public final class LaivastonSijoituttaja {
     private void tarkastaKomento(Komento tarkastettava)
             throws IllegalArgumentException {
         if (tarkastettava.KOMENTOTYYPPI != Komentotyyppi.SIJOITA_LAIVA) {
-//            throw new IllegalArgumentException("Pelaaja antoi epäkelvon "
-//                    + "laivansijoituskomennon.\n");
-            KAYTTOLIITTYMA.tulostaDebuggausViesti("Epäkelpo sijoituskomento.");
-            KAYTTOLIITTYMA.tulostaOhje();
+            throw new IllegalArgumentException("Pelaaja antoi epäkelvon "
+                    + "laivansijoituskomennon.\n");
         }
     }
     

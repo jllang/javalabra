@@ -143,7 +143,7 @@ public final class Pelikierros {
                 throw new TyhjaKomentoException();
             case LUOVUTA:  // Asetetaan voittaja ja jatketaan eteenpäin.
                 KAYTTOLIITTYMA.tulostaViesti("Pelaaja "
-                        + vuorossaolija.kerroNimi() + "luovutti pelin.\n");
+                        + vuorossaolija.kerroNimi() + " luovutti pelin.\n");
                 voittaja = annaVastapelaaja(vuorossaolija);
             case LOPETA:
                 peliJatkuu = false;
@@ -172,13 +172,13 @@ public final class Pelikierros {
                 return;
             case GOD_MODE:
                 KAYTTOLIITTYMA.tulostaViesti("Jumaltila aktivoitu. Vastustajan "
-                        + "laivasto näkyy nyt vasemmalla.");
+                        + "laivasto näkyy nyt vasemmalla.\n");
                 KAYTTOLIITTYMA.asetaKatsoja(annaVastapelaaja(vuorossaolija));
                 KAYTTOLIITTYMA.alusta();
                 KAYTTOLIITTYMA.tulostaPelitilanne();
                 return;
-        default:
-            throw new TuntematonKomentoException();
+            default:
+                throw new TuntematonKomentoException();
         }
     }
     
@@ -209,9 +209,9 @@ public final class Pelikierros {
     private void lopeta() {
         KAYTTOLIITTYMA.tulostaViesti("Voittaja oli ");
         if (voittaja == PELAAJA1) {
-            KAYTTOLIITTYMA.tulostaViesti("pelaaja 1.");
+            KAYTTOLIITTYMA.tulostaViesti("pelaaja 1.\n");
         } else {
-            KAYTTOLIITTYMA.tulostaViesti("pelaaja 2.");
+            KAYTTOLIITTYMA.tulostaViesti("pelaaja 2.\n");
         }
     }
 

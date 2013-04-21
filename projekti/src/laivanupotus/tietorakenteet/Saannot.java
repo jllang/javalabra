@@ -62,9 +62,9 @@ public final class Saannot implements Tallennettava {
     public Saannot() {
         this.VARASTO                    = new ArrayList<>();
         this.LAIVOJEN_MITAT_JA_MAARAT   = new TreeMap<>();
-        VARASTO.add(10);
-        VARASTO.add(10);
-        VARASTO.add(0);
+        VARASTO.add(10);    // Pelialueen leveys
+        VARASTO.add(10);    // Pelialueen korkeus
+        VARASTO.add(0);     // Vuorojen määrä (0 = ei rajoitusta)
         VARASTO.add(4);     // Pisimmän laivan pituus. Taitaa olla redundantti.
         VARASTO.add(4);     // 4 * 1 ruutu
         VARASTO.add(6);     // 3 * 2 ruutua

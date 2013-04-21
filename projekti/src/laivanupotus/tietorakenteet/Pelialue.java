@@ -195,7 +195,7 @@ public final class Pelialue {
             if (ampuja == KAYTTOLIITTYMA.annaKatsoja()) {
                 // Parempi tekoäly tarvitsisi tietoa tästä tapahtumasta esim.
                 // jonkin boolean-kentän muodossa.
-                KAYTTOLIITTYMA.tulostaViesti(ampuja.kerroNimi() + ": Osui ja upposi!");
+                KAYTTOLIITTYMA.tulostaViesti(ampuja.kerroNimi() + ": Osui ja upposi!\n");
             }
             poistaHylky(laiva);
         }
