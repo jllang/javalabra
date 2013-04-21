@@ -1,8 +1,8 @@
 
 package laivanupotus.kayttajat;
 
-import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.Komento;
+import laivanupotus.tietorakenteet.Pelialue;
 
 /**
  * Tämän abstraktin luokan tarkoitus on mallintaa laivanupotuksen pelaajaa.

@@ -1,11 +1,11 @@
 
 package laivanupotus.kontrolli;
 
-import laivanupotus.kayttajat.Tekoalypelaaja;
-import laivanupotus.kayttajat.Ihmispelaaja;
-import laivanupotus.kayttajat.Pelaaja;
 import java.util.Random;
 import javax.swing.SwingUtilities;
+import laivanupotus.kayttajat.Ihmispelaaja;
+import laivanupotus.kayttajat.Pelaaja;
+import laivanupotus.kayttajat.Tekoalypelaaja;
 import laivanupotus.kayttoliittymat.GraafinenKayttoliittyma;
 import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
 import laivanupotus.kontrolli.sijoitus.LaivastonSijoituttaja;

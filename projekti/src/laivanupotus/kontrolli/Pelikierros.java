@@ -6,9 +6,9 @@ import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
 import laivanupotus.poikkeukset.TuntematonKomentoException;
 import laivanupotus.poikkeukset.TyhjaKomentoException;
-import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
+import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.Saannot;
 import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 

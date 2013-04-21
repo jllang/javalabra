@@ -1,23 +1,21 @@
 
 package laivanupotus.tietorakenteet;
 
+import java.util.Random;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
-import laivanupotus.tietorakenteet.Pelialue;
-import java.util.Random;
 import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.kontrolli.Poikkeustenkasittelija;
 import laivanupotus.kontrolli.SaantojenArpoja;
 import laivanupotus.poikkeukset.*;
 import laivanupotus.rajapinnat.Kayttoliittyma;
-import laivanupotus.tietorakenteet.Saannot;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

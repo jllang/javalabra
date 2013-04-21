@@ -11,7 +11,7 @@ import laivanupotus.tietorakenteet.enumit.Ruutu;
  *
  * @author John Lång
  */
-public class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
+public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
     
     private Ruutu[][]   ruudukko;
     private int         x, y;

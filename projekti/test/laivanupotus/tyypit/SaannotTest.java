@@ -1,20 +1,19 @@
 
 package laivanupotus.tyypit;
 
-import laivanupotus.tietorakenteet.Saannot;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
+import laivanupotus.kontrolli.SaantojenArpoja;
+import laivanupotus.tietorakenteet.Saannot;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import laivanupotus.kontrolli.SaantojenArpoja;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  *

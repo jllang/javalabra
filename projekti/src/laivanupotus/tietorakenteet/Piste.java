@@ -12,22 +12,22 @@ package laivanupotus.tietorakenteet;
  * @see Ruutu
  * @see Pelialue
  */
-public final class Piste {
+final class Piste {
     
     /**
      * Tosi jos ja vain jos pisteessä on laiva.
      */
-    public boolean onOsaLaivaa;
+    boolean onOsaLaivaa;
     
     /**
      * Tosi jos ja vain jos pisteeseen on ammuttu.
      */
-    public boolean onAmmuttu;
+    boolean onAmmuttu;
     
     /**
      * Konstruktori joka luo aina tyhjän ruudun.
      */
-    public Piste() {
+    Piste() {
         onOsaLaivaa = false;
         onAmmuttu   = false;
     }

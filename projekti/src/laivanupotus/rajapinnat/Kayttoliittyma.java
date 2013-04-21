@@ -2,9 +2,9 @@
 package laivanupotus.rajapinnat;
 
 import laivanupotus.kayttajat.Pelaaja;
-import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.tietorakenteet.Komento;
+import laivanupotus.tietorakenteet.Pelialue;
 
 /**
  * Tämän rajapinnan on tarkoitus määrittää ohjelman käyttöliittymältä vaaditut 

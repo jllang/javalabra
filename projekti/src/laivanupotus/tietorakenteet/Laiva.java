@@ -11,11 +11,11 @@ import java.util.Queue;
  *
  * @author John Lång
  */
-public class Laiva {
+final class Laiva {
 
     private Piste[] pisteet;
     
-    public Laiva(Queue<Piste> pisteet) {
+    Laiva(Queue<Piste> pisteet) {
         this.pisteet = new Piste[pisteet.size()];
         Iterator iteraattori = pisteet.iterator();
         for (int i = 0; i < pisteet.size(); i++) {
@@ -23,7 +23,7 @@ public class Laiva {
         }
     }
 
-    public boolean upposi() {
+    boolean upposi() {
         for (Piste piste : pisteet) {
             if (!piste.onAmmuttu) {
                 return false;
@@ -32,7 +32,7 @@ public class Laiva {
         return true;
     }
     
-    public Piste[] annaPisteet() {
+    Piste[] annaPisteet() {
         return pisteet;
     }
     

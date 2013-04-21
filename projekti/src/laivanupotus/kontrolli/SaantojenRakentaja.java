@@ -2,8 +2,6 @@
 package laivanupotus.kontrolli;
 
 import laivanupotus.rajapinnat.Kayttoliittyma;
-import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.Saannot;
 
 /**
  * Tämän luokan tarkoituksena on rakentaa uudet säännöt peliin käyttäjän 

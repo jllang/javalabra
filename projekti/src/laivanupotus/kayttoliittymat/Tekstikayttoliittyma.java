@@ -1,13 +1,13 @@
 
 package laivanupotus.kayttoliittymat;
 
-import laivanupotus.kayttoliittymat.komponentit.tekstikayttoliittyma.Komentotulkki;
 import java.util.Scanner;
 import laivanupotus.kayttajat.Pelaaja;
+import laivanupotus.kayttoliittymat.komponentit.tekstikayttoliittyma.Komentotulkki;
 import laivanupotus.kontrolli.Pelikierros;
-import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
+import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
 
 /**

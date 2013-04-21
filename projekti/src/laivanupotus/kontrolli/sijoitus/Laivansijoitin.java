@@ -3,7 +3,6 @@ package laivanupotus.kontrolli.sijoitus;
 
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.poikkeukset.SaantojenvastainenSijoitusException;
-import laivanupotus.tietorakenteet.Laiva;
 import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
 
@@ -15,21 +14,21 @@ import laivanupotus.tietorakenteet.enumit.Ruutu;
  * @see Pelaaja
  * @see Pelialue
  */
-public final class Laivansijoitin {
+final class Laivansijoitin {
     
-    public static final int              HORISONTAALINEN_ORIENTAATIO = 0;
-    public static final int              VERTIKAALINEN_ORIENTAATIO   = 1;
+    static final int    HORISONTAALINEN_ORIENTAATIO = 0;
+    static final int    VERTIKAALINEN_ORIENTAATIO   = 1;
     
     private Pelaaja     pelaaja;
     private Pelialue    pelialue;
     
-    public Laivansijoitin() {}
+    Laivansijoitin() {}
     
     /**
      * Valmistelee olion sisäiset kentät laivan sijoittamista varten.
      * @param laivanOmistaja Pelaaja jonka laivaa ollaan sijoittamassa.
      */
-    public void asetaPelaaja(Pelaaja laivanOmistaja) {
+    void asetaPelaaja(Pelaaja laivanOmistaja) {
         this.pelaaja = laivanOmistaja;
         this.pelialue = laivanOmistaja.annaPelialue();
     }
@@ -48,7 +47,7 @@ public final class Laivansijoitin {
      * @throws Exception    Mahdollinen virheellisten parametrien tai sääntöjen 
      * vastaisen sijoittamisyrityksen aiheuttama poikkeus.
      */
-    public void sijoitaLaiva(int x, int y, int orientaatio,
+    void sijoitaLaiva(int x, int y, int orientaatio,
             int pituus) throws Exception {
         tarkastaOrientaatio(orientaatio);
         tarkastaLaivanSijainti(x, y, orientaatio, pituus);

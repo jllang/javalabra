@@ -6,18 +6,17 @@ import java.io.PrintStream;
 import java.util.Random;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
-import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.kontrolli.Poikkeustenkasittelija;
+import laivanupotus.kontrolli.SaantojenArpoja;
+import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.Saannot;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
-import laivanupotus.kontrolli.SaantojenArpoja;
+import org.junit.Test;
 
 /**
  *

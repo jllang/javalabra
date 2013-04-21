@@ -21,7 +21,7 @@ import laivanupotus.tietorakenteet.enumit.Ruutu;
  *
  * @author John Lång
  */
-public class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
+public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     
     private JFrame              frame;    
     private Ruutu[][]           r1, r2;

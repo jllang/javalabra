@@ -4,10 +4,9 @@ package laivanupotus.kayttajat;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import laivanupotus.kontrolli.sijoitus.Laivansijoitin;
 import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 import laivanupotus.tietorakenteet.Saannot;
+import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 
 /**
  *
@@ -64,7 +63,7 @@ public final class Tekoalypelaaja extends Pelaaja {
      * @param pituus    Pelialueelle sijoitetetavan laivan pituus.
      * @return          Sijoituskomento uudelle laivalle.
      */
-    protected static Komento annaSijoituskomento(int pituus) {
+    static Komento annaSijoituskomento(int pituus) {
         int[] parametrit = arvoSijoitusparametrit(pituus);
         return new Komento(Komentotyyppi.SIJOITA_LAIVA, parametrit);
     }
@@ -77,7 +76,7 @@ public final class Tekoalypelaaja extends Pelaaja {
                 parametrit[0] = arpoja.nextInt(leveys - pituus);
                 parametrit[1] = arpoja.nextInt(korkeus);
                 break;
-            case Laivansijoitin.VERTIKAALINEN_ORIENTAATIO:
+            case 1: //Laivansijoitin.VERTIKAALINEN_ORIENTAATIO
                 parametrit[0] = arpoja.nextInt(leveys);
                 parametrit[1] = arpoja.nextInt(korkeus - pituus);
         }
