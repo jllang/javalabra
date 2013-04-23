@@ -48,8 +48,8 @@ public final class Laivanupotus {
             return;
         }
         
-//        asetukset[5] = true;
-//        asetukset[0] = true;
+        asetukset[5] = true;
+        asetukset[0] = false;
         
         Kayttoliittyma kl;
         if (asetukset[5]) {
@@ -73,13 +73,13 @@ public final class Laivanupotus {
         if (asetukset[5]) {
             SwingUtilities.invokeLater(kl);
         }
+
         try {
-            kl.tulostaPelitilanne();
+//            kl.tulostaPelitilanne();
             ls.sijoitaLaivasto(p1, asetukset[0]);
 //            ls.sijoitaLaivasto(p1, false);
             ls.sijoitaLaivasto(p2, false);
-//            System.out.println("g");            
-            
+//            kl.tulostaPelitilanne();
             peki.aloita();
         } catch (Exception poikkeus) {
             // Vain fataalien virheiden pitäisi päästä tänne asti.
@@ -140,8 +140,8 @@ public final class Laivanupotus {
     
     private static void alustaAsetuksetOletusarvoilla() {
         asetukset = new boolean[6];
-//        asetukset[0] = true;    //Tilaspäisesti pois käytöstä.
-        asetukset[0] = false;   // Laivojen sijoitus käsin
+        asetukset[0] = true;    //Tilaspäisesti pois käytöstä.
+//        asetukset[0] = false;   // Laivojen sijoitus käsin
         asetukset[1] = false;   // Värit
         asetukset[2] = true;    // Jatketaanko suoritusta
         asetukset[3] = false;   // Debuggausviestit

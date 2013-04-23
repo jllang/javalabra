@@ -69,3 +69,7 @@ Lauantai 20.4:
 
 Sunnuntai 21.4:
 	- Kello 10.30 - 13.30: Itsenäistä työskentelyä
+	- Kello 14.30 -	17.30: Koodikatselmointi 2
+
+Tiistai 23.3:
+	- Kello 10.30 - 12.30: Itsenäistä työskentelyä

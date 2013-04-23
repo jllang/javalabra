@@ -20,13 +20,14 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
         this.ruudukko = ruudukko;
         this.x = x;
         this.y = y;
+//        super.setBounds(x, y, ruudukko[0].length * 16 + 2, ruudukko.length * 16 + 2); // Miksei toimi???
+//        super.setBackground(Color.BLACK);
     }
     
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Color c = new Color(128, 128, 128);
-        g.fillRect(8, 8, ruudukko[0].length * 8 + 1, ruudukko.length * 8 + 1);
+        Color c;
         for (int i = 0; i < ruudukko.length - 1; i++) {
             for (int j = 0; j < ruudukko[j].length - 1; j++) {
                 switch (ruudukko[i][j]) {
@@ -40,14 +41,15 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
                         c = new Color(24, 32, 128);
                         break;
                 }
-                g.fillRect(j * 9 + x + 1, i * 9 + y + 1, 8, 8);
+                g.setColor(c);
+                g.fillRect(j * 18 + x + 1, i * 18 + y + 1, 16, 16);
             }
         }
     }
 
     @Override
     public void tulosta() {
-        repaint();
+        repaint();        
     }
 
 }

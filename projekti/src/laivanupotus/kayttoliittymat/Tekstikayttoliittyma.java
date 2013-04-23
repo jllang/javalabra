@@ -16,7 +16,7 @@ import laivanupotus.tietorakenteet.enumit.Ruutu;
  *
  * @author John Lång 
  */
-public final class Tekstikayttoliittyma implements Kayttoliittyma, Runnable {
+public final class Tekstikayttoliittyma implements Kayttoliittyma {
     
     private static final int    KUVAN_LEVEYS = 80, KUVAN_KORKEUS = 21;
     private static final char[] AAKKOSET = {
