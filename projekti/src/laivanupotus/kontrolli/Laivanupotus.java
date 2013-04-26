@@ -1,7 +1,10 @@
 
 package laivanupotus.kontrolli;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
@@ -71,21 +74,31 @@ public final class Laivanupotus {
         kl.asetaKatsoja(p1);
         kl.alusta();
         if (asetukset[5]) {
-            SwingUtilities.invokeLater(kl);
-        }
-
-        try {
-//            kl.tulostaPelitilanne();
-            ls.sijoitaLaivasto(p1, asetukset[0]);
-//            ls.sijoitaLaivasto(p1, false);
-            ls.sijoitaLaivasto(p2, false);
-//            kl.tulostaPelitilanne();
-            peki.aloita();
-        } catch (Exception poikkeus) {
-            // Vain fataalien virheiden pitäisi päästä tänne asti.
-            poka.kasittele(poikkeus);
+            try {
+                SwingUtilities.invokeAndWait(kl);
+            } catch (Exception poikkeus) {
+                poka.kasittele(poikkeus);
+            }
         }
         
+        GraafinenKayttoliittyma kl2 = (GraafinenKayttoliittyma) kl;
+        kl2.tulostaRuudut();
+        System.out.println();
+
+        try {
+            ls.sijoitaLaivasto(p1, asetukset[0]);
+//            kl.tulostaPelitilanne();
+//            ls.sijoitaLaivasto(p1, false);
+            ls.sijoitaLaivasto(p2, false);
+            kl.tulostaPelitilanne();
+            kl2 = (GraafinenKayttoliittyma) kl;
+            kl2.tulostaRuudut();
+            peki.aloita();
+        } catch (Exception poikkeus) {
+//            Logger.getLogger(Laivanupotus.class.getName()).log(Level.SEVERE, null, poikkeus);
+            poka.kasittele(poikkeus);
+        }
+        System.exit(0);
     }
 
     /**

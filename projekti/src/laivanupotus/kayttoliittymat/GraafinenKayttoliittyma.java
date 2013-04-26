@@ -9,11 +9,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import laivanupotus.kayttajat.Pelaaja;
@@ -30,13 +32,16 @@ import laivanupotus.tietorakenteet.enumit.Ruutu;
  * @author John Lång
  */
 public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
+ 
+    private static Ruutu[][]    r1, r2; // Miksi ette päivity???
+    private static Pelikierros  pelikierros;
     
     private JFrame              freimi;
+    private JLabel              tilaviesti;
+    private JOptionPane         popupViesti;
     private Valikonkuuntelija   valikonkuuntelija;
-    private Ruutu[][]           r1, r2;
     private Ruutupaneeli        rp1, rp2;
     private Pelaaja             katsoja;
-    private Pelikierros         pelikierros;
     private Komento             viimeisinKomento;
     
     public GraafinenKayttoliittyma() {
@@ -54,6 +59,8 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     }
     
     private void rakennaKomponentit(Container container) {
+        popupViesti = new JOptionPane("Virhe", JOptionPane.ERROR_MESSAGE);
+        
         rakennaValikkopalkki();
         
 //        JPanel tausta = new JPanel();
@@ -62,7 +69,7 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         r2  = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
         rp1 = new Ruutupaneeli(r1, 8, 8);
         rp2 = new Ruutupaneeli(r2, 188, 8);
-        JLabel tilaviesti = new JLabel("Peli alkoi.");
+        tilaviesti = new JLabel("Peli alkoi.");
         
 //        container.add(tausta, BorderLayout.CENTER);
         container.add(rp1, BorderLayout.CENTER);
@@ -80,6 +87,32 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         valikkopalkki.add(valikko);
         valikonkuuntelija       = new Valikonkuuntelija(this, valikkopalkki);
         freimi.setJMenuBar(valikkopalkki);
+    }
+    
+    public void tulostaRuudut() {
+        // Debuggaukseen
+        for (Ruutu[] ruutus : r1) {
+            for (Ruutu ruutu : ruutus) {
+                switch (ruutu) {
+                    case LAIVA_EI_OSUMAA:
+                        System.out.print("L ");
+                        break;
+                    case LAIVA_OSUMA:
+                        System.out.print("X ");
+                        break;
+                    case TYHJA_EI_OSUMAA:
+                        System.out.print("~ ");
+                        break;
+                    case TYHJA_OSUMA:
+                        System.out.print("O ");
+                        break;
+                    default:
+                        System.out.print("? ");
+                        break;
+                }
+            }
+            System.out.println();
+        }
     }
 
     @Override
@@ -115,7 +148,7 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void tulostaPelitilanne() {
-        rp1.tulosta();
+//        rp1.tulosta();
         rp2.tulosta();
     }
 
@@ -126,12 +159,14 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void tulostaViesti(String viesti) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        tilaviesti.setText(viesti);
     }
 
     @Override
     public void tulostaDebuggausViesti(String viesti) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        popupViesti.setMessage(viesti);
+        JDialog dialogi = popupViesti.createDialog("Virhe");
+        dialogi.setVisible(true);
     }
 
     @Override
