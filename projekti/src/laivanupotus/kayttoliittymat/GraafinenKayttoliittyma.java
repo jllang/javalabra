@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import laivanupotus.kayttajat.Pelaaja;
+import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Hiirenkuuntelija;
 import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Ruutupaneeli;
 import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Valikonkuuntelija;
 import laivanupotus.kontrolli.Pelikierros;
@@ -28,7 +29,9 @@ import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.enumit.Ruutu;
 
 /**
- *
+ * Laivanupotuspelin graafinen käyttöliittymä.
+ * 
+ * @see Kayttoliittyma
  * @author John Lång
  */
 public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
@@ -40,13 +43,12 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     private JLabel              tilaviesti;
     private JOptionPane         popupViesti;
     private Valikonkuuntelija   valikonkuuntelija;
+    private Hiirenkuuntelija    hk1, hk2;
     private Ruutupaneeli        rp1, rp2;
     private Pelaaja             katsoja;
     private Komento             viimeisinKomento;
     
-    public GraafinenKayttoliittyma() {
-        
-    }
+    public GraafinenKayttoliittyma() {}
 
     @Override
     public void run() {
@@ -67,11 +69,17 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 //        tausta.setBackground(Color.GRAY);
         r1  = katsoja.annaPelialue().annaRuudukko(katsoja);
         r2  = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
+        
+        Ruutupaneeli.asetaMitat(r1[0].length, r1.length, 16, 16);
         rp1 = new Ruutupaneeli(r1, 8, 8);
         rp2 = new Ruutupaneeli(r2, 188, 8);
+        hk1 = new Hiirenkuuntelija(this, rp1, katsoja);
+        hk2 = new Hiirenkuuntelija(this, rp2, pelikierros.annaVastapelaaja(katsoja));
         tilaviesti = new JLabel("Peli alkoi.");
         
 //        container.add(tausta, BorderLayout.CENTER);
+        container.addMouseListener(hk1);
+        container.addMouseListener(hk2);
         container.add(rp1, BorderLayout.CENTER);
         container.add(rp2, BorderLayout.CENTER);
         container.add(tilaviesti, BorderLayout.SOUTH);
@@ -132,13 +140,14 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void alusta() {
-//        r1 = pelikierros.annaPelialue1().annaRuudukko(katsoja);
-//        r2 = pelikierros.annaPelialue2().annaRuudukko(katsoja);
+        r1  = katsoja.annaPelialue().annaRuudukko(katsoja);
+        r2  = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
     }
 
     @Override
     public void paivita(Pelialue pelialue, int x, int y) {
         Ruutu ruutu = pelialue.haeRuutu(katsoja, x, y);
+//        System.out.println("Ruudun uusi tila:" + ruutu);
         if (pelialue == pelikierros.annaPelialue1()) {
             r1[y][x] = ruutu;
         } else {
@@ -148,7 +157,9 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void tulostaPelitilanne() {
-//        rp1.tulosta();
+//        System.out.println(rp1 == null);    // ???
+//        System.out.println(rp2 == null);
+        rp1.tulosta();
         rp2.tulosta();
     }
 

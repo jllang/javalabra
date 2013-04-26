@@ -53,6 +53,8 @@ public final class Laivanupotus {
         
         asetukset[5] = true;
         asetukset[0] = false;
+        asetukset[3] = true;
+        asetukset[4] = true;
         
         Kayttoliittyma kl;
         if (asetukset[5]) {
@@ -72,33 +74,35 @@ public final class Laivanupotus {
         Pelikierros peki = new Pelikierros(kl, poka, s, p1, p2);
         kl.asetaPelikierros(peki);
         kl.asetaKatsoja(p1);
-        kl.alusta();
+//        kl.alusta();
         if (asetukset[5]) {
             try {
-                SwingUtilities.invokeAndWait(kl);
+                SwingUtilities.invokeLater(kl);
             } catch (Exception poikkeus) {
                 poka.kasittele(poikkeus);
             }
         }
+        kl.alusta();
         
-        GraafinenKayttoliittyma kl2 = (GraafinenKayttoliittyma) kl;
-        kl2.tulostaRuudut();
+//        GraafinenKayttoliittyma kl2 = (GraafinenKayttoliittyma) kl;
+//        kl2.tulostaRuudut();
         System.out.println();
 
         try {
-            ls.sijoitaLaivasto(p1, asetukset[0]);
+//            ls.sijoitaLaivasto(p1, asetukset[0]);
 //            kl.tulostaPelitilanne();
-//            ls.sijoitaLaivasto(p1, false);
+            ls.sijoitaLaivasto(p1, false);
+//            kl.tulostaPelitilanne();
             ls.sijoitaLaivasto(p2, false);
-            kl.tulostaPelitilanne();
-            kl2 = (GraafinenKayttoliittyma) kl;
-            kl2.tulostaRuudut();
+//            kl.tulostaPelitilanne();
+//            kl2 = (GraafinenKayttoliittyma) kl;
+//            kl2.tulostaRuudut();
             peki.aloita();
         } catch (Exception poikkeus) {
 //            Logger.getLogger(Laivanupotus.class.getName()).log(Level.SEVERE, null, poikkeus);
             poka.kasittele(poikkeus);
         }
-        System.exit(0);
+//        System.exit(0);
     }
 
     /**

@@ -1,8 +1,11 @@
 
 package laivanupotus.kontrolli;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
+import laivanupotus.kayttoliittymat.GraafinenKayttoliittyma;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
 import laivanupotus.poikkeukset.TuntematonKomentoException;
 import laivanupotus.poikkeukset.TyhjaKomentoException;
@@ -83,7 +86,9 @@ public final class Pelikierros {
         KAYTTOLIITTYMA.asetaKatsoja(PELAAJA1);
         KAYTTOLIITTYMA.asetaPelikierros(this);
         KAYTTOLIITTYMA.alusta();
-        
+        KAYTTOLIITTYMA.tulostaPelitilanne();
+        System.out.println("Pelikierros alkoi.");
+         
         while (peliJatkuu) {
             if (vuorossaolija.getClass() == Ihmispelaaja.class) {
                 KAYTTOLIITTYMA.tulostaPelitilanne();
@@ -91,6 +96,7 @@ public final class Pelikierros {
             try {
                 kasitteleVuoro(vuorossaolija);
             } catch (Exception poikkeus) {
+                System.out.println(poikkeus.getClass());
                 POIKKEUSTENKASITTELIJA.kasittele(poikkeus);
             }
         }
