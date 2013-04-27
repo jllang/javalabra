@@ -32,7 +32,8 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
     private static final String VARI_LAIVA      = "\u001B[37m";
     private static final String VARI_MERI       = "\u001B[34m";
     private static final String VARI_TUNTEMATON = "\u001B[37m";
-    private static final String VARI_OSUMA      = "\u001B[31m"; // Osuma laivaan
+    private static final String VARI_OSUMA      = "\u001B[1;31m"; // Osuma laivaan
+    private static final String VARI_UPOTUS     = "\u001B[31m";
     
     private final Scanner       LUKIJA;
     private final Komentotulkki KOMENTOTULKKI;
@@ -242,8 +243,6 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
     
     private char tulkitseRuutu(Ruutu ruutu) {
         switch (ruutu) {
-            default:
-                return '?';
             case TYHJA_EI_OSUMAA:
                 return '~';
             case LAIVA_EI_OSUMAA:
@@ -251,7 +250,11 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
             case TYHJA_OSUMA:
                 return 'O';
             case LAIVA_OSUMA:
+                return '*';
+            case LAIVA_UPONNUT:
                 return 'X';
+            default:
+                return '?';
         }
     }
     
@@ -278,9 +281,6 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
     private String varita(char nykyinenMerkki) {
         String varikoodi;
         switch (nykyinenMerkki) {
-            default:
-                varikoodi = VARI_TEKSTI;
-                break;
             case '?':
                 varikoodi = VARI_TUNTEMATON;
                 break;
@@ -291,8 +291,15 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
             case '~':
                 varikoodi = VARI_MERI;
                 break;
-            case 'X':
+            case '*':
                 varikoodi = VARI_OSUMA;
+                break;
+            case 'X':
+                varikoodi = VARI_UPOTUS;
+                break;
+            default:
+                varikoodi = VARI_TEKSTI;
+                break;
         }
         return varikoodi;
     }

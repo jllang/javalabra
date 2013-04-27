@@ -87,7 +87,6 @@ public final class Pelikierros {
         KAYTTOLIITTYMA.asetaPelikierros(this);
         KAYTTOLIITTYMA.alusta();
         KAYTTOLIITTYMA.tulostaPelitilanne();
-        System.out.println("Pelikierros alkoi.");
          
         while (peliJatkuu) {
             if (vuorossaolija.getClass() == Ihmispelaaja.class) {
@@ -96,7 +95,6 @@ public final class Pelikierros {
             try {
                 kasitteleVuoro(vuorossaolija);
             } catch (Exception poikkeus) {
-                System.out.println(poikkeus.getClass());
                 POIKKEUSTENKASITTELIJA.kasittele(poikkeus);
             }
         }
@@ -146,16 +144,15 @@ public final class Pelikierros {
             Pelialue pelialue) throws Exception {
         switch (komento.KOMENTOTYYPPI) {
             case TYHJA:
-                throw new TyhjaKomentoException();
-            case LUOVUTA:  // Asetetaan voittaja ja jatketaan eteenpäin.
-                KAYTTOLIITTYMA.tulostaViesti("Pelaaja "
-                        + vuorossaolija.kerroNimi() + " luovutti pelin.\n");
-                voittaja = annaVastapelaaja(vuorossaolija);
+                kasitteleTyhjaKomento();
+                return;
+            case LUOVUTA:
+                kasitteleLuovutus();
             case LOPETA:
-                peliJatkuu = false;
+                kasitteleLopetus();
                 return;
             case OHJEET:
-                KAYTTOLIITTYMA.tulostaOhje();
+                kasitteleOhjeet();
                 return;
 //            case PAIVITA_KAYTTOLIITTYMA: // Varattu debuggausta varten
 //                KAYTTOLIITTYMA.alusta();
@@ -165,27 +162,33 @@ public final class Pelikierros {
                 kasitteleTilakysely(komento.PARAMETRIT[0]);
                 return;
             case AMMU:
-                try {
-                    pelialue.ammu(vuorossaolija,
-                            komento.PARAMETRIT[0],
-                            komento.PARAMETRIT[1]);
-                    vuorossaolija = annaVastapelaaja(vuorossaolija);
-                } catch (RuutuunOnJoAmmuttuException rojae) {
-                    // Tulostetaan virhesanoma mutta jatketaan normaalisti
-//                    KAYTTOLIITTYMA.tulostaDebuggausViesti(rojae.getMessage());
-                    POIKKEUSTENKASITTELIJA.kasittele(rojae);
-                }
+                kasitteleAmpuminen(pelialue, komento);
                 return;
             case GOD_MODE:
-                KAYTTOLIITTYMA.tulostaViesti("Jumaltila aktivoitu. Vastustajan "
-                        + "laivasto näkyy nyt vasemmalla.\n");
-                KAYTTOLIITTYMA.asetaKatsoja(annaVastapelaaja(vuorossaolija));
-                KAYTTOLIITTYMA.alusta();
-                KAYTTOLIITTYMA.tulostaPelitilanne();
+                kasitteleHuijaus();
                 return;
             default:
                 throw new TuntematonKomentoException();
         }
+    }
+    
+    private void kasitteleTyhjaKomento() throws TyhjaKomentoException {
+        throw new TyhjaKomentoException();
+    }
+
+    private void kasitteleLuovutus() {
+        // Asetetaan voittaja ja jatketaan eteenpäin.
+        KAYTTOLIITTYMA.tulostaViesti("Pelaaja "
+        + vuorossaolija.kerroNimi() + " luovutti pelin.\n");
+        voittaja = annaVastapelaaja(vuorossaolija);
+    }
+
+    private void kasitteleLopetus() {
+        peliJatkuu = false;
+    }
+
+    private void kasitteleOhjeet() {
+        KAYTTOLIITTYMA.tulostaOhje();
     }
     
     private void kasitteleTilakysely(int kyselynumero) {
@@ -211,6 +214,25 @@ public final class Pelikierros {
                 break;
         }
     }
+
+    private void kasitteleAmpuminen(Pelialue pelialue, Komento komento) throws Exception {
+        try {
+            pelialue.ammu(vuorossaolija,
+                    komento.PARAMETRIT[0],
+                    komento.PARAMETRIT[1]);
+            vuorossaolija = annaVastapelaaja(vuorossaolija);
+        } catch (RuutuunOnJoAmmuttuException rojae) {
+            POIKKEUSTENKASITTELIJA.kasittele(rojae);
+        }
+    }
+
+    private void kasitteleHuijaus() {
+        KAYTTOLIITTYMA.tulostaViesti("Jumaltila aktivoitu. Vastustajan "
+                + "laivasto näkyy nyt vasemmalla.\n");
+        KAYTTOLIITTYMA.asetaKatsoja(annaVastapelaaja(vuorossaolija));
+        KAYTTOLIITTYMA.alusta();
+        KAYTTOLIITTYMA.tulostaPelitilanne();
+    }
     
     private void lopeta() {
         KAYTTOLIITTYMA.tulostaViesti("Voittaja oli ");
@@ -220,5 +242,4 @@ public final class Pelikierros {
             KAYTTOLIITTYMA.tulostaViesti("pelaaja 2.\n");
         }
     }
-
 }

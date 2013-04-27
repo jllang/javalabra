@@ -15,13 +15,13 @@ import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 public class Hiirenkuuntelija implements MouseListener {
     
     private final GraafinenKayttoliittyma   KAYTTOLIITTYMA;
-    private final Pelaaja                   PELAAJA;
+    private final Pelaaja                   RUUDUKON_PELAAJA;
     private int siirtoX, siirtoY, sarakkeita, riveja, ruudunLeveys, ruudunKorkeus;
     
     public Hiirenkuuntelija(GraafinenKayttoliittyma kayttoliittyma,
             Ruutupaneeli ruutupaneeli, Pelaaja pelaaja) {
         this.KAYTTOLIITTYMA     = kayttoliittyma;
-        this.PELAAJA            = pelaaja;
+        this.RUUDUKON_PELAAJA   = pelaaja;
         this.sarakkeita         = Ruutupaneeli.sarakkeita;
         this.riveja             = Ruutupaneeli.riveja;
         this.ruudunLeveys       = Ruutupaneeli.ruudunLeveys;
@@ -41,10 +41,11 @@ public class Hiirenkuuntelija implements MouseListener {
                 && y0 >= 0) {
             x1 = x0 / ruudunLeveys;
             y1 = y0 / ruudunKorkeus;
-            if (KAYTTOLIITTYMA.annaKatsoja() == PELAAJA) {
+//            System.err.println("Klikattiin ruutuun (" + x1 + "," + y1 + ").");
+            if (KAYTTOLIITTYMA.annaKatsoja() == RUUDUKON_PELAAJA) {
                 KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, x1, y1));
             } else {
-                KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.AMMU_JA_PAIVITYTA, x1, y1));
+                KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.AMMU, x1, y1));
             }
         }
     }

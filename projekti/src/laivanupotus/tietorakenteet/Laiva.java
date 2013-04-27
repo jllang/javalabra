@@ -1,8 +1,7 @@
 
 package laivanupotus.tietorakenteet;
 
-import java.util.Iterator;
-import java.util.Queue;
+import java.util.List;
 
 /**
  * Mallintaa yhtä laivaa pelialueella. Laiva on joukko pisteitä ja pelialueen 
@@ -13,18 +12,16 @@ import java.util.Queue;
  */
 final class Laiva {
 
-    private Piste[] pisteet;
+    private final List<Piste>   PISTEET;
+    private final List<Integer> KOORDINAATIT;
     
-    Laiva(Queue<Piste> pisteet) {
-        this.pisteet = new Piste[pisteet.size()];
-        Iterator iteraattori = pisteet.iterator();
-        for (int i = 0; i < pisteet.size(); i++) {
-            this.pisteet[i] = (Piste) iteraattori.next();
-        }
+    Laiva(List<Piste> pisteet, List<Integer> koordinaatit) {
+        this.PISTEET = pisteet;
+        this.KOORDINAATIT = koordinaatit;
     }
 
     boolean upposi() {
-        for (Piste piste : pisteet) {
+        for (Piste piste : PISTEET) {
             if (!piste.onAmmuttu) {
                 return false;
             }
@@ -32,8 +29,12 @@ final class Laiva {
         return true;
     }
     
-    Piste[] annaPisteet() {
-        return pisteet;
+    List<Piste> annaPisteet() {
+        return PISTEET;
+    }
+    
+    List<Integer> annaKoordinaatit() {
+        return KOORDINAATIT;
     }
     
 }

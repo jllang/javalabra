@@ -34,6 +34,11 @@ public enum Ruutu {
     LAIVA_OSUMA,
     
     /**
+     * Jos pisteessä on laiva ja siihen on ammuttu sekä laiva on uponnut.
+     */
+    LAIVA_UPONNUT,
+    
+    /**
      * Jos piste ei sijaitse katsojan pelialueella eikä siihen ole ammuttu.
      */
     TUNTEMATON;

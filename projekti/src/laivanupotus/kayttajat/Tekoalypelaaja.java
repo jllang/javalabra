@@ -48,7 +48,8 @@ public final class Tekoalypelaaja extends Pelaaja {
         komento = new Komento(Komentotyyppi.AMMU, x, y);
         
         try {
-            Thread.sleep(100);
+            // Tämä odottelu on lähinnä animointiefekti.
+            Thread.sleep(250);
         } catch (InterruptedException keskeytys) {
             Logger.getLogger(Tekoalypelaaja.class.getName()).log(Level.SEVERE, null, keskeytys);
         }

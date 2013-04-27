@@ -80,3 +80,7 @@ Torstai 25.4:
 Perjantai 26.4:
 	- Kello 10.00 - 11.00: Itsenäistä työskentelyä
 	- Kello 12.15 - 16.00: Pajatyöskentelyä
+	- Kello 19.00 - 20.00: Itsenäistä työskentelyä
+
+Lauantai 27.4:
+	- Kello 12.00 -

@@ -1,10 +1,10 @@
 
 package laivanupotus.tietorakenteet;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
@@ -27,7 +27,8 @@ public final class Pelialue {
     private final Map<Piste, Laiva> PISTEET_JA_LAIVAT;  // Jokin mättää.
     private final int               LEVEYS, KORKEUS;
     
-    private Queue<Piste>            pistejono;
+    private List<Piste>             pistelista;
+    private List<Integer>           koordinaattilista;
     private int                     ehjaPintaAla, laivoja;
     
     /**
@@ -40,15 +41,16 @@ public final class Pelialue {
      * alusta alkaen kaikki pelialueen laivat.
      */
     public Pelialue(Pelikierros pelikierros, Pelaaja omistaja) {
-        this.KAYTTOLIITTYMA = pelikierros.annaKayttoliittyma();
-        this.OMISTAJA       = omistaja;
-        this.LEVEYS         = pelikierros.annaSaannot().leveys();
-        this.KORKEUS        = pelikierros.annaSaannot().korkeus();
-        this.KOORDINAATISTO = new Piste[KORKEUS][LEVEYS]; 
-        this.PISTEET_JA_LAIVAT = new HashMap<>();
-        this.pistejono      = new ArrayDeque<>();
-        this.ehjaPintaAla   = 0;
-        this.laivoja        = 0;
+        this.KAYTTOLIITTYMA     = pelikierros.annaKayttoliittyma();
+        this.OMISTAJA           = omistaja;
+        this.LEVEYS             = pelikierros.annaSaannot().leveys();
+        this.KORKEUS            = pelikierros.annaSaannot().korkeus();
+        this.KOORDINAATISTO     = new Piste[KORKEUS][LEVEYS]; 
+        this.PISTEET_JA_LAIVAT  = new HashMap<>();
+        this.pistelista         = new ArrayList<>();
+        this.koordinaattilista  = new ArrayList<>();
+        this.ehjaPintaAla       = 0;
+        this.laivoja            = 0;
         for (int i = 0; i < KORKEUS; i++) {
             for (int j = 0; j < LEVEYS; j++) {
                 KOORDINAATISTO[i][j] = new Piste();
@@ -74,34 +76,35 @@ public final class Pelialue {
     public void peitaSijaintiLaivalla(Pelaaja lisaaja, int x, int y)
             throws Exception {
         tarkastaOmistajuus(lisaaja, true);
-        // Laivojen määrä pitäisi ehkä tarkastaa laivaindeksin avulla.
         Piste piste = haePiste(x, y);
 
         if (!pisteessaOnLaiva(piste)) {
-//            piste.onOsaLaivaa = true;
-            pistejono.add(piste);
-//            ehjaPintaAla++;
+            koordinaattilista.add(x);
+            koordinaattilista.add(y);
+            pistelista.add(piste);
         } else {
             // Tätä poikkeusta ei saisi tapahtua.
             throw new SaantojenvastainenSijoitusException("Sääntörikkomus: "
                     + "Ruutuun yritettiin asettaa uudelleen laiva.");
         }
-        
-        KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
     /**
      * Tämä metodi tulee suorittaa sen jälkeen kun lisättävän laiva on kokonaan 
-     * lisätty pelialueelle
+     * lisätty pelialueelle. Metodi muunmuassa lisää uuden laivan
+     * hajautuskarttaan ja antaa päivityttää käyttöliittymän välimuistin.
      */
     public void viimeisteleSijoitus() {
-        Laiva laiva = new Laiva(pistejono);
-        while(!pistejono.isEmpty()) {
-            pistejono.peek().onOsaLaivaa = true;
+        Laiva laiva = new Laiva(pistelista, koordinaattilista);
+        for (Piste piste : pistelista) {
+            piste.onOsaLaivaa = true;
             ehjaPintaAla++;
-            PISTEET_JA_LAIVAT.put(pistejono.poll(), laiva);
+            PISTEET_JA_LAIVAT.put(piste, laiva);
         }
         laivoja++;
+        pistelista          = new ArrayList<>();
+        koordinaattilista   = new ArrayList<>();
+        paivityta(koordinaattilista);
     }
     
     /**
@@ -156,7 +159,11 @@ public final class Pelialue {
         Ruutu ruutu = Ruutu.TUNTEMATON;
         if (piste.onAmmuttu) {
             if (piste.onOsaLaivaa) {
-                ruutu = Ruutu.LAIVA_OSUMA;
+                if (piste.onOsaUponnuttaLaivaa) {
+                    ruutu = Ruutu.LAIVA_UPONNUT;
+                } else {
+                    ruutu = Ruutu.LAIVA_OSUMA;
+                }
             } else  {
                 ruutu = Ruutu.TYHJA_OSUMA;
             }
@@ -195,17 +202,33 @@ public final class Pelialue {
             if (ampuja == KAYTTOLIITTYMA.annaKatsoja()) {
                 // Parempi tekoäly tarvitsisi tietoa tästä tapahtumasta esim.
                 // jonkin boolean-kentän muodossa.
-                KAYTTOLIITTYMA.tulostaViesti(ampuja.kerroNimi() + ": Osui ja upposi!\n");
+                // Upotetulle laivalle voisi ehkä varata oman värin käyttöliit-
+                // tymässä.
+                KAYTTOLIITTYMA.tulostaViesti("Osui ja upposi!\n");
             }
             poistaHylky(laiva);
         }
     }
      
     private void poistaHylky(Laiva laiva) {
+        // Tieto kaikista uponneista ruuduista pitäisi välittää jotenkin käyttö-
+        // liittymälle jotta näkymä voitaisiin päivittää.
         for (Piste piste : laiva.annaPisteet()) {
+            piste.onOsaUponnuttaLaivaa = true;
             PISTEET_JA_LAIVAT.remove(piste);
         }
+        List<Integer> koordinaatit = laiva.annaKoordinaatit();
+        paivityta(koordinaatit);
         laivoja--;
+    }
+    
+    private void paivityta(List<Integer> koordinaatit) {
+        int x, y;
+        for (int i = 0, j = 1; j < koordinaatit.size(); i += 2, j += 2) {
+            x = koordinaatit.get(i);
+            y = koordinaatit.get(j);
+            KAYTTOLIITTYMA.paivita(this, x, y);
+        }
     }
     
     private void tarkastaKoordinaatit(int x, int y)

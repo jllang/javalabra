@@ -16,7 +16,9 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
     private static final Color VARI_OLETUS          = new Color(128, 0, 0);
     private static final Color VARI_LAIVA_EI_OSUMAA = new Color(160, 160, 160);
     private static final Color VARI_LAIVA_OSUMA     = new Color(255, 0, 0);
-    private static final Color VARI_MERI            = new Color(32, 64, 128);
+    private static final Color VARI_OSUI_JA_UPPOSI  = new Color(128, 0, 0);
+    private static final Color VARI_TYHJA_EI_OSUMAA = new Color(32, 64, 128);
+    private static final Color VARI_TYHJA_OSUMA     = new Color(64, 128, 255);
     private static final Color VARI_TUNTEMATON      = new Color(128, 128, 128);
     
     static int          sarakkeita, riveja, ruudunLeveys, ruudunKorkeus;
@@ -39,13 +41,43 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
         Ruutupaneeli.ruudunKorkeus  = ruudunKorkeus + 2;
     }
     
+    public void tulostaRuudut() {
+        // Debuggaukseen
+        for (Ruutu[] ruutus : ruudukko) {
+            for (Ruutu ruutu : ruutus) {
+                switch (ruutu) {
+                    case LAIVA_EI_OSUMAA:
+                        System.out.print("L ");
+                        break;
+                    case LAIVA_OSUMA:
+                        System.out.print("X ");
+                        break;
+                    case TYHJA_EI_OSUMAA:
+                        System.out.print("~ ");
+                        break;
+                    case TYHJA_OSUMA:
+                        System.out.print("O ");
+                        break;
+                    default:
+                        System.out.print("? ");
+                        break;
+                }
+            }
+            System.out.println();
+        }
+    }
+    
+    public Ruutu[][] annaRuudut() {
+        return ruudukko;
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Color c;
         Ruutu r;
-        for (int i = 0; i < riveja - 1; i++) {
-            for (int j = 0; j < sarakkeita - 1; j++) {
+        for (int i = 0; i < riveja; i++) {
+            for (int j = 0; j < sarakkeita; j++) {
 //                r = ruudukko[i][j];
 //                System.out.println(r);
                 switch (ruudukko[i][j]) {
@@ -55,9 +87,14 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
                     case LAIVA_OSUMA:
                         c = VARI_LAIVA_OSUMA;
                         break;
+                    case LAIVA_UPONNUT:
+                        c = VARI_OSUI_JA_UPPOSI;
+                        break;
                     case TYHJA_EI_OSUMAA:
+                        c = VARI_TYHJA_EI_OSUMAA;
+                        break;
                     case TYHJA_OSUMA:
-                        c = VARI_MERI;
+                        c = VARI_TYHJA_OSUMA;
                         break;
                     case TUNTEMATON:
                         c = VARI_TUNTEMATON;

@@ -20,6 +20,11 @@ final class Piste {
     boolean onOsaLaivaa;
     
     /**
+     * Tosi jos ja vain jos pisteessä on laiva joka on uponnut.
+     */
+    boolean onOsaUponnuttaLaivaa;
+    
+    /**
      * Tosi jos ja vain jos pisteeseen on ammuttu.
      */
     boolean onAmmuttu;
@@ -28,8 +33,9 @@ final class Piste {
      * Konstruktori joka luo aina tyhjän ruudun.
      */
     Piste() {
-        onOsaLaivaa = false;
-        onAmmuttu   = false;
+        onOsaLaivaa             = false;
+        onOsaUponnuttaLaivaa    = false;
+        onAmmuttu               = false;
     }
     
 }

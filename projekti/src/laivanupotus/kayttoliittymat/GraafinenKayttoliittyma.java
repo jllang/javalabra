@@ -72,7 +72,7 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         
         Ruutupaneeli.asetaMitat(r1[0].length, r1.length, 16, 16);
         rp1 = new Ruutupaneeli(r1, 8, 8);
-        rp2 = new Ruutupaneeli(r2, 188, 8);
+        rp2 = new Ruutupaneeli(r2, 206, 8);
         hk1 = new Hiirenkuuntelija(this, rp1, katsoja);
         hk2 = new Hiirenkuuntelija(this, rp2, pelikierros.annaVastapelaaja(katsoja));
         tilaviesti = new JLabel("Peli alkoi.");
@@ -98,29 +98,31 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     }
     
     public void tulostaRuudut() {
+        System.out.println(r1 == rp1.annaRuudut());
+        rp1.tulostaRuudut();
         // Debuggaukseen
-        for (Ruutu[] ruutus : r1) {
-            for (Ruutu ruutu : ruutus) {
-                switch (ruutu) {
-                    case LAIVA_EI_OSUMAA:
-                        System.out.print("L ");
-                        break;
-                    case LAIVA_OSUMA:
-                        System.out.print("X ");
-                        break;
-                    case TYHJA_EI_OSUMAA:
-                        System.out.print("~ ");
-                        break;
-                    case TYHJA_OSUMA:
-                        System.out.print("O ");
-                        break;
-                    default:
-                        System.out.print("? ");
-                        break;
-                }
-            }
-            System.out.println();
-        }
+//        for (Ruutu[] ruutus : r1) {
+//            for (Ruutu ruutu : ruutus) {
+//                switch (ruutu) {
+//                    case LAIVA_EI_OSUMAA:
+//                        System.out.print("L ");
+//                        break;
+//                    case LAIVA_OSUMA:
+//                        System.out.print("X ");
+//                        break;
+//                    case TYHJA_EI_OSUMAA:
+//                        System.out.print("~ ");
+//                        break;
+//                    case TYHJA_OSUMA:
+//                        System.out.print("O ");
+//                        break;
+//                    default:
+//                        System.out.print("? ");
+//                        break;
+//                }
+//            }
+//            System.out.println();
+//        }
     }
 
     @Override
@@ -140,8 +142,7 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void alusta() {
-        r1  = katsoja.annaPelialue().annaRuudukko(katsoja);
-        r2  = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
+        // Ei tehdä mitään graafisessa käyttöliittymässä.
     }
 
     @Override
@@ -170,20 +171,20 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void tulostaViesti(String viesti) {
-        tilaviesti.setText(viesti);
+        tilaviesti.setText(viesti.trim());
     }
 
     @Override
     public void tulostaDebuggausViesti(String viesti) {
         popupViesti.setMessage(viesti);
-        JDialog dialogi = popupViesti.createDialog("Virhe");
+        JDialog dialogi = popupViesti.createDialog("Poikkeus");
         dialogi.setVisible(true);
     }
 
     @Override
     public Komento pyydaKomento() throws Exception {
         while (viimeisinKomento == null) {
-            Thread.sleep(10);
+            Thread.sleep(100);
         }
         Komento k = viimeisinKomento;
         viimeisinKomento = null;

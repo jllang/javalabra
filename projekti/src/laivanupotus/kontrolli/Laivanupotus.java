@@ -1,7 +1,6 @@
 
 package laivanupotus.kontrolli;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +13,7 @@ import laivanupotus.kayttoliittymat.Tekstikayttoliittyma;
 import laivanupotus.kontrolli.sijoitus.LaivastonSijoituttaja;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Saannot;
+import laivanupotus.tietorakenteet.enumit.Ruutu;
 
 /**
  * Laivanupotuspelin pääluokka, joka vastaa komentoriviparametrien tulkinnasta 
@@ -53,8 +53,8 @@ public final class Laivanupotus {
         
         asetukset[5] = true;
         asetukset[0] = false;
-        asetukset[3] = true;
-        asetukset[4] = true;
+//        asetukset[3] = true;
+//        asetukset[4] = true;
         
         Kayttoliittyma kl;
         if (asetukset[5]) {
@@ -68,6 +68,7 @@ public final class Laivanupotus {
         Saannot s = new Saannot();
         Pelaaja p1 = new Ihmispelaaja("Käyttäjä");
         Pelaaja p2 = new Tekoalypelaaja(arpoja, s);
+//        Pelaaja p2 = new Ihmispelaaja("Käyttäjä 2");
         LaivastonSijoituttaja ls = new LaivastonSijoituttaja(poka, kl);
         ls.asetaSaannot(s);
         
@@ -77,9 +78,11 @@ public final class Laivanupotus {
 //        kl.alusta();
         if (asetukset[5]) {
             try {
-                SwingUtilities.invokeLater(kl);
+                SwingUtilities.invokeAndWait(kl);
             } catch (Exception poikkeus) {
-                poka.kasittele(poikkeus);
+                if (asetukset[3]) {
+                    Logger.getLogger(Laivanupotus.class.getName()).log(Level.SEVERE, null, poikkeus);
+                }
             }
         }
         kl.alusta();
@@ -89,12 +92,18 @@ public final class Laivanupotus {
         System.out.println();
 
         try {
-//            ls.sijoitaLaivasto(p1, asetukset[0]);
+            ls.sijoitaLaivasto(p1, asetukset[0]);
 //            kl.tulostaPelitilanne();
-            ls.sijoitaLaivasto(p1, false);
+//            ls.sijoitaLaivasto(p1, false);
 //            kl.tulostaPelitilanne();
             ls.sijoitaLaivasto(p2, false);
 //            kl.tulostaPelitilanne();
+//            Ruutu[][] r = p1.annaPelialue().annaRuudukko(p1);
+//            for (Ruutu[] ruutus : r) {
+//                for (Ruutu q : ruutus) {
+//                    System.out.println(q);
+//                }
+//            }
 //            kl2 = (GraafinenKayttoliittyma) kl;
 //            kl2.tulostaRuudut();
             peki.aloita();
@@ -157,8 +166,7 @@ public final class Laivanupotus {
     
     private static void alustaAsetuksetOletusarvoilla() {
         asetukset = new boolean[6];
-        asetukset[0] = true;    //Tilaspäisesti pois käytöstä.
-//        asetukset[0] = false;   // Laivojen sijoitus käsin
+        asetukset[0] = true;   // Laivojen sijoitus käsin
         asetukset[1] = false;   // Värit
         asetukset[2] = true;    // Jatketaanko suoritusta
         asetukset[3] = false;   // Debuggausviestit
