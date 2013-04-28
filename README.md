@@ -18,7 +18,7 @@ Peli voi päättyä jomman kumman pelaajan voittoon, luovutukseen tai vuorojen l
 Pelin käynnistäminen
 
 Peli voidaan käynnistää komentotulkissa seuraavalla komennolla:
-    java -jar projekti.jar [<argumentti 1>][ <argumentti 2>][... <argumentti n>]
+    java -jar projekti.jar [\<argumentti 1\>][ \<argumentti 2\>][... \<argumentti n\>]
 Huom. Argumentit pitää erottaa välilyönneillä.
 
 Pelin käynnistysargumentit
