@@ -1,0 +1,48 @@
+(Yleistä tietoa pelistä sekä lista käynnistysargumenteista näkee löytyy tiedos-
+tosta README.md)
+
+Legenda
+
+    Symboli  Merkitys
+
+    ?        Vastustajan ruutu (ei ammuttu vielä)
+    ~        Merta (ei ammuttu vielä)
+    O        Merta (ammuttu, ei osumaa)
+    L        Laiva (oma ruudukko, ei osumaa)
+    *        Laiva (osuma)
+    X        Laiva (uponnut)
+
+--------------------------------------------------------------------------------
+
+Laivojen sijoittaminen ruudukkoon
+
+Laivat sijoitetaan ennen pelikierroksen alkua pelialueille alkaen lyhyimmistä
+laivoista pisimpiin. Laivojen sijoittaminen käsin ruudukkoon tapahtuu komennolla
+    aseta <x> <y> 0|1
+missä <x> on sijoitettavan laivan ensimmäisen ruudun sijainti vaakasuunnassa vä-
+liltä [A, J] ja <y> on sijoitettavan laivan ensimmäisen ruudun sijainti pysty-
+suunnassa väliltä [1, 10]. Komennon viimeisenä parametrina annetaaan sijoitetta-
+van laivan orientaatio. Orientaatio kuvaa sijoitettavan laivan suuntaa siten,
+että arvo 0 merkitsee laivan sijoittamista horisontaalisesti (ts. annetusta ruu-
+dusta oikealle päin) ja arvo 1 vertikaalisesti (ts. annetusta ruudusta alaspäin)
+. Esimerkki:
+    aseta a 3 0
+
+--------------------------------------------------------------------------------
+
+Pelikierroksen aikana käytettävissä olevat komennot
+
+    Komento      Parametrit      Selitys
+
+    ohje         (ei ole)        Tulostaa tämän ohjeen.
+    lopeta       (ei ole)        Lopettaa pelin.
+    luovuta      (ei ole)        Lopettaa pelin (vastapuolen voittoon.)
+    ammu         <x> <y>         Ampuu vastustajan pelialueelle annettuihin
+                                 koordinaatteihin. <x> ja <y> kuten laivojen si-
+                                 joituskomennossa.
+    laivoja      (ei ole)        Tulostaa tiedon pelaajilla olevevien upottamat-
+                                 tomien laivojen määrästä.
+    vuoro        (ei ole)        Tulostaa tiedon käynnissä olevan pelivuoron
+                                 järjestysnumerosta. Tulostaa lisäksi tiedon
+                                 jäljellä olevien vuorojen määrästä mikäli se on
+                                 rajoitettu.

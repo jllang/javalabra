@@ -1,0 +1,16 @@
+(Yleistä tietoa pelistä sekä lista käynnistysargumenteista näkee löytyy tiedos-
+tosta README.md)
+
+Jos laivat on valittu sijoitettavaksi käsin, onnistuu tämä klikkaamalla hiiren
+pelaajan omalle pelialueelle vasemmalla tai oikealla hiiren painikkeella. Jos 
+sääntöjen sallimaan ruutuun klikataan hiiren vasemmalla painikkeella, sijoite-
+taan laiva tästä ruudusta tarkasteltuna oikealle päin. Jos taas ruutuun klika-
+taan oikealla painikkeella, tapahtuu sijoitus alaspäin.
+
+Laivojen sijoittamisen jälkeen alkaa varsinainen pelikierros. Pelikierroksen ai-
+kana pelaajat ampuvat vuorotellen toistensa pelialueille. Vastustajan pelialu-
+eelle ampuminen tapahtuu klikkaamalla haluttua ruutua hiiren vasemmalla painik-
+keella. Pelin voi luovuttaa valitsemalla valikosta vaihtoehto "Luovuta". Tällöin
+vastapelaaja voittaa ja peli päättyy. Pelin voi myös lopettaa luovuttamatta va-
+litsemalla valikosta vaihtoehdon "Lopeta" tai sulkemalla ohjelma ikkunamanagerin
+tai käyttöjärjestelmän signaalilla.
