@@ -16,7 +16,7 @@ public class Hiirenkuuntelija implements MouseListener {
     
     private final GraafinenKayttoliittyma   KAYTTOLIITTYMA;
     private final Pelaaja                   RUUDUKON_PELAAJA;
-    private int siirtoX, siirtoY, sarakkeita, riveja, ruudunLeveys, ruudunKorkeus;
+    private int sarakkeita, riveja, ruudunLeveys, ruudunKorkeus;
     
     public Hiirenkuuntelija(GraafinenKayttoliittyma kayttoliittyma,
             Ruutupaneeli ruutupaneeli, Pelaaja pelaaja) {
@@ -26,15 +26,13 @@ public class Hiirenkuuntelija implements MouseListener {
         this.riveja             = Ruutupaneeli.riveja;
         this.ruudunLeveys       = Ruutupaneeli.ruudunLeveys;
         this.ruudunKorkeus      = Ruutupaneeli.ruudunKorkeus;
-        this.siirtoX            = ruutupaneeli.siirtoX;
-        this.siirtoY            = ruutupaneeli.siirtoY;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         int x0, y0, x1, y1;
-        x0 = e.getX() - siirtoX;
-        y0 = e.getY() - siirtoY;
+        x0 = e.getX() - ruudunLeveys;   // Ruutupaneeli siirtää ruudukkoa yhdel-
+        y0 = e.getY() - ruudunKorkeus;  // lä ruudulla koordinaatteja varten.
         if (x0 <= sarakkeita * ruudunLeveys
                 && x0 >= 0
                 &&y0 <= riveja * ruudunKorkeus
@@ -43,7 +41,11 @@ public class Hiirenkuuntelija implements MouseListener {
             y1 = y0 / ruudunKorkeus;
 //            System.err.println("Klikattiin ruutuun (" + x1 + "," + y1 + ").");
             if (KAYTTOLIITTYMA.annaKatsoja() == RUUDUKON_PELAAJA) {
-                KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, x1, y1));
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, x1, y1, 0));
+                } else if (e.getButton() == MouseEvent.BUTTON2 || e.getButton() == MouseEvent.BUTTON3) {
+                    KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.SIJOITA_LAIVA, x1, y1, 1));
+                }
             } else {
                 KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.AMMU, x1, y1));
             }

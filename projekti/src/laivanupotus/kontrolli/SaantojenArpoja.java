@@ -25,7 +25,7 @@ public final class SaantojenArpoja {
         System.out.println("Pelikentän korkeudeksi arvottiin " + korkeus + ".");
         System.out.println("Pelin kestoksi arvottiin " + vuoroja + ".");
         System.out.println("Laivojen mitoiksi ja määriksi valittiin 1*3, 1*2 ja 1*1");
-        return new Saannot(leveys, korkeus, vuoroja, luoVakiotLaivojenMitatJaMaarat());
+        return new Saannot(leveys, korkeus, vuoroja, luoVakiotLaivojenMitatJaMaarat(), true);
     }
         
     public TreeMap<Integer, Integer> luoVakiotLaivojenMitatJaMaarat() {
@@ -40,7 +40,7 @@ public final class SaantojenArpoja {
     
     //Nopea viritelmä SaantoTestia varten:
     public int[] arvoTauluSaannoista() {
-        int[] saantoTaulu = new int[7];
+        int[] saantoTaulu = new int[8];
         
         Saannot s = arvoSaannot();
         saantoTaulu[0] = s.leveys();
@@ -50,6 +50,7 @@ public final class SaantojenArpoja {
         saantoTaulu[4] = 1;
         saantoTaulu[5] = 2;
         saantoTaulu[6] = 3;
+        saantoTaulu[7] = 1;
         
         return saantoTaulu;
     }

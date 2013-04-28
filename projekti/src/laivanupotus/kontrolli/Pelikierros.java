@@ -14,6 +14,7 @@ import laivanupotus.tietorakenteet.Komento;
 import laivanupotus.tietorakenteet.Pelialue;
 import laivanupotus.tietorakenteet.Saannot;
 import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
+import laivanupotus.tietorakenteet.enumit.Ruutu;
 
 /**
  * Tämän luokka ohjaa varsinaista pelin kulkua ja välittää tietoa eri 
@@ -83,9 +84,7 @@ public final class Pelikierros {
      * Aloittaa pelikierroksen kulun.
      */
     public void aloita() {
-        KAYTTOLIITTYMA.asetaKatsoja(PELAAJA1);
-        KAYTTOLIITTYMA.asetaPelikierros(this);
-        KAYTTOLIITTYMA.alusta();
+        KAYTTOLIITTYMA.tulostaViesti("Pelikierros alkoi.");
         KAYTTOLIITTYMA.tulostaPelitilanne();
          
         while (peliJatkuu) {
@@ -110,13 +109,7 @@ public final class Pelikierros {
      * @see Saannot
      */
     private void kasitteleVuoro(Pelaaja pelaaja) throws Exception {
-        if (!pelaaja.annaPelialue().laivojaOnJaljella()) {
-            voittaja = annaVastapelaaja(pelaaja);
-            peliJatkuu = false;
-            KAYTTOLIITTYMA.tulostaViesti("Peli päättyi. Voittaja oli "
-                    + ((voittaja == PELAAJA1) ? "pelaaja 1." : "pelaaja 2.\n"));
-            return;
-        }
+        if (tarkastaLoppuikoPeli(pelaaja)) return;
         Pelialue pelialue = annaVastapelaaja(pelaaja).annaPelialue();
 
         Komento komento;
@@ -128,6 +121,18 @@ public final class Pelikierros {
         }
         
         kasitteleKomento(komento, pelialue);
+    }
+    
+    private boolean tarkastaLoppuikoPeli(Pelaaja pelaaja) {
+        if (!pelaaja.annaPelialue().laivojaOnJaljella()) {
+            voittaja = annaVastapelaaja(pelaaja);
+            peliJatkuu = false;
+            KAYTTOLIITTYMA.tulostaViesti("Peli päättyi. Voittaja oli "
+                    + ((voittaja == PELAAJA1) ? "pelaaja 1." : "pelaaja 2.\n"));
+            KAYTTOLIITTYMA.tulostaPelitilanne();
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -220,10 +225,24 @@ public final class Pelikierros {
             pelialue.ammu(vuorossaolija,
                     komento.PARAMETRIT[0],
                     komento.PARAMETRIT[1]);
+            Thread.sleep(250);
+            if (osuiTaiUpposi(pelialue, komento)) return;
             vuorossaolija = annaVastapelaaja(vuorossaolija);
-        } catch (RuutuunOnJoAmmuttuException rojae) {
-            POIKKEUSTENKASITTELIJA.kasittele(rojae);
+        } catch (Exception poikkeus) {
+            POIKKEUSTENKASITTELIJA.kasittele(poikkeus);
         }
+    }
+    
+    private boolean osuiTaiUpposi(Pelialue pelialue, Komento komento) throws IndexOutOfBoundsException {
+        Ruutu r = pelialue.haeRuutu(vuorossaolija,
+                komento.PARAMETRIT[0],
+                komento.PARAMETRIT[1]);
+        if (r == Ruutu.LAIVA_OSUMA || r == Ruutu.LAIVA_UPONNUT) {
+            if (SAANNOT.osumastaSaaLisavuoron()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void kasitteleHuijaus() {
@@ -232,14 +251,5 @@ public final class Pelikierros {
         KAYTTOLIITTYMA.asetaKatsoja(annaVastapelaaja(vuorossaolija));
         KAYTTOLIITTYMA.alusta();
         KAYTTOLIITTYMA.tulostaPelitilanne();
-    }
-    
-    private void lopeta() {
-        KAYTTOLIITTYMA.tulostaViesti("Voittaja oli ");
-        if (voittaja == PELAAJA1) {
-            KAYTTOLIITTYMA.tulostaViesti("pelaaja 1.\n");
-        } else {
-            KAYTTOLIITTYMA.tulostaViesti("pelaaja 2.\n");
-        }
     }
 }

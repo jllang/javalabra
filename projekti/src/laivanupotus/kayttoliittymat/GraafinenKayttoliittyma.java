@@ -9,6 +9,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +24,7 @@ import javax.swing.WindowConstants;
 import laivanupotus.kayttajat.Pelaaja;
 import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Hiirenkuuntelija;
 import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Ruutupaneeli;
+import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Selitepaneeli;
 import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Valikonkuuntelija;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.rajapinnat.Kayttoliittyma;
@@ -40,9 +44,8 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     private static Pelikierros  pelikierros;
     
     private JFrame              freimi;
-    private JLabel              tilaviesti;
+    private JLabel              tilaviesti, laivoja1, laivoja2;
     private JOptionPane         popupViesti;
-    private Valikonkuuntelija   valikonkuuntelija;
     private Hiirenkuuntelija    hk1, hk2;
     private Ruutupaneeli        rp1, rp2;
     private Pelaaja             katsoja;
@@ -55,6 +58,7 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         freimi = new JFrame("Laivanupotus");
         freimi.setPreferredSize(new Dimension(640, 480));
         freimi.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        freimi.setResizable(false);
         rakennaKomponentit(freimi.getContentPane());
         freimi.pack();
         freimi.setVisible(true);
@@ -65,23 +69,20 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         
         rakennaValikkopalkki();
         
-//        JPanel tausta = new JPanel();
-//        tausta.setBackground(Color.GRAY);
         r1  = katsoja.annaPelialue().annaRuudukko(katsoja);
-        r2  = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
-        
+        r2  = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);        
         Ruutupaneeli.asetaMitat(r1[0].length, r1.length, 16, 16);
-        rp1 = new Ruutupaneeli(r1, 8, 8);
-        rp2 = new Ruutupaneeli(r2, 206, 8);
+        
         hk1 = new Hiirenkuuntelija(this, rp1, katsoja);
         hk2 = new Hiirenkuuntelija(this, rp2, pelikierros.annaVastapelaaja(katsoja));
+        rp1 = new Ruutupaneeli(hk1);
+        rp2 = new Ruutupaneeli(hk2);
+        
+        JPanel keskialue = rakennaKeskialue();
+
         tilaviesti = new JLabel("Peli alkoi.");
         
-//        container.add(tausta, BorderLayout.CENTER);
-        container.addMouseListener(hk1);
-        container.addMouseListener(hk2);
-        container.add(rp1, BorderLayout.CENTER);
-        container.add(rp2, BorderLayout.CENTER);
+        container.add(keskialue, BorderLayout.CENTER);
         container.add(tilaviesti, BorderLayout.SOUTH);
     }
     
@@ -93,8 +94,62 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         valinta                 = new JMenuItem("Lopeta");
         valikko.add(valinta);
         valikkopalkki.add(valikko);
-        valikonkuuntelija       = new Valikonkuuntelija(this, valikkopalkki);
+        Valikonkuuntelija vk = new Valikonkuuntelija(this, valikkopalkki);
         freimi.setJMenuBar(valikkopalkki);
+    }
+    
+    private JPanel rakennaKeskialue() {
+        JPanel keskialue            = new JPanel();
+        GridBagLayout asettelu      = new GridBagLayout();
+        GridBagConstraints rajat    = new GridBagConstraints();
+        keskialue.setLayout(asettelu);
+        
+        rajat.gridx     = 0;
+        rajat.gridy     = 0;
+        rajat.weightx   = 0.5;
+        rajat.weighty   = 0.1;
+        keskialue.add(new JLabel("Pelaaja 1"), rajat);
+        
+        rajat.gridx     = 1;
+        rajat.gridy     = 0;
+        rajat.weightx   = 0.5;
+        rajat.weighty   = 0.1;
+        keskialue.add(new JLabel("Pelaaja 2"), rajat);
+        
+        rajat.gridx     = 0;
+        rajat.gridy     = 1;
+        rajat.weightx   = 0.5;
+        rajat.weighty   = 0.8;
+        rajat.fill      = rajat.BOTH;
+        keskialue.add(rp1, rajat);
+        
+        rajat.gridx     = 1;
+        rajat.gridy     = 1;
+        rajat.weighty   = 0.8;
+        rajat.fill      = rajat.BOTH;
+        keskialue.add(rp2, rajat);
+        
+        rajat.gridx     = 2;
+        rajat.gridy     = 1;
+        rajat.weightx   = 0.5;
+        rajat.weighty   = 0.8;
+        keskialue.add(new Selitepaneeli(), rajat);
+        
+        rajat.gridx     = 0;
+        rajat.gridy     = 2;
+        rajat.weightx   = 0.5;
+        rajat.weighty   = 0.1;
+        laivoja1        = new JLabel("Laivoja: ");
+        keskialue.add(laivoja1, rajat);
+        
+        rajat.gridx     = 1;
+        rajat.gridy     = 2;
+        rajat.weightx   = 0.5;
+        rajat.weighty   = 0.1;
+        laivoja2        = new JLabel("Laivoja: ");
+        keskialue.add(laivoja2, rajat);
+        
+        return keskialue;
     }
     
     public void tulostaRuudut() {
@@ -142,7 +197,10 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void alusta() {
-        // Ei tehdä mitään graafisessa käyttöliittymässä.
+        r1 = katsoja.annaPelialue().annaRuudukko(katsoja);
+        r2 = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
+        rp1.asetaRuudukko(r1);
+        rp2.asetaRuudukko(r2);
     }
 
     @Override
@@ -158,10 +216,10 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void tulostaPelitilanne() {
-//        System.out.println(rp1 == null);    // ???
-//        System.out.println(rp2 == null);
         rp1.tulosta();
         rp2.tulosta();
+        laivoja1.setText("Laivoja: " + pelikierros.annaPelialue1().laivojaJaljella());
+        laivoja2.setText("Laivoja: " + pelikierros.annaPelialue2().laivojaJaljella());
     }
 
     @Override

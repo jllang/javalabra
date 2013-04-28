@@ -1,5 +1,5 @@
 
-package laivanupotus.tyypit;
+package laivanupotus.tietorakenteet;
 
 import java.util.List;
 import java.util.Map;
@@ -52,7 +52,12 @@ public class SaannotTest {
     public void testEpakelvotSaannot() {
         System.out.println("Testataan järjenvastaisten sääntöjen luomista...\n");
         int[] saantojenArvot = saantokone.arvoTauluSaannoista();
-        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2] - 1, saantokone.luoVakiotLaivojenMitatJaMaarat());
+        Saannot saannot2 = new Saannot(
+                saantojenArvot[0],
+                saantojenArvot[1],
+                saantojenArvot[2] - 1,
+                saantokone.luoVakiotLaivojenMitatJaMaarat(),
+                true);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -60,7 +65,7 @@ public class SaannotTest {
         System.out.println("Testataan lisää järjenvastaisten sääntöjen luomista...\n");
         TreeMap<Integer, Integer> laivaKartta = new TreeMap<>();
         laivaKartta.put(6, 1);
-        Saannot saannot2 = new Saannot(5, 5, 0, laivaKartta);
+        Saannot saannot2 = new Saannot(5, 5, 0, laivaKartta, true);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -72,13 +77,13 @@ public class SaannotTest {
         laivaKartta.put(3, 0);
         laivaKartta.put(2, 1);
         laivaKartta.put(1, 0);
-        Saannot saannot2 = new Saannot(5, 5, 0, laivaKartta);
+        Saannot saannot2 = new Saannot(5, 5, 0, laivaKartta, false);
     }
 
     @Test
     public void testSaannotOletusarvoilla() {
         System.out.println("Testataan säännöt oletusarvoilla...\n");
-        int[] saantojenArvot = {10, 10, 0, 4, 4, 6, 6, 4};
+        int[] saantojenArvot = {10, 10, 0, 4, 4, 6, 6, 4, 0};
         List<Object> saadutArvot = luoListaKentista(saannot);
         vertaile(saantojenArvot, saadutArvot);
     }
@@ -87,7 +92,12 @@ public class SaannotTest {
     public void testSaannotSatunnaisillaArvoilla() {
         System.out.println("Testataan säännöt satunnaisilla arvoilla...\n");
         int[] saantojenArvot = saantokone.arvoTauluSaannoista();
-        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2], saantokone.luoVakiotLaivojenMitatJaMaarat());
+        Saannot saannot2 = new Saannot(
+                saantojenArvot[0],
+                saantojenArvot[1],
+                saantojenArvot[2],
+                saantokone.luoVakiotLaivojenMitatJaMaarat(),
+                true);
         List<Object> saadutArvot = luoListaKentista(saannot2);
         vertaile(saantojenArvot, saadutArvot);
     }
@@ -109,7 +119,12 @@ public class SaannotTest {
     public void testAnnaSisaltoSatunnaisillaArvoilla() {
         System.out.println("Testataan metodi annaSisalto satunnaisilla arvoilla...\n");
         int[] saantojenArvot = saantokone.arvoTauluSaannoista();
-        Saannot saannot2 = new Saannot(saantojenArvot[0], saantojenArvot[1], saantojenArvot[2], saantokone.luoVakiotLaivojenMitatJaMaarat());
+        Saannot saannot2 = new Saannot(
+                saantojenArvot[0],
+                saantojenArvot[1],
+                saantojenArvot[2],
+                saantokone.luoVakiotLaivojenMitatJaMaarat(),
+                true);
         List<Object> sisalto = saannot2.annaSisalto();
         vertaile(saantojenArvot, sisalto);
     }

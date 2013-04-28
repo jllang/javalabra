@@ -1,8 +1,8 @@
 
 package laivanupotus.tietorakenteet;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -14,6 +14,7 @@ import org.junit.Test;
  *
  * @author John Lång
  */
+
 public class LaivaTest {
     
     private Laiva           laiva;
@@ -35,16 +36,23 @@ public class LaivaTest {
     
     @Before
     public void setUp() {
-        Queue<Piste> pistejono = new ArrayDeque<>();
+        List<Piste> pistelista          = new ArrayList<>();
+        List<Integer> koordinaattilista = new ArrayList<>();
         a = new Piste();
         b = new Piste();
         c = new Piste();
-        d = a;
-        pistejono.add(a);
-        pistejono.add(b);
-        pistejono.add(c);
-        pistejono.add(d);
-        this.laiva = new Laiva(pistejono);
+//        d = a;
+        pistelista.add(a);
+        pistelista.add(b);
+        pistelista.add(c);
+//        pistelista.add(d);
+        koordinaattilista.add(0);
+        koordinaattilista.add(0);
+        koordinaattilista.add(4);
+        koordinaattilista.add(7);
+        koordinaattilista.add(9);
+        koordinaattilista.add(1);
+        this.laiva = new Laiva(pistelista, koordinaattilista);
     }
     
     @After
@@ -63,10 +71,6 @@ public class LaivaTest {
     @Test
     public void testUpposi2() {
         System.out.println("Testataan uudelleen metodia upposi...");
-        System.out.println(a == null);
-        System.out.println(b == null);
-        System.out.println(c == null);
-        System.out.println(laiva == null);
         a.onAmmuttu = true;
         b.onAmmuttu = true;
         c.onAmmuttu = true;

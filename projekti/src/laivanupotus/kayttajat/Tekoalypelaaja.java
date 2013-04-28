@@ -47,13 +47,6 @@ public final class Tekoalypelaaja extends Pelaaja {
         int y = arpoja.nextInt(korkeus);
         komento = new Komento(Komentotyyppi.AMMU, x, y);
         
-        try {
-            // Tämä odottelu on lähinnä animointiefekti.
-            Thread.sleep(250);
-        } catch (InterruptedException keskeytys) {
-            Logger.getLogger(Tekoalypelaaja.class.getName()).log(Level.SEVERE, null, keskeytys);
-        }
-        
         return komento;
     }
     

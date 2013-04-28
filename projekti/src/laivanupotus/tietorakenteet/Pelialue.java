@@ -102,9 +102,9 @@ public final class Pelialue {
             PISTEET_JA_LAIVAT.put(piste, laiva);
         }
         laivoja++;
+        paivityta(koordinaattilista);
         pistelista          = new ArrayList<>();
         koordinaattilista   = new ArrayList<>();
-        paivityta(koordinaattilista);
     }
     
     /**
@@ -135,6 +135,8 @@ public final class Pelialue {
         if (pisteessaOnLaiva(piste)) {
             ehjaPintaAla--;
             tarkastaUpposiko(ampuja, piste);
+        } else if (ampuja == KAYTTOLIITTYMA.annaKatsoja()) {
+            KAYTTOLIITTYMA.tulostaViesti("Ei osumaa.\n");
         }
         
         KAYTTOLIITTYMA.paivita(this, x, y);
@@ -207,6 +209,8 @@ public final class Pelialue {
                 KAYTTOLIITTYMA.tulostaViesti("Osui ja upposi!\n");
             }
             poistaHylky(laiva);
+        } else if (ampuja == KAYTTOLIITTYMA.annaKatsoja()) {
+            KAYTTOLIITTYMA.tulostaViesti("Osuma!\n");
         }
     }
      

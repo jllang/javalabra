@@ -42,7 +42,8 @@ public final class Saannot implements Tallennettava {
      * oletetaan olevan suuruusjärjestyksessä.)
      */
     public Saannot(int leveys, int korkeus, int vuoroja,
-            TreeMap<Integer, Integer> laivojenMitatJaMaarat) {
+            TreeMap<Integer, Integer> laivojenMitatJaMaarat,
+            boolean osumastaSaaLisavuoron) {
         tarkastaArvot(leveys, korkeus, vuoroja, laivojenMitatJaMaarat);
         this.VARASTO = new ArrayList<>();
         this.LAIVOJEN_MITAT_JA_MAARAT = laivojenMitatJaMaarat;
@@ -54,6 +55,11 @@ public final class Saannot implements Tallennettava {
         // tulevaisuudessa kun kerkeän toteuttamaan pelaajan omien sääntöjen 
         // luomisen peliin.
         sarjallistaLaivat(laivojenMitatJaMaarat);
+        if (osumastaSaaLisavuoron) {
+            VARASTO.add(1);
+        } else {
+            VARASTO.add(0);
+        }
     }
     
     /**
@@ -70,6 +76,7 @@ public final class Saannot implements Tallennettava {
         VARASTO.add(6);     // 3 * 2 ruutua
         VARASTO.add(6);     // 2 * 3 ruutua
         VARASTO.add(4);     // 1 * 4 ruutua
+        VARASTO.add(0);     // Osumasta ei saa lisävuoroa.
         laskeLaivojenMitatJaMaarat();
     }
     
@@ -130,7 +137,7 @@ public final class Saannot implements Tallennettava {
     
     private void laskeLaivojenMitatJaMaarat() {
         int pituus  = (int) VARASTO.get(3);     // Pisimmän laivan pituus;
-        int i       = (int) VARASTO.size() - 1; // Pisimpien laivojen pinta-ala.
+        int i       = (int) VARASTO.size() - 2; // Pisimpien laivojen pinta-ala.
         int maara;
         
         for (; i > 3; i--, pituus--) {
@@ -165,9 +172,13 @@ public final class Saannot implements Tallennettava {
         return (int) VARASTO.get(2);
     }
     
+    public boolean osumastaSaaLisavuoron() {
+        return VARASTO.get(VARASTO.size() - 1) == 1;
+    }
+    
     public int laivapintaAla() {
         int laivapintaAla = 0;
-        for (int i = 4; i < VARASTO.size(); i++) {
+        for (int i = 4; i < VARASTO.size() - 1; i++) {
             laivapintaAla += (int) VARASTO.get(i);
         }
         return laivapintaAla;
