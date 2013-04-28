@@ -6,12 +6,11 @@
 package laivanupotus.kayttoliittymat;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.text.DecimalFormat;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,10 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import laivanupotus.kayttajat.Pelaaja;
-import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Hiirenkuuntelija;
-import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Ruutupaneeli;
-import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Selitepaneeli;
-import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.Valikonkuuntelija;
+import laivanupotus.kayttoliittymat.komponentit.graafinenKayttoliittyma.*;
 import laivanupotus.kontrolli.Pelikierros;
 import laivanupotus.rajapinnat.Kayttoliittyma;
 import laivanupotus.tietorakenteet.Komento;
@@ -40,23 +36,26 @@ import laivanupotus.tietorakenteet.enumit.Ruutu;
  */
 public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
  
-    private static Ruutu[][]    r1, r2; // Miksi ette päivity???
-    private static Pelikierros  pelikierros;
+    private static Ruutu[][]        r1, r2;
+    private static Pelikierros      pelikierros;
+    private static DecimalFormat    df;
     
-    private JFrame              freimi;
-    private JLabel              tilaviesti, laivoja1, laivoja2;
-    private JOptionPane         popupViesti;
-    private Hiirenkuuntelija    hk1, hk2;
-    private Ruutupaneeli        rp1, rp2;
-    private Pelaaja             katsoja;
-    private Komento             viimeisinKomento;
+    private JFrame                  freimi;
+    private JLabel                  tilaviesti, laivoja1, laivoja2, aika;
+    private JOptionPane             popupViesti;
+    private Hiirenkuuntelija        hk1, hk2;
+    private Ruutupaneeli            rp1, rp2;
+    private Pelaaja                 katsoja;
+    private Komento                 viimeisinKomento;
     
-    public GraafinenKayttoliittyma() {}
+    public GraafinenKayttoliittyma() {
+        df = new DecimalFormat("0.0");
+    }
 
     @Override
     public void run() {
         freimi = new JFrame("Laivanupotus");
-        freimi.setPreferredSize(new Dimension(640, 480));
+        freimi.setPreferredSize(new Dimension(600, 320));
         freimi.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         freimi.setResizable(false);
         rakennaKomponentit(freimi.getContentPane());
@@ -65,22 +64,22 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     }
     
     private void rakennaKomponentit(Container container) {
-        popupViesti = new JOptionPane("Virhe", JOptionPane.ERROR_MESSAGE);
+        popupViesti = new JOptionPane("Virhe", JOptionPane.WARNING_MESSAGE);
         
         rakennaValikkopalkki();
         
-        r1  = katsoja.annaPelialue().annaRuudukko(katsoja);
-        r2  = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);        
+        r1  = katsoja.annaPelialue().nakyma(katsoja);
+        r2  = pelikierros.vastapelaaja(katsoja).annaPelialue().nakyma(katsoja);        
         Ruutupaneeli.asetaMitat(r1[0].length, r1.length, 16, 16);
         
         hk1 = new Hiirenkuuntelija(this, rp1, katsoja);
-        hk2 = new Hiirenkuuntelija(this, rp2, pelikierros.annaVastapelaaja(katsoja));
+        hk2 = new Hiirenkuuntelija(this, rp2, pelikierros.vastapelaaja(katsoja));
         rp1 = new Ruutupaneeli(hk1);
         rp2 = new Ruutupaneeli(hk2);
         
         JPanel keskialue = rakennaKeskialue();
 
-        tilaviesti = new JLabel("Peli alkoi.");
+        tilaviesti = new JLabel();
         
         container.add(keskialue, BorderLayout.CENTER);
         container.add(tilaviesti, BorderLayout.SOUTH);
@@ -90,6 +89,8 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         JMenuBar valikkopalkki  = new JMenuBar();
         JMenu valikko           = new JMenu("Valikko");
         JMenuItem valinta       = new JMenuItem("Ohje");
+        valikko.add(valinta);
+        valinta                 = new JMenuItem("Luovuta");
         valikko.add(valinta);
         valinta                 = new JMenuItem("Lopeta");
         valikko.add(valinta);
@@ -106,78 +107,63 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
         
         rajat.gridx     = 0;
         rajat.gridy     = 0;
-        rajat.weightx   = 0.5;
-        rajat.weighty   = 0.1;
+        rajat.weightx   = 0.4;
+        rajat.weighty   = 0.05;
         keskialue.add(new JLabel("Pelaaja 1"), rajat);
         
         rajat.gridx     = 1;
         rajat.gridy     = 0;
-        rajat.weightx   = 0.5;
-        rajat.weighty   = 0.1;
+        rajat.weightx   = 0.4;
+        rajat.weighty   = 0.05;
         keskialue.add(new JLabel("Pelaaja 2"), rajat);
         
         rajat.gridx     = 0;
         rajat.gridy     = 1;
-        rajat.weightx   = 0.5;
-        rajat.weighty   = 0.8;
+        rajat.weightx   = 0.4;
+        rajat.weighty   = 0.9;
         rajat.fill      = rajat.BOTH;
         keskialue.add(rp1, rajat);
         
         rajat.gridx     = 1;
         rajat.gridy     = 1;
-        rajat.weighty   = 0.8;
+        rajat.weightx   = 0.4;
+        rajat.weighty   = 0.9;
         rajat.fill      = rajat.BOTH;
         keskialue.add(rp2, rajat);
         
         rajat.gridx     = 2;
         rajat.gridy     = 1;
-        rajat.weightx   = 0.5;
-        rajat.weighty   = 0.8;
+        rajat.weightx   = 0.2;
+        rajat.weighty   = 0.9;
         keskialue.add(new Selitepaneeli(), rajat);
         
         rajat.gridx     = 0;
         rajat.gridy     = 2;
-        rajat.weightx   = 0.5;
-        rajat.weighty   = 0.1;
-        laivoja1        = new JLabel("Laivoja: ");
+        rajat.weightx   = 0.4;
+        rajat.weighty   = 0.05;
+        rajat.fill      = rajat.CENTER;
+        laivoja1        = new JLabel("Laivoja: ?");
         keskialue.add(laivoja1, rajat);
         
         rajat.gridx     = 1;
         rajat.gridy     = 2;
-        rajat.weightx   = 0.5;
-        rajat.weighty   = 0.1;
-        laivoja2        = new JLabel("Laivoja: ");
+        rajat.weightx   = 0.4;
+        rajat.weighty   = 0.05;
+        laivoja2        = new JLabel("Laivoja: ?");
         keskialue.add(laivoja2, rajat);
+        
+        rajat.gridx     = 2;
+        rajat.gridy     = 2;
+        rajat.weightx   = 0.2;
+        rajat.weighty   = 0.05;
+        aika            = new JLabel("Kulunut aika: 0.0 s");
+        keskialue.add(aika, rajat);
         
         return keskialue;
     }
     
-    public void tulostaRuudut() {
-        System.out.println(r1 == rp1.annaRuudut());
-        rp1.tulostaRuudut();
-        // Debuggaukseen
-//        for (Ruutu[] ruutus : r1) {
-//            for (Ruutu ruutu : ruutus) {
-//                switch (ruutu) {
-//                    case LAIVA_EI_OSUMAA:
-//                        System.out.print("L ");
-//                        break;
-//                    case LAIVA_OSUMA:
-//                        System.out.print("X ");
-//                        break;
-//                    case TYHJA_EI_OSUMAA:
-//                        System.out.print("~ ");
-//                        break;
-//                    case TYHJA_OSUMA:
-//                        System.out.print("O ");
-//                        break;
-//                    default:
-//                        System.out.print("? ");
-//                        break;
-//                }
-//            }
-//            System.out.println();
-//        }
+    private void tulostaAika() {
+        aika.setText("Kulunut aika: " + df.format((double) pelikierros.aika() / 1000.0) + " s");
     }
 
     @Override
@@ -197,8 +183,8 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
 
     @Override
     public void alusta() {
-        r1 = katsoja.annaPelialue().annaRuudukko(katsoja);
-        r2 = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
+        r1 = katsoja.annaPelialue().nakyma(katsoja);
+        r2 = pelikierros.vastapelaaja(katsoja).annaPelialue().nakyma(katsoja);
         rp1.asetaRuudukko(r1);
         rp2.asetaRuudukko(r2);
     }
@@ -207,7 +193,7 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     public void paivita(Pelialue pelialue, int x, int y) {
         Ruutu ruutu = pelialue.haeRuutu(katsoja, x, y);
 //        System.out.println("Ruudun uusi tila:" + ruutu);
-        if (pelialue == pelikierros.annaPelialue1()) {
+        if (pelialue == pelikierros.pelialue1()) {
             r1[y][x] = ruutu;
         } else {
             r2[y][x] = ruutu;
@@ -218,8 +204,20 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     public void tulostaPelitilanne() {
         rp1.tulosta();
         rp2.tulosta();
-        laivoja1.setText("Laivoja: " + pelikierros.annaPelialue1().laivojaJaljella());
-        laivoja2.setText("Laivoja: " + pelikierros.annaPelialue2().laivojaJaljella());
+        laivoja1.setText("Laivoja: " + pelikierros.pelialue1().laivojaJaljella());
+        laivoja2.setText("Laivoja: " + pelikierros.pelialue2().laivojaJaljella());
+        tulostaAika();
+    }
+    
+    @Override
+    public void tulostaLopputilanne() {
+        tulostaAika();
+        r1 = pelikierros.pelialue1().nakyma(katsoja);
+        r2 = pelikierros.pelialue2().nakyma(pelikierros.vastapelaaja(katsoja));
+        rp1.asetaRuudukko(r1);
+        rp2.asetaRuudukko(r2);
+        rp1.tulosta();
+        rp2.tulosta();        
     }
 
     @Override
@@ -243,6 +241,7 @@ public final class GraafinenKayttoliittyma implements Runnable, Kayttoliittyma {
     public Komento pyydaKomento() throws Exception {
         while (viimeisinKomento == null) {
             Thread.sleep(100);
+            tulostaAika();
         }
         Komento k = viimeisinKomento;
         viimeisinKomento = null;

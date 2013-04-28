@@ -41,6 +41,9 @@ public class Valikonkuuntelija implements ActionListener, ItemListener {
             case "Lopeta":
                 KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.LOPETA));
                 break;
+            case "Luovuta":
+                KAYTTOLIITTYMA.asetaKomento(new Komento(Komentotyyppi.LUOVUTA));
+                break;
             case "Ohje":
                 break;
             default:

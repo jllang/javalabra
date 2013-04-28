@@ -18,7 +18,6 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
         'O', 'P', 'Q', 'R', 'S', 'T'
     };
     
-    static final Color VARI_OLETUS          = new Color(128, 0, 0);
     static final Color VARI_LAIVA_EI_OSUMAA = new Color(160, 160, 160);
     static final Color VARI_LAIVA_OSUMA     = new Color(255, 0, 0);
     static final Color VARI_OSUI_JA_UPPOSI  = new Color(128, 0, 0);
@@ -50,32 +49,6 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
         Ruutupaneeli.ruudunKorkeus  = ruudunKorkeus + 2;
         Ruutupaneeli.siirtoX        = 12;
         Ruutupaneeli.siirtoY        = 12;
-    }
-    
-    public void tulostaRuudut() {
-        // Debuggaukseen
-        for (Ruutu[] ruutus : ruudukko) {
-            for (Ruutu ruutu : ruutus) {
-                switch (ruutu) {
-                    case LAIVA_EI_OSUMAA:
-                        System.out.print("L ");
-                        break;
-                    case LAIVA_OSUMA:
-                        System.out.print("X ");
-                        break;
-                    case TYHJA_EI_OSUMAA:
-                        System.out.print("~ ");
-                        break;
-                    case TYHJA_OSUMA:
-                        System.out.print("O ");
-                        break;
-                    default:
-                        System.out.print("? ");
-                        break;
-                }
-            }
-            System.out.println();
-        }
     }
     
     public Ruutu[][] annaRuudut() {
@@ -125,11 +98,8 @@ public final class Ruutupaneeli extends JPanel implements Grafiikkakomponentti {
                     case TYHJA_OSUMA:
                         c = VARI_TYHJA_OSUMA;
                         break;
-                    case TUNTEMATON:
-                        c = VARI_TUNTEMATON;
-                        break;
                     default:
-                        c = VARI_OLETUS;
+                        c = VARI_TUNTEMATON;
                         break;
                 }
                 g.setColor(c);

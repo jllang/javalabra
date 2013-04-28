@@ -2,8 +2,6 @@
 package laivanupotus.kayttajat;
 
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import laivanupotus.tietorakenteet.Komento;
 import laivanupotus.tietorakenteet.Saannot;
 import laivanupotus.tietorakenteet.enumit.Komentotyyppi;

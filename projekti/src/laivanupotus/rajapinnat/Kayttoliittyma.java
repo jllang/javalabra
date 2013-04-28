@@ -68,6 +68,12 @@ public interface Kayttoliittyma extends Runnable {
     void tulostaPelitilanne();
     
     /**
+     * Metodia kutsutaan kun peli on ratkennut. Käyttöliittymä paljastaa tällöin
+     * molempien pelaajien pelialueet.
+     */
+    void tulostaLopputilanne();
+    
+    /**
      * Tulostaa pelin ohjeet. Nämä ohjeet sisältävät lyhyen selostuksen pelistä
      * sekä siinä käytettävissä olevista komennoista. Luokan Laivanupotus metodi 
      * tulostaOhje puolestaan tulostaa teknisluontoisemman ohjeen käytettävissä 

@@ -65,8 +65,8 @@ public class TekstikayttoliittymaTest {
         tekstikayttoliittyma    = new Tekstikayttoliittyma(false);
         pelikierros             = new Pelikierros(tekstikayttoliittyma,
                 poikkeustenkasittelija, saannot, pelaaja1, pelaaja2);
-        pelialue1               = pelikierros.annaPelialue1();
-        pelialue2               = pelikierros.annaPelialue2();
+        pelialue1               = pelikierros.pelialue1();
+        pelialue2               = pelikierros.pelialue2();
         tekstikayttoliittyma.asetaPelikierros(pelikierros);
     }
     

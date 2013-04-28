@@ -79,10 +79,10 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
 
     @Override
     public void alusta() {
-        ruudukko1 = katsoja.annaPelialue().annaRuudukko(katsoja);
-        ruudukko2 = pelikierros.annaVastapelaaja(katsoja).annaPelialue().annaRuudukko(katsoja);
-        ruudukonLeveys = pelikierros.annaSaannot().leveys();
-        ruudukonKorkeus = pelikierros.annaSaannot().korkeus();
+        ruudukko1 = katsoja.annaPelialue().nakyma(katsoja);
+        ruudukko2 = pelikierros.vastapelaaja(katsoja).annaPelialue().nakyma(katsoja);
+        ruudukonLeveys = pelikierros.saannot().leveys();
+        ruudukonKorkeus = pelikierros.saannot().korkeus();
         alustaKuva();
         alustaKoordinaatit();
     }
@@ -90,7 +90,7 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
     @Override
     public void paivita(Pelialue pelialue, int x, int y) {
         Ruutu ruutu = pelialue.haeRuutu(katsoja, x, y);
-        if (pelialue == pelikierros.annaPelialue1()) {
+        if (pelialue == pelikierros.pelialue1()) {
             ruudukko1[y][x] = ruutu;
         } else {
             ruudukko2[y][x] = ruutu;
@@ -104,6 +104,13 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
         tulkitseRuudukko(ruudukko2, ruudukonLeveys + 2);
         String mj = rakennaKuva();
         tulostaMerkkijono(mj);
+    }
+    
+    @Override
+    public void tulostaLopputilanne() {
+        ruudukko1 = pelikierros.pelialue1().nakyma(katsoja);
+        ruudukko2 = pelikierros.pelialue2().nakyma(pelikierros.vastapelaaja(katsoja));
+        tulostaPelitilanne();
     }
     
     @Override
@@ -141,10 +148,10 @@ public final class Tekstikayttoliittyma implements Kayttoliittyma {
                 + "    aseta <x> <y> 0|1\n"
                 + "missä <x> on sijoitettavan laivan ensimmäisen ruudun "
                 + "sijainti vaakasuunnassa vä-\n"
-                + "liltä [A, " + AAKKOSET[pelikierros.annaSaannot().leveys() -1]
+                + "liltä [A, " + AAKKOSET[pelikierros.saannot().leveys() -1]
                 + "] ja <y> on sijoitettavan laivan ensimmäisen ruudun sijainti"
                 + " pysty-\n"
-                + "suunnassa väliltä [1, " + pelikierros.annaSaannot().korkeus()
+                + "suunnassa väliltä [1, " + pelikierros.saannot().korkeus()
                 + "]. "
                 + "Komennon viimeisenä parametrina annetaaan sijoitetta-\n"
                 + "van laivan orientaatio. Orientaatio kuvaa sijoitettavan "

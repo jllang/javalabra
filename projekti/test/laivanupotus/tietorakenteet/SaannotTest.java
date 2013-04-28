@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import laivanupotus.kontrolli.SaantojenArpoja;
-import laivanupotus.tietorakenteet.Saannot;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;

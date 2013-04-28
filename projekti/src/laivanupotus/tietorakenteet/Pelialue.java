@@ -41,10 +41,10 @@ public final class Pelialue {
      * alusta alkaen kaikki pelialueen laivat.
      */
     public Pelialue(Pelikierros pelikierros, Pelaaja omistaja) {
-        this.KAYTTOLIITTYMA     = pelikierros.annaKayttoliittyma();
+        this.KAYTTOLIITTYMA     = pelikierros.kayttoliittyma();
         this.OMISTAJA           = omistaja;
-        this.LEVEYS             = pelikierros.annaSaannot().leveys();
-        this.KORKEUS            = pelikierros.annaSaannot().korkeus();
+        this.LEVEYS             = pelikierros.saannot().leveys();
+        this.KORKEUS            = pelikierros.saannot().korkeus();
         this.KOORDINAATISTO     = new Piste[KORKEUS][LEVEYS]; 
         this.PISTEET_JA_LAIVAT  = new HashMap<>();
         this.pistelista         = new ArrayList<>();
@@ -142,7 +142,7 @@ public final class Pelialue {
         KAYTTOLIITTYMA.paivita(this, x, y);
     }
     
-    public Ruutu[][] annaRuudukko(Pelaaja asiakas) {
+    public Ruutu[][] nakyma(Pelaaja asiakas) {
         
         Ruutu[][] ruudukko = new Ruutu[KORKEUS][LEVEYS];
         

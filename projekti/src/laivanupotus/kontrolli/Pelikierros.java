@@ -1,20 +1,14 @@
 
 package laivanupotus.kontrolli;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import laivanupotus.kayttajat.Ihmispelaaja;
 import laivanupotus.kayttajat.Pelaaja;
-import laivanupotus.kayttoliittymat.GraafinenKayttoliittyma;
-import laivanupotus.poikkeukset.RuutuunOnJoAmmuttuException;
+import laivanupotus.kayttajat.Tekoalypelaaja;
 import laivanupotus.poikkeukset.TuntematonKomentoException;
 import laivanupotus.poikkeukset.TyhjaKomentoException;
 import laivanupotus.rajapinnat.Kayttoliittyma;
-import laivanupotus.tietorakenteet.Komento;
-import laivanupotus.tietorakenteet.Pelialue;
-import laivanupotus.tietorakenteet.Saannot;
-import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
-import laivanupotus.tietorakenteet.enumit.Ruutu;
+import laivanupotus.tietorakenteet.*;
+import laivanupotus.tietorakenteet.enumit.*;
 
 /**
  * Tämän luokka ohjaa varsinaista pelin kulkua ja välittää tietoa eri 
@@ -35,6 +29,9 @@ public final class Pelikierros {
     private boolean                         peliJatkuu, vuorotOnRajoitettu;
     private Pelaaja                         voittaja, vuorossaolija;
     private int                             vuoro;
+    private long                            katsojanPeliaika;
+    private Kello                           kello;
+    private Thread                          kelloSaie;
     
     public Pelikierros(
             Kayttoliittyma kayttoliittyma,
@@ -53,31 +50,47 @@ public final class Pelikierros {
         this.peliJatkuu             = true;
         this.vuorossaolija          = pelaaja1;
         this.vuoro                  = 1;
+        kello         = new Kello();
+        kello.tyhjenna();
+        this.kelloSaie                  = new Thread(kello);
+        kelloSaie.start();
         this.PELAAJA1.asetaPelialue(PELIALUE1);
         this.PELAAJA2.asetaPelialue(PELIALUE2);
     }
     
-    public Kayttoliittyma annaKayttoliittyma() {
+    public Kayttoliittyma kayttoliittyma() {
         return KAYTTOLIITTYMA;
     }
     
-    public Saannot annaSaannot() {
+    public Saannot saannot() {
         return SAANNOT;
     }
     
-    public Pelaaja annaVastapelaaja(Pelaaja pelaaja) {
+    public Pelaaja vastapelaaja(Pelaaja pelaaja) {
         if(pelaaja == PELAAJA1) {
             return PELAAJA2;
         }
         return PELAAJA1;
     }
     
-    public Pelialue annaPelialue1() {
+    public Pelialue pelialue1() {
         return PELIALUE1;
     }
     
-    public Pelialue annaPelialue2() {
+    public Pelialue pelialue2() {
         return PELIALUE2;
+    }
+    
+    public long aika() {
+        return kello.aika() + katsojanPeliaika;
+    }
+    
+    public void pysaytaAjanotto() {
+        katsojanPeliaika += kello.aika();
+    }
+    
+    public void jatkaAjanottoa() {
+        kello.tyhjenna();
     }
     
     /**
@@ -110,12 +123,14 @@ public final class Pelikierros {
      */
     private void kasitteleVuoro(Pelaaja pelaaja) throws Exception {
         if (tarkastaLoppuikoPeli(pelaaja)) return;
-        Pelialue pelialue = annaVastapelaaja(pelaaja).annaPelialue();
+        Pelialue pelialue = vastapelaaja(pelaaja).annaPelialue();
 
         Komento komento;
         
         if (pelaaja.getClass() == Ihmispelaaja.class) {
+            jatkaAjanottoa();
             komento = KAYTTOLIITTYMA.pyydaKomento();
+            pysaytaAjanotto();
         } else {
             komento = pelaaja.annaKomento(new Komento(Komentotyyppi.AMMU));
         }
@@ -125,11 +140,11 @@ public final class Pelikierros {
     
     private boolean tarkastaLoppuikoPeli(Pelaaja pelaaja) {
         if (!pelaaja.annaPelialue().laivojaOnJaljella()) {
-            voittaja = annaVastapelaaja(pelaaja);
+            voittaja = vastapelaaja(pelaaja);
             peliJatkuu = false;
             KAYTTOLIITTYMA.tulostaViesti("Peli päättyi. Voittaja oli "
                     + ((voittaja == PELAAJA1) ? "pelaaja 1." : "pelaaja 2.\n"));
-            KAYTTOLIITTYMA.tulostaPelitilanne();
+            KAYTTOLIITTYMA.tulostaLopputilanne();
             return true;
         }
         return false;
@@ -185,11 +200,13 @@ public final class Pelikierros {
         // Asetetaan voittaja ja jatketaan eteenpäin.
         KAYTTOLIITTYMA.tulostaViesti("Pelaaja "
         + vuorossaolija.kerroNimi() + " luovutti pelin.\n");
-        voittaja = annaVastapelaaja(vuorossaolija);
+        voittaja = vastapelaaja(vuorossaolija);
+        KAYTTOLIITTYMA.tulostaLopputilanne();
     }
 
-    private void kasitteleLopetus() {
+    private void kasitteleLopetus() throws InterruptedException {
         peliJatkuu = false;
+        kelloSaie.join();
     }
 
     private void kasitteleOhjeet() {
@@ -213,7 +230,7 @@ public final class Pelikierros {
                         + vuorossaolija.annaPelialue().laivojaJaljella()
                         + " kpl.\n");
                 KAYTTOLIITTYMA.tulostaViesti("Vastustajan laivoja on "
-                        + "jäljellä " + annaVastapelaaja(vuorossaolija)
+                        + "jäljellä " + vastapelaaja(vuorossaolija)
                         .annaPelialue().laivojaJaljella()
                         + " kpl.\n");
                 break;
@@ -225,9 +242,11 @@ public final class Pelikierros {
             pelialue.ammu(vuorossaolija,
                     komento.PARAMETRIT[0],
                     komento.PARAMETRIT[1]);
-            Thread.sleep(250);
+            if (vuorossaolija.getClass() == Tekoalypelaaja.class) {
+                Thread.sleep(250);
+            }
             if (osuiTaiUpposi(pelialue, komento)) return;
-            vuorossaolija = annaVastapelaaja(vuorossaolija);
+            vuorossaolija = vastapelaaja(vuorossaolija);
         } catch (Exception poikkeus) {
             POIKKEUSTENKASITTELIJA.kasittele(poikkeus);
         }
@@ -246,10 +265,7 @@ public final class Pelikierros {
     }
 
     private void kasitteleHuijaus() {
-        KAYTTOLIITTYMA.tulostaViesti("Jumaltila aktivoitu. Vastustajan "
-                + "laivasto näkyy nyt vasemmalla.\n");
-        KAYTTOLIITTYMA.asetaKatsoja(annaVastapelaaja(vuorossaolija));
-        KAYTTOLIITTYMA.alusta();
-        KAYTTOLIITTYMA.tulostaPelitilanne();
+        KAYTTOLIITTYMA.tulostaViesti("Jumaltila aktivoitu.\n");
+        KAYTTOLIITTYMA.tulostaLopputilanne();
     }
 }
