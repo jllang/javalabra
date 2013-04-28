@@ -14,11 +14,7 @@ import laivanupotus.tietorakenteet.enumit.Komentotyyppi;
 public final class Komento {
     
     // Maagisia lukuja liittyen enumiin Komentotyyppi.TILAKYSELY:
-    public static final int 
-//            TILAKYSELY_MONESKO_VUORO                = 1,
-//            TILAKYSELY_VUOROJA_JALJELLA             = 2,
-//            TILAKYSELY_OMIA_LAIVOJA_JALJELLA        = 3, 
-//            TILAKYSELY_VASTUSTAJAN_LAIVOJA_JALJELLA = 4;
+    public static final int
             TILAKYSELY_VUOROT = 1,
             TILAKYSELY_LAIVAT = 2;
     

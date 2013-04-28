@@ -24,7 +24,7 @@ public final class Pelialue {
     private final Kayttoliittyma    KAYTTOLIITTYMA;
     private final Pelaaja           OMISTAJA;
     private final Piste[][]         KOORDINAATISTO;
-    private final Map<Piste, Laiva> PISTEET_JA_LAIVAT;  // Jokin mättää.
+    private final Map<Piste, Laiva> PISTEET_JA_LAIVAT;
     private final int               LEVEYS, KORKEUS;
     
     private List<Piste>             pistelista;

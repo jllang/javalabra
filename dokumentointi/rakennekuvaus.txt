@@ -1,0 +1,65 @@
+Ohjelman pääluokan nimi on Laivanupotus. Ohjelman suoritus tapahtuu pääosin sen
+kutsumissa (tämän luokan suhteen) itsenäisesti toimivissa komponenteissa. Tämän
+vuoksi olen jättänyt luokan Laivanupotus pois ohjelman luokkakaaviosta.
+
+Ennen pelikierroksen alkua luokka LaivastonSijoituttaja sijoittaa pelaajien lai-
+vastot näiden pelialueille delegoimalla yksittäisten laivojen sijoittamisen kom-
+ponentille Laivansijoitin. LaivastonSijoituttaja pyytää ihmispelaajilta käyttö-
+liittymän välityksellä komentoja kun taas tekoälypelaajat antavat niitä suoraan. 
+(Tämä ratkaisu ei aivan vastaa alkuperäisiä suunnitelmiani sillä olin ajatellut
+toteuttaa ohjelman niin, että ihmis- ja tekoälypelaajat olisivat toimineet kai-
+ken aikaa samanlaisen rajapinnan kautta jolloin esimerkiksi kahden ihmis- tai
+tekoälypelaajan väliset pelit olisi ollut helppo toteuttaa.) Laivansijoitin tar-
+kastaa, että annetun laivan lisääminen annettuilla koordinaateilla ja orientaa-
+tiolla on sääntöjen mukaan mahdollista. Lopullinen laivan sijoittaminen pelialu-
+eelle kuuluu luokan Pelialue itsensä tehtäviin.
+
+Pelin toinen varsinainen pääteema liittyy pelin kulkua eteenpäin vievään luok-
+kaan Pelikierros. Tämä kontrolliluokka välittää tietoa eri komponenttien välillä
+ja huolehtii pelivuorojen käsittelystä.
+
+Laivanupotuksen perustoiminnallisuuden kannalta ehkäpä tärkein luokka on Peli-
+alue. Käyttäjillä on omat pelialueensa, jotka pitävät sisällään kaiken oleelli-
+sen tiedon laivoista ja ruuduista joihin on ammuttu. Pelialue käyttää tiedon
+tallentamiseen erinäisiä aputietorakenteita, joista keskeisimmät ovat Piste ja
+Laiva. Lisäksi lähinnä käyttöliittymää varten on olemassa enumeroitu tyyppi Ruu-
+tu, jonka luomisesta Pisteen sisältämien tietojen perusteella luokka Pelialue
+vastaa. Luokka Laiva mallintaa samannimistä pisteistä koostuvaa kokonaisuutta.
+
+Ohjelman suorituksen aikana pelin sääntöjen muistamisesta vastaa luokka Saannot.
+Se on tällä hetkellä ainoa rajapinnan Tallennettava toteuttava luokka. Saannot
+käyttää tiedon ensisijaiseen säilyttämiseen listaa. Tämän vuoksi sen sisältämät
+tiedot on helposti kirjoitettavissa tiedostojärjestelmään sarjallistetussa muo-
+dossa. Lisäksi laivastojen sijoittamisen helpottamiseksi Saannot käyttää aputie-
+torakenteenaan täysin redundanttia luokan TreeMap instanssia.
+
+Seuraavaksi selitän lyhyesti muutamien luonteeltaan hieman teknisempien luokkien
+rakennetta, toimintaa ja tarkoitusta:
+    Ohjelman sisäisen kommunikaation perustietorakenteena toimii luokka Komento.
+Se sisältää enumeroidun tietotyypin Komentotyyppi sekä nolla tai useamman int-
+tyyppisen parametrin. (Tällä hetkellä eniten parametreja on laivojen sijoitus-
+komennossa, jonka parametrien määrä on 3.)
+    Pelissä on kaksi käyttöliittymää, jotka toteuttavat rajapinnan Kayttoliitty-
+ma. Tekstikayttoliittyma on tarkoitettu käytettäväksi (ensisijaisesti Unix
+-kaltaisten käyttöjärjestelmien) 80x25 merkin resoluutioisessa virtuaalitermi-
+naalissa. GraafinenKayttoliittyma puolestaan käyttää Javan Swing-kirjastoa. Va-
+litulla käyttöliittymällä ei ole vaikutusta varsinaisen sovelluslogiikan toimin-
+taan.
+    Joitain (muun muassa laivojen sijoittamiseen liittyviä) poikkeuksia lukuun-
+ottamatta suurinta osaa pelin suoritusaikana heitettävistä poikkeuksista käsit-
+telee luokan Poikkeustenkasittelija instanssi sille konstruktorissa annettujen 
+parametrien määräämällä tavalla. Oletuksena kaikki poikkeukset unohdetaan hil-
+jaisesti.
+    Javan standardikirjaston sisältämien lisäksi pelissä on viisi poikkeusluok-
+kaa joita edellämainittu luokka siis käsittelee. Pelialue heittää RuutuunOnJoAm-
+muttuExceptionin jos pelaaja yrittää ampua useamman kerran samaan ruutuun. Jos
+laiva yritetään sijoittaa sääntöjen vastaisesti, Pelialue heittää poikkeuksen
+SaantojenVastainenSijoitusException. Jos taas pelaaja yrittää ampua omalle peli-
+alueelleen tai sijoittaa laivaa vastustajan pelialueelle, heitetään poikkeus
+VaaraPelialueException. Lisäksi luokka Pelikierros heittää poikkeuksen TyhjaKo-
+mentoException jos se vastaanottaa komennon, jonka kenttä KOMENTOTYYPPI osoittaa
+enumeroituun arvoon Komentotyyppi.TYHJA. Jos taas edellä mainitun kentän osoit-
+tama enum on Komentotyyppi.TUNTEMATON tai jokin muu ei-tuettu tyyppi, heitetään
+TuntematonKomentoException. On syytä huomata että edellä mainittujen poikkeusten
+"sietäminen" on osa pelin normaalia kulkua joskaan niitä ei esiintyisi jos sekä
+ihmis- että tekoälypelaajat toimisivat aina odottamallani tavalla.
